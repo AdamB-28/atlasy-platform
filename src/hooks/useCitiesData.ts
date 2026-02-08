@@ -7,7 +7,7 @@ export function useCitiesData() {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    fetch('/data/cities.json')
+    fetch(`${import.meta.env.BASE_URL}data/cities.json`)
       .then((res) => res.json())
       .then((json) => {
         setData(json)

@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getImagePath(imageName: string | null, cityFolder: string): string {
   if (!imageName) return ''
   // Files are already clean ASCII, no encoding needed
-  return `/${cityFolder}/${imageName}.PNG`
+  return `${import.meta.env.BASE_URL}${cityFolder}/${imageName}.PNG`
 }
 
 export function formatMetricValue(value: number | string | null): string {
