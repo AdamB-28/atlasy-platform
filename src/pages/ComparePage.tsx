@@ -130,12 +130,12 @@ export default function ComparePage() {
     }
     
     return (
-      <div className="border-b border-neutral-200 py-4 last:border-b-0">
-        <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-3 transition-colors duration-500">
+      <div className="border-b border-neutral-200 dark:border-neutral-700 py-4 last:border-b-0 transition-colors duration-500">
+        <p className="text-xs md:text-sm font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-3 transition-colors duration-500">
           {label}
         </p>
-        <div className="grid grid-cols-2 gap-4">
-          <div className={`relative p-4 rounded-lg border-2 transition-colors duration-500 ${
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+          <div className={`relative p-3 md:p-4 rounded-lg border-2 transition-colors duration-500 ${
             isBetter === 'A' 
               ? 'bg-green-50 dark:bg-green-900/30 border-green-400 dark:border-green-700 shadow-sm' 
               : 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700'
@@ -143,23 +143,24 @@ export default function ComparePage() {
             {hasA ? (
               <>
                 {isBetter === 'A' && (
-                  <div className="absolute -top-2 -right-2 bg-green-600 dark:bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-md flex items-center gap-1 transition-colors duration-500">
-                    <TrendingUp className="w-3 h-3" />
-                    BETTER
+                  <div className="absolute -top-2 -right-2 bg-green-600 dark:bg-green-500 text-white px-2 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-bold shadow-md flex items-center gap-0.5 md:gap-1 transition-colors duration-500">
+                    <TrendingUp className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                    <span className="hidden sm:inline">BETTER</span>
+                    <span className="sm:hidden">✓</span>
                   </div>
                 )}
-                <p className={`text-2xl font-bold transition-colors duration-500 ${
+                <p className={`text-xl md:text-2xl font-bold transition-colors duration-500 ${
                   isBetter === 'A' ? 'text-green-800 dark:text-green-300' : 'text-blue-900 dark:text-blue-300'
                 }`}>
                   {formatMetricValue(valueA)}
-                  {unit && <span className="text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}
+                  {unit && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}
                 </p>
               </>
             ) : (
-              <p className="text-sm text-neutral-400 dark:text-neutral-500">No data</p>
+              <p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data</p>
             )}
           </div>
-          <div className={`relative p-4 rounded-lg border-2 transition-colors duration-500 ${
+          <div className={`relative p-3 md:p-4 rounded-lg border-2 transition-colors duration-500 ${
             isBetter === 'B' 
               ? 'bg-green-50 dark:bg-green-900/30 border-green-400 dark:border-green-700 shadow-sm' 
               : 'bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700'
@@ -167,20 +168,21 @@ export default function ComparePage() {
             {hasB ? (
               <>
                 {isBetter === 'B' && (
-                  <div className="absolute -top-2 -right-2 bg-green-600 dark:bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-md flex items-center gap-1 transition-colors duration-500">
-                    <TrendingUp className="w-3 h-3" />
-                    BETTER
+                  <div className="absolute -top-2 -right-2 bg-green-600 dark:bg-green-500 text-white px-2 py-0.5 md:py-1 rounded-full text-[10px] md:text-xs font-bold shadow-md flex items-center gap-0.5 md:gap-1 transition-colors duration-500">
+                    <TrendingUp className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                    <span className="hidden sm:inline">BETTER</span>
+                    <span className="sm:hidden">✓</span>
                   </div>
                 )}
-                <p className={`text-2xl font-bold transition-colors duration-500 ${
+                <p className={`text-xl md:text-2xl font-bold transition-colors duration-500 ${
                   isBetter === 'B' ? 'text-green-800 dark:text-green-300' : 'text-amber-900 dark:text-amber-300'
                 }`}>
                   {formatMetricValue(valueB)}
-                  {unit && <span className="text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}
+                  {unit && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}
                 </p>
               </>
             ) : (
-              <p className="text-sm text-neutral-400 dark:text-neutral-500">No data</p>
+              <p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data</p>
             )}
           </div>
         </div>
@@ -203,42 +205,42 @@ export default function ComparePage() {
     if (!hasA && !hasB) return null
     
     return (
-      <div className="mb-8">
-        <h4 className="font-semibold text-neutral-900 dark:text-white mb-4 transition-colors duration-500">{title}</h4>
-        <div className="grid md:grid-cols-2 gap-6">
+      <div className="mb-6 md:mb-8">
+        <h4 className="font-semibold text-sm md:text-base text-neutral-900 dark:text-white mb-3 md:mb-4 transition-colors duration-500">{title}</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="relative">
             {hasA ? (
               <div className="border-2 border-blue-300 dark:border-blue-700 rounded-lg overflow-hidden transition-colors duration-500">
-                <div className="bg-blue-100 dark:bg-blue-900 px-3 py-1 text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide transition-colors duration-500">
+                <div className="bg-blue-100 dark:bg-blue-900 px-3 py-1.5 text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide transition-colors duration-500">
                   City A
                 </div>
                 <SafeImage
                   src={getImagePathA(imageA)}
                   alt={`${cityA.name} - ${title}`}
-                  className="w-full aspect-video"
+                  className="w-full aspect-video object-cover"
                 />
               </div>
             ) : (
               <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
-                <p className="text-neutral-400 dark:text-neutral-500">No data available</p>
+                <p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p>
               </div>
             )}
           </div>
           <div className="relative">
             {hasB ? (
               <div className="border-2 border-amber-300 dark:border-amber-700 rounded-lg overflow-hidden transition-colors duration-500">
-                <div className="bg-amber-100 dark:bg-amber-900 px-3 py-1 text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide transition-colors duration-500">
+                <div className="bg-amber-100 dark:bg-amber-900 px-3 py-1.5 text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide transition-colors duration-500">
                   City B
                 </div>
                 <SafeImage
                   src={getImagePathB(imageB)}
                   alt={`${cityB.name} - ${title}`}
-                  className="w-full aspect-video"
+                  className="w-full aspect-video object-cover"
                 />
               </div>
             ) : (
               <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
-                <p className="text-neutral-400 dark:text-neutral-500">No data available</p>
+                <p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p>
               </div>
             )}
           </div>
@@ -261,39 +263,39 @@ export default function ComparePage() {
           </button>
           
           <div className="mb-4">
-            <div className="inline-block px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 text-xs font-semibold rounded-full mb-3 uppercase tracking-wide transition-colors duration-500">
+            <div className="inline-block px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 text-xs font-semibold rounded-full mb-2 md:mb-3 uppercase tracking-wide transition-colors duration-500">
               Comparison Mode
             </div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white transition-colors duration-500">Side-by-Side Analysis</h1>
-            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-2 mb-3 transition-colors duration-500">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white transition-colors duration-500">Side-by-Side Analysis</h1>
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-2 mb-3 transition-colors duration-500">
               💡 <strong>Tip:</strong> Click "Show Insights" buttons in each section to learn about the differences
             </p>
-            <div className="flex items-center gap-4 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+            <div className="flex flex-wrap items-center gap-3 md:gap-4 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded bg-blue-400 border-2 border-blue-600"></div>
-                <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">City A</span>
+                <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-blue-400 border-2 border-blue-600"></div>
+                <span className="text-[10px] md:text-xs font-medium text-neutral-700 dark:text-neutral-300">City A</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded bg-amber-400 border-2 border-amber-600"></div>
-                <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">City B</span>
+                <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-amber-400 border-2 border-amber-600"></div>
+                <span className="text-[10px] md:text-xs font-medium text-neutral-700 dark:text-neutral-300">City B</span>
               </div>
-              <div className="flex items-center gap-2 ml-auto">
-                <div className="w-4 h-4 rounded bg-green-400 border-2 border-green-600"></div>
-                <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300">Better Performance</span>
+              <div className="flex items-center gap-2 w-full sm:w-auto sm:ml-auto">
+                <div className="w-3 h-3 md:w-4 md:h-4 rounded bg-green-400 border-2 border-green-600"></div>
+                <span className="text-[10px] md:text-xs font-medium text-neutral-700 dark:text-neutral-300">Better Performance</span>
               </div>
             </div>
           </div>
           
           {/* City Selectors */}
-          <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-4 items-center mt-6">
-            <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-300 dark:border-blue-700 transition-colors duration-500">
-              <label className="text-xs font-semibold text-blue-900 uppercase tracking-wide mb-2 block">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 md:gap-4 items-center mt-6">
+            <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-300 dark:border-blue-700 transition-colors duration-500">
+              <label className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-2 block transition-colors duration-500">
                 City A
               </label>
               <select
                 value={cityA.id}
                 onChange={(e) => navigate(`/compare/${e.target.value}/${cityB.id}`)}
-                className="w-full p-2 border border-blue-300 dark:border-blue-700 rounded-lg font-semibold text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-500"
+                className="w-full p-2 border border-blue-300 dark:border-blue-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-500"
               >
                 {cities.map((city) => (
                   <option key={city.id} value={city.id} disabled={city.id === cityB.id}>
@@ -302,22 +304,22 @@ export default function ComparePage() {
                 ))}
               </select>
               {cityA.location.country && (
-                <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-2 transition-colors duration-500">{cityA.location.country}</p>
+                <p className="text-neutral-600 dark:text-neutral-400 text-xs md:text-sm mt-2 transition-colors duration-500">{cityA.location.country}</p>
               )}
             </div>
             
-            <div className="flex justify-center">
-              <ArrowLeftRight className="w-6 h-6 text-neutral-400 dark:text-neutral-500" />
+            <div className="flex justify-center py-2 md:py-0">
+              <ArrowLeftRight className="w-5 h-5 md:w-6 md:h-6 text-neutral-400 dark:text-neutral-500 transform rotate-90 md:rotate-0" />
             </div>
             
-            <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border-2 border-amber-300 dark:border-amber-700 transition-colors duration-500">
-              <label className="text-xs font-semibold text-amber-900 uppercase tracking-wide mb-2 block">
+            <div className="p-3 md:p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border-2 border-amber-300 dark:border-amber-700 transition-colors duration-500">
+              <label className="text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide mb-2 block transition-colors duration-500">
                 City B
               </label>
               <select
                 value={cityB.id}
                 onChange={(e) => navigate(`/compare/${cityA.id}/${e.target.value}`)}
-                className="w-full p-2 border border-amber-300 dark:border-amber-700 rounded-lg font-semibold text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors duration-500"
+                className="w-full p-2 border border-amber-300 dark:border-amber-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors duration-500"
               >
                 {cities.map((city) => (
                   <option key={city.id} value={city.id} disabled={city.id === cityA.id}>
@@ -326,7 +328,7 @@ export default function ComparePage() {
                 ))}
               </select>
               {cityB.location.country && (
-                <p className="text-neutral-600 dark:text-neutral-400 text-sm mt-2 transition-colors duration-500">{cityB.location.country}</p>
+                <p className="text-neutral-600 dark:text-neutral-400 text-xs md:text-sm mt-2 transition-colors duration-500">{cityB.location.country}</p>
               )}
             </div>
           </div>
