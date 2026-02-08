@@ -30,12 +30,12 @@ export default function ComparePage() {
   
   const getImagePathA = (imageName: string | null) => {
     if (!imageName) return ''
-    return `/${cityFolderA}/${imageName}.PNG`
+    return `${import.meta.env.BASE_URL}${cityFolderA}/${imageName}.PNG`
   }
   
   const getImagePathB = (imageName: string | null) => {
     if (!imageName) return ''
-    return `/${cityFolderB}/${imageName}.PNG`
+    return `${import.meta.env.BASE_URL}${cityFolderB}/${imageName}.PNG`
   }
   
   // Get first quarter from each city for comparison

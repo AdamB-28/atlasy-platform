@@ -23,7 +23,7 @@ export default function CityPage() {
   const cityFolder = getCityFolderName(city.name)
   const getImagePath = (imageName: string | null) => {
     if (!imageName) return ''
-    return `/${cityFolder}/${imageName}.PNG`
+    return `${import.meta.env.BASE_URL}${cityFolder}/${imageName}.PNG`
   }
   
   const otherCities = cities.filter(c => c.id !== city.id)

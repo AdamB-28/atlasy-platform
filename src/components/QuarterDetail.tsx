@@ -38,7 +38,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
   const cityFolder = getCityFolderName(cityName)
   const getImagePath = (imageName: string | null) => {
     if (!imageName) return ''
-    return `/${cityFolder}/${imageName}.PNG`
+    return `${import.meta.env.BASE_URL}${cityFolder}/${imageName}.PNG`
   }
   
   return (
