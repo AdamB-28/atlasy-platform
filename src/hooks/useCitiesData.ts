@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { CitiesData, City } from '../types'
+import type { CitiesData } from '../types'
 
 export function useCitiesData() {
   const [data, setData] = useState<CitiesData | null>(null)
