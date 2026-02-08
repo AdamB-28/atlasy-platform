@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Educational platform for urban daylight and energy analysis",
-  "homepage": "https://yourusername.github.io/atlasy-platform",
+  "homepage": "https://adamb-28.github.io/atlasy-platform",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
