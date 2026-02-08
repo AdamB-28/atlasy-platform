@@ -1,0 +1,269 @@
+{
+  "cities": [
+    {
+      "id": "elephant_and_castle",
+      "name": "Elephant and Castle",
+      "location": {
+        "country": "Wielka Brytania, \nLondyn, dzielnica \nElephant And Castle",
+        "coordinates": {
+          "lat": 51.4938,
+          "lng": -0.0992,
+          "zoom": 15
+        },
+        "imageUrl": "Elephant_and_Castle_lokalizacja"
+      },
+      "timeline": {
+        "years": "2013-2028",
+        "description": "\"Elephant Park jest częścią rewitalizowanego obszaru Elephant&Castel w południowym Londynie, na \nterenie dawnego osiedla mieszkalnego Heygate, zabudowanego blokowiskami z lat 60 i 70 XXw., ze \nskomplikowaną komunikacją, otoczone złą sławą z powodu czynników społecznych i zaniedbań \nsystemowych, którym sprzyjała struktura urbanistyczna osiedla.\" \"Elephant Park najbardziej przypomina gęsto zabudowaną, wielofunkcyjną dzielnicę w duchu założeń modelu \nmiasta Compact City oraz koncepcji 5­minute City. Jego cechą wyróżniającą jest zwarta struktura: intensywne \nwykorzystanie terenu na mieszkania, usługi i zieleń, z wyraźnym priorytetem lokalnych funkcji usługowych i \nrekreacyjnych. Zapewnia również bardzo dobre powiązania transportowe i mobilność pieszo­rowerową co jest \ntypowe dla miast Compact City. \""
+      },
+      "overview": {
+        "schwarzplanImage": "Elephant_and_Castle_schwarzplan",
+        "model3dImage": "Elephant_and_Castle_model_3D",
+        "far": 2.9
+      },
+      "urbanIndicators": {
+        "buildingIntensity": 0.39,
+        "greenSpacePercentage": "dominują kwartały zwartej zabudowy (na planie prostokąta bądź trapezu),obszary wewnątrz kwartałów są wyniesione o jedną kondygnację i zaadaptowane na zielone przestrzenie półpubliczne, w ramach zabudowy tworzącej kwartały znajduje się przynajmniej jeden punktowiec, który stanowi dominantę wysokościową",
+        "buildingTypes": "\"Przebudową objęto układ drogowy i pieszy wokół dzielnicy, z planem modernizacji i przebudowy stacji metra. Układ budynków i palców wewnętrznych zaplanowano w taki sposób, aby poprawić dostępność pieszą i rowerową w okolicy, co zachęca do korzystania z transportu publicznego, rowerów i tras pieszych.  W okolicy znajduje się wiele przystanków komunikacji miejskiej oraz bezpieczne ścieżki rowerowe. \nZminimalizowano skalę ruchu samochodowego i ograniczono liczbę miejsc parkingowych.\", \"ograniczenie emisji, promocja  ekologicznego transportu\", \"Priorytet dla ruchu rowerowego jako głównego środka transportu\"",
+        "transport": "\"39% terenu Elephant Parku to przestrzenie zielone, w tym park o powierzchni około 1 ha. Zachowano i \nwkomponowano w projekt istniejące drzewa, w tym stulenie okazy. Wprowadzono roślinność sprzyjająca \nbioróżnorodności np. łąki kwietne, domki dla owadów(... ) Wprowadzono system do zbierania i ponownego wykorzystania wody deszczowej. Wykonano ogrody \ndeszczowe. Wysoki wskaźnik retencji wód.\""
+      },
+      "shadingAnalysis": {
+        "marchSeptember": "Elephant_and_Castle_zacienianie_21marzec_wrzesien",
+        "june": "Elephant_and_Castle_zacienianie_21czerwiec",
+        "december": "Elephant_and_Castle_zacienianie_21grudzien"
+      },
+      "quarters": [
+        {
+          "id": 1,
+          "name": "Quarter 1",
+          "plan": "Elephant_and_Castle_kwartal_1_rzut",
+          "form3d": "Elephant_and_Castle_kwartal_1_forma_3D",
+          "far": 3.3,
+          "indicators": {
+            "buildingIntensity": 0.32,
+            "greenSpaceRatio": 0.42,
+            "buildingCoverage": 11,
+            "avgFloors": "21 zachowanych i 160 nowych",
+            "treeCount": "w przedziale 1,4 - 1,9:1",
+            "heightToWidthRatio": "18 - 20m, 20- 22 m, 15 - 16m",
+            "streetWidth": "głównie  funkcja mieszkaniowa  wraz z usługami w parterach"
+          },
+          "function": "głównie  funkcja mieszkaniowa  wraz z usługami w parterach",
+          "sunHours": "Elephant_and_Castle_sun_hours",
+          "daylightPotential": "Elephant_and_Castle_Daylight_potential",
+          "daylightPotential2": "Elephant_and_Castle_Daylight_potential_2",
+          "solarEnergy": "Elephant_and_Castle_Solar_energy_analysis",
+          "daylightFactor": {
+            "simulation1": {
+              "image": "Elephant_and_Castle_DF",
+              "avgValue": 0.0517,
+              "description": "Wartość maksymalna osiąga 19,33% w pobliżu przeszkleń, natomiast \nminimalna 2.32%"
+            },
+            "simulation2": {
+              "image": "brak",
+              "avgValue": "brak",
+              "description": "brak"
+            }
+          },
+          "spatialDaylightAutonomy": {
+            "simulation1": {
+              "image": "Elephant_and_Castle_sDA750lx",
+              "autonomy": "Średnia wartość sDA wynosi 49,54%"
+            },
+            "simulation2": {
+              "image": "brak",
+              "autonomy": "brak"
+            },
+            "interpretation": "\"Około 47% powierzchni pomieszczenia (strefa przyokienna zaznaczona na \nróżowo) spełnia zadane kryterium przez połowę czasu eksploatacji. Pozostałe 53% \npowierzchni wymaga doświetlenia światłem sztucznym przy wykonywaniu zadań \nwymagających wysokiej precyzji (750 lux)\""
+          },
+          "usefulDaylightIlluminance": {
+            "simulation1": {
+              "image": "Elephant_and_Castle_UDI_a",
+              "avgValue": "Średnia wartość UDI dla pomieszczenia to 64,09%."
+            },
+            "simulation2": {
+              "image": "brak",
+              "avgValue": "brak"
+            },
+            "interpretation": "\"Maksymalna wartość 76,07,% oraz fakt, że aż 94,5% powierzchni znajduje się \nponiżej progu olśnienia (Below Target), sugeruje, że pomieszczenie jest bardzo dobrze chronione przed przegrzewaniem i nadmiernym blaskiem, zachowując jednocześnie użyteczny poziom oświetlenia naturalnego przez większość roku.\" \"",
+            "conclusions": "brak"
+          }
+        }
+      ]
+    },
+    {
+      "id": "garnizon",
+      "name": "Garnizon",
+      "location": {
+        "country": "Polska, Gdańsk, dzielnica Strzyża/Wrzeszcz Górny",
+        "coordinates": {
+          "lat": 54.3894,
+          "lng": 18.5932,
+          "zoom": 15
+        },
+        "imageUrl": null
+      },
+      "timeline": {
+        "years": "2005 - obecnie",
+        "description": "\"Garnizon is a residential district developed on the site of former militarybarracks. The primary objective of the project was to reclaim and revitalize an area previously excluded from urban life, while preserving its historical\ncharacter. This included retaining existing buildings of high architectural and historical value.The development is designed to combine high-quality residential and office spaces with a full range of services, while offering excellent connectivity for pedestrians, cyclists, and motorists. It also benefits from outstandingaccess to public transport and nearby green spaces.\""
+      },
+      "overview": {
+        "schwarzplanImage": "Garnizon_schwarzplan",
+        "model3dImage": "Garnizon_model_3D",
+        "far": 2.75
+      },
+      "urbanIndicators": {
+        "buildingIntensity": 0.38,
+        "greenSpacePercentage": "kwartały zabudowy  (głównie na planie prostokąta), wewnątrz niektórych kwartałach znajdują się punktowce, tereny zieleni oraz ciągi piesze, obszary wewnątrz niektórych kwartałach są wyniesione o jedną kondygnację i zaadaptowane na zielone przestrzenie półpubliczne",
+        "buildingTypes": "kolej: 1200 m od przystanku kolejowego\ntramwaj: obecność dwóch przystanków tramwajowych w zasięgu do 800 m\nautobus: obecność 3 przystanków autobusowych w zasięgu 600 m \nrower: stacje roweru metropolitalnego\nścieżki rowerowe\nciągi pieszo - jezdne na obszarze założenia",
+        "transport": null
+      },
+      "shadingAnalysis": {
+        "marchSeptember": "brak",
+        "june": "brak",
+        "december": "brak"
+      },
+      "quarters": [
+        {
+          "id": 1,
+          "name": "Quarter 1",
+          "plan": "Garnizon_kwartal_1_rzut",
+          "form3d": "Garnizon_kwartal_1_forma_3D",
+          "far": 2.89,
+          "indicators": {
+            "buildingIntensity": 0.61,
+            "greenSpaceRatio": 0.52,
+            "buildingCoverage": 5.66,
+            "avgFloors": 8,
+            "treeCount": "brak",
+            "heightToWidthRatio": "brak",
+            "streetWidth": ""
+          },
+          "sunHours": "Garnizon_sun_hours_kwartal_1",
+          "daylightPotential": "Garnizon_Daylight_potential_kwartal_1",
+          "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_1"
+        },
+        {
+          "id": 2,
+          "name": "Quarter 2",
+          "plan": "Garnizon_kwartal_2_forma_3D",
+          "form3d": 1.98,
+          "far": 0.79,
+          "indicators": {
+            "buildingIntensity": 0.39,
+            "greenSpaceRatio": 5,
+            "buildingCoverage": 16,
+            "avgFloors": "brak",
+            "treeCount": "brak",
+            "heightToWidthRatio": null,
+            "streetWidth": "Garnizon_sun_hours_kwartal_2"
+          },
+          "sunHours": "Garnizon_Daylight_potential_kwartal_2",
+          "daylightPotential": "Garnizon_Daylight_potential_2_kwartal_2",
+          "daylightPotential2": "brak"
+        },
+        {
+          "id": 3,
+          "name": "Quarter 3",
+          "plan": null,
+          "form3d": "Garnizon_sun_hours_kwartal_3",
+          "far": "Garnizon_Daylight_potential_kwartal_3",
+          "indicators": {
+            "buildingIntensity": "Garnizon_Daylight_potential_2_kwartal_3",
+            "greenSpaceRatio": "brak",
+            "buildingCoverage": "brak",
+            "avgFloors": "brak",
+            "treeCount": "brak",
+            "heightToWidthRatio": "brak",
+            "streetWidth": "brak"
+          },
+          "sunHours": "brak",
+          "daylightPotential": "brak",
+          "daylightPotential2": "brak"
+        }
+      ]
+    },
+    {
+      "id": "hudson_yards",
+      "name": "Hudson Yards",
+      "location": {
+        "country": "Stany \nZjednoczone ,  Nowy \nJork, Hudson Yards",
+        "coordinates": {
+          "lat": 40.7536,
+          "lng": -74.001,
+          "zoom": 15
+        },
+        "imageUrl": "Hudson_Yards_lokalizacja"
+      },
+      "timeline": {
+        "years": "brak",
+        "description": "\"Hudson Yards to obszar i wielofunkcyjny kompleks urbanistyczny położony w zachodniej \nczęści Manhattanu w Nowym Jorku (USA), na Far West Side Midtown Manhattan. Inwestycja zajmuje \nteren pomiędzy West 30th Street a West 34th Street, a w kierunku wschód–zachód rozciąga się od 10th \nAvenue w stronę rzeki Hudson i West Side Highway. Kompleks w dużej mierze zwrócony jest w stronę \nrzeki Hudson na zachodzie i graniczy z innymi dzielnicami Manhattanu, takimi jak Chelsea i Hell’s \nKitchen. \""
+      },
+      "overview": {
+        "schwarzplanImage": "Hudson_Yards_schwarzplan",
+        "model3dImage": "Hudson_Yards_model_3D",
+        "far": 12.65
+      },
+      "urbanIndicators": {
+        "buildingIntensity": 0.1473,
+        "greenSpacePercentage": "brak",
+        "buildingTypes": "\"Hudson Yards został zaprojektowany z myślą o płynnej integracji z istniejącą tkanką miejską:\n· bezpośrednie połączenie z High Line, popularnym parkiem linearowym.\n· nowa stacja metra 34th Street–Hudson Yards, zapewniająca łatwy dostęp do innych części miasta.\"",
+        "transport": "\"Projekt zakładał integrację zaawansowanych technologii ekologicznych, takich jak:\n· systemy odzysku wody deszczowej do nawadniania terenów zielonych.\n· własne źródła energii, w tym mikroelektrownie kogeneracyjne.\n· zielone dachy i inteligentne systemy zarządzania energią.\""
+      },
+      "shadingAnalysis": {
+        "marchSeptember": "Hudson_Yards_21marzec_wrzesien",
+        "june": "Hudson_Yards_21lipiec",
+        "december": "Hudson_Yards_21grudzien"
+      },
+      "quarters": [
+        {
+          "id": 1,
+          "name": "Quarter 1",
+          "plan": "Hudson_Yards_kwartal_rzut",
+          "far": 12.65,
+          "indicators": {
+            "buildingIntensity": 0.1735,
+            "greenSpaceRatio": 0.49,
+            "buildingCoverage": 55,
+            "avgFloors": "brak"
+          },
+          "shadingAnalysis": {
+            "marchSeptember": "Hudson_Yards_21marzec_wrzesien",
+            "june": "Hudson_Yards_21lipiec",
+            "december": "Hudson_Yards_21grudzien"
+          },
+          "daylightFactor": {
+            "best": {
+              "image": "brak",
+              "description": "brak"
+            },
+            "worst": {
+              "image": "brak",
+              "description": "Hudson_Yards_DF_najgorsza_charakterystyka"
+            }
+          },
+          "spatialDaylightAutonomy": {
+            "best": {
+              "image": 0.0696,
+              "description": "Wartość maksymalna osiąga 23,96 % , natomiast \nminimalna 2.37%"
+            },
+            "worst": {
+              "image": "Hudson_Yards_DF_najlepsza_charakterystyka",
+              "description": 0.1068
+            }
+          },
+          "usefulDaylightIlluminance": {
+            "best": {
+              "image": "Wartość maksymalna osiąga 26,21 % , natomiast \nminimalna 4,01%",
+              "description": "Hudson_Yards_DA_najgorsza_charakterystyka"
+            },
+            "worst": {
+              "image": "Średnia wartość sDA wynosi 75,77%",
+              "description": "Hudson_Yards_DA_najlepsza_charakterystyka"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
