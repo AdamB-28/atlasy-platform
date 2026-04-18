@@ -125,84 +125,82 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
         )}
       </div>
       
-      {/* Sun Hours Analysis */}
-      {hasData(quarter.sunHours) && (
+      {/* Sun Hours Analysis + Distribution */}
+      {(hasData(quarter.sunHours) || quarter.sunHoursDistribution) && (
         <div className="card">
           <h4 className="section-title text-base md:text-lg">Sun Hours Analysis</h4>
-          <SafeImage
-            src={getImagePath(quarter.sunHours)}
-            alt="Sun hours analysis"
-            className="w-full rounded-lg"
-          />
-        </div>
-      )}
-
-      {/* Sun Hours Distribution */}
-      {quarter.sunHoursDistribution && (
-        <div className="card">
-          <h4 className="section-title text-base md:text-lg">Sun Hours Distribution</h4>
-          <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
-            Percentage of area receiving different amounts of daily sunlight hours (21 March)
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {quarter.sunHoursDistribution.ground && (
-              <DistributionChart
-                data={quarter.sunHoursDistribution.ground}
-                title="Ground Level"
-                color="amber"
-              />
-            )}
-            {quarter.sunHoursDistribution.facades && (
-              <DistributionChart
-                data={quarter.sunHoursDistribution.facades}
-                title="Facades, Roofs & Other"
-                color="amber"
-              />
-            )}
-          </div>
+          {hasData(quarter.sunHours) && (
+            <SafeImage
+              src={getImagePath(quarter.sunHours)}
+              alt="Sun hours analysis"
+              className="w-full rounded-lg"
+            />
+          )}
+          {quarter.sunHoursDistribution && (
+            <div className="mt-4">
+              <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
+                Percentage of area receiving different amounts of daily sunlight hours (21 March)
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {quarter.sunHoursDistribution.ground && (
+                  <DistributionChart
+                    data={quarter.sunHoursDistribution.ground}
+                    title="Ground Level"
+                    color="amber"
+                  />
+                )}
+                {quarter.sunHoursDistribution.facades && (
+                  <DistributionChart
+                    data={quarter.sunHoursDistribution.facades}
+                    title="Facades, Roofs & Other"
+                    color="amber"
+                  />
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
       
-      {/* Daylight Potential */}
-      {(hasData(quarter.daylightPotential) || hasData(quarter.daylightPotential2)) && (
+      {/* Daylight Potential + Distribution */}
+      {(hasData(quarter.daylightPotential) || hasData(quarter.daylightPotential2) || quarter.daylightPotentialDistribution) && (
         <div className="card">
           <h4 className="section-title text-base md:text-lg">Daylight Potential</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {hasData(quarter.daylightPotential) && (
-              <div>
-                <SafeImage
-                  src={getImagePath(quarter.daylightPotential)}
-                  alt="Daylight potential"
-                  className="w-full rounded-lg"
+          {(hasData(quarter.daylightPotential) || hasData(quarter.daylightPotential2)) && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {hasData(quarter.daylightPotential) && (
+                <div>
+                  <SafeImage
+                    src={getImagePath(quarter.daylightPotential)}
+                    alt="Daylight potential"
+                    className="w-full rounded-lg"
+                  />
+                </div>
+              )}
+              {hasData(quarter.daylightPotential2) && (
+                <div>
+                  <SafeImage
+                    src={getImagePath(quarter.daylightPotential2 || null)}
+                    alt="Daylight potential 2"
+                    className="w-full rounded-lg"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+          {quarter.daylightPotentialDistribution && (
+            <div className="mt-4">
+              <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
+                Percentage of facades receiving different levels of daylight potential
+              </p>
+              <div className="max-w-lg">
+                <DistributionChart
+                  data={quarter.daylightPotentialDistribution}
+                  color="blue"
                 />
               </div>
-            )}
-            {hasData(quarter.daylightPotential2) && (
-              <div>
-                <SafeImage
-                  src={getImagePath(quarter.daylightPotential2 || null)}
-                  alt="Daylight potential 2"
-                  className="w-full rounded-lg"
-                />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Daylight Potential Distribution */}
-      {quarter.daylightPotentialDistribution && (
-        <div className="card">
-          <h4 className="section-title text-base md:text-lg">Daylight Potential Distribution</h4>
-          <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
-            Percentage of facades receiving different levels of daylight potential
-          </p>
-          <div className="max-w-lg">
-            <DistributionChart
-              data={quarter.daylightPotentialDistribution}
-              color="blue"
-            />
-          </div>
+            </div>
+          )}
         </div>
       )}
       
