@@ -1,36 +1,10 @@
-import { hasData, formatMetricValue, getCityFolderName } from '../utils/helpers'
+import { hasData, getCityFolderName, extractPercentage } from '../utils/helpers'
 import type { Quarter } from '../types'
 import SafeImage from './SafeImage'
 import DistributionChart from './DistributionChart'
 import SolarEnergyTable from './SolarEnergyTable'
 import UrbanSectionDiagram from './UrbanSectionDiagram'
-
-interface MetricCardProps {
-  label: string
-  value: string | number | null
-  unit?: string
-}
-
-function MetricCard({ label, value, unit }: MetricCardProps) {
-  if (!hasData(value)) {
-    return (
-      <div className="p-3 md:p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
-        <p className="metric-label text-xs md:text-sm">{label}</p>
-        <p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500 mt-2">No data available</p>
-      </div>
-    )
-  }
-  
-  return (
-    <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
-      <p className="metric-label text-xs md:text-sm">{label}</p>
-      <p className="metric-value text-xl md:text-2xl">
-        {formatMetricValue(value)}
-        {unit && <span className="text-xs md:text-base text-neutral-500 dark:text-neutral-400 ml-1">{unit}</span>}
-      </p>
-    </div>
-  )
-}
+import { DensityGauge, PercentRing } from './MetricVisuals'
 
 interface QuarterDetailProps {
   quarter: Quarter
@@ -84,47 +58,70 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
       {/* Urban Indicators */}
       <div className="card">
         <h4 className="section-title text-base md:text-lg">Urban Indicators</h4>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
-          <MetricCard 
-            label="Building Intensity" 
-            value={quarter.indicators.buildingIntensity}
-          />
-          <MetricCard 
-            label="Green Space Ratio" 
-            value={quarter.indicators.greenSpaceRatio}
-            unit="%"
-          />
-          <MetricCard 
-            label="Building Coverage" 
-            value={quarter.indicators.buildingCoverage}
-            unit="%"
-          />
-          <MetricCard 
-            label="Average Floors" 
-            value={quarter.indicators.avgFloors}
-          />
-          <MetricCard 
-            label="Tree Count" 
-            value={quarter.indicators.treeCount}
-          />
-          <MetricCard 
-            label="H/W Ratio" 
-            value={quarter.indicators.heightToWidthRatio}
-          />
-          <MetricCard 
-            label="Street Width" 
-            value={quarter.indicators.streetWidth}
-          />
+
+        {/* FAR / Building Intensity – full-width density gauge */}
+        {hasData(quarter.indicators.buildingIntensity) && (
+          <div className="mb-4 p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+            <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
+              Building Intensity (FAR)
+            </p>
+            <DensityGauge value={quarter.indicators.buildingIntensity} />
+          </div>
+        )}
+
+        {/* Percentage metrics – ring charts side by side */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-4">
+          {hasData(quarter.indicators.greenSpaceRatio) && (
+            <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
+                Green Space
+              </p>
+              <PercentRing
+                value={quarter.indicators.greenSpaceRatio}
+                color="stroke-emerald-500 dark:stroke-emerald-400"
+              />
+            </div>
+          )}
+          {hasData(quarter.indicators.buildingCoverage) && (
+            <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
+                Building Coverage
+              </p>
+              <PercentRing
+                value={quarter.indicators.buildingCoverage}
+                color="stroke-slate-500 dark:stroke-slate-400"
+              />
+            </div>
+          )}
+          {hasData(quarter.indicators.avgFloors) && (
+            <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
+                Average Floors
+              </p>
+              <span className="text-2xl font-bold text-neutral-900 dark:text-white transition-colors duration-500">
+                {quarter.indicators.avgFloors}
+              </span>
+              <span className="text-xs text-neutral-500 dark:text-neutral-400 ml-1 transition-colors duration-500">storeys</span>
+            </div>
+          )}
+          {hasData(quarter.indicators.treeCount) && (
+            <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+              <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
+                Trees
+              </p>
+              <p className="text-sm text-neutral-700 dark:text-neutral-300 transition-colors duration-500">
+                {quarter.indicators.treeCount}
+              </p>
+            </div>
+          )}
         </div>
 
-        {/* H/W Ratio & Street Width Visualizations */}
+        {/* H/W Ratio & Street Width – existing diagram */}
         {(hasData(quarter.indicators.heightToWidthRatio) || hasData(quarter.indicators.streetWidth)) && (
-          <div className="mt-4">
-            <UrbanSectionDiagram
-              heightToWidthRatio={quarter.indicators.heightToWidthRatio}
-              streetWidth={quarter.indicators.streetWidth}
-            />
-          </div>
+          <UrbanSectionDiagram
+            heightToWidthRatio={quarter.indicators.heightToWidthRatio}
+            streetWidth={quarter.indicators.streetWidth}
+          />
         )}
       </div>
       
@@ -249,11 +246,15 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
                 />
                 {hasData(quarter.daylightFactor.simulation1.avgValue) && (
-                  <MetricCard
-                    label="Average DF"
-                    value={quarter.daylightFactor.simulation1.avgValue || null}
-                    unit="%"
-                  />
+                  <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+                    <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">Average DF</p>
+                    <PercentRing
+                      value={quarter.daylightFactor.simulation1.avgValue ?? null}
+                      color="stroke-amber-500 dark:stroke-amber-400"
+                      threshold={2}
+                      thresholdLabel="2% min (European standard)"
+                    />
+                  </div>
                 )}
                 {hasData(quarter.daylightFactor.simulation1.description) && (
                   <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 p-3 md:p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg transition-colors duration-500">
@@ -273,11 +274,15 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
                 />
                 {hasData(quarter.daylightFactor.simulation2.avgValue) && (
-                  <MetricCard
-                    label="Average DF"
-                    value={quarter.daylightFactor.simulation2.avgValue || null}
-                    unit="%"
-                  />
+                  <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+                    <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">Average DF</p>
+                    <PercentRing
+                      value={quarter.daylightFactor.simulation2.avgValue ?? null}
+                      color="stroke-amber-500 dark:stroke-amber-400"
+                      threshold={2}
+                      thresholdLabel="2% min (European standard)"
+                    />
+                  </div>
                 )}
                 {hasData(quarter.daylightFactor.simulation2.description) && (
                   <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 p-3 md:p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg transition-colors duration-500">
@@ -308,13 +313,24 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   alt="sDA - Worst Case"
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
                 />
-                {hasData(quarter.spatialDaylightAutonomy.simulation1.autonomy) && (
-                  <MetricCard
-                    label="Autonomy"
-                    value={quarter.spatialDaylightAutonomy.simulation1.autonomy || null}
-                    unit="%"
-                  />
-                )}
+                {hasData(quarter.spatialDaylightAutonomy.simulation1.autonomy) && (() => {
+                  const pct = extractPercentage(quarter.spatialDaylightAutonomy!.simulation1.autonomy as string)
+                  return pct !== null ? (
+                    <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+                      <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">sDA Value</p>
+                      <PercentRing
+                        value={pct}
+                        color="stroke-blue-500 dark:stroke-blue-400"
+                        threshold={55}
+                        thresholdLabel="55% LEED threshold"
+                      />
+                    </div>
+                  ) : (
+                    <p className="text-xs md:text-sm text-neutral-700 dark:text-neutral-300 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg transition-colors duration-500">
+                      {String(quarter.spatialDaylightAutonomy!.simulation1.autonomy)}
+                    </p>
+                  )
+                })()}
               </div>
             )}
             
@@ -326,13 +342,24 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   alt="sDA - Best Case"
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
                 />
-                {hasData(quarter.spatialDaylightAutonomy.simulation2.autonomy) && (
-                  <MetricCard
-                    label="Autonomy"
-                    value={quarter.spatialDaylightAutonomy.simulation2.autonomy || null}
-                    unit="%"
-                  />
-                )}
+                {hasData(quarter.spatialDaylightAutonomy.simulation2.autonomy) && (() => {
+                  const pct = extractPercentage(quarter.spatialDaylightAutonomy!.simulation2.autonomy as string)
+                  return pct !== null ? (
+                    <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+                      <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">sDA Value</p>
+                      <PercentRing
+                        value={pct}
+                        color="stroke-blue-500 dark:stroke-blue-400"
+                        threshold={55}
+                        thresholdLabel="55% LEED threshold"
+                      />
+                    </div>
+                  ) : (
+                    <p className="text-xs md:text-sm text-neutral-700 dark:text-neutral-300 p-3 bg-neutral-50 dark:bg-neutral-800 rounded-lg transition-colors duration-500">
+                      {String(quarter.spatialDaylightAutonomy!.simulation2.autonomy)}
+                    </p>
+                  )
+                })()}
               </div>
             )}
           </div>
@@ -367,11 +394,13 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
                 />
                 {hasData(quarter.usefulDaylightIlluminance.simulation1.avgValue) && (
-                  <MetricCard
-                    label="Average UDI"
-                    value={quarter.usefulDaylightIlluminance.simulation1.avgValue || null}
-                    unit="%"
-                  />
+                  <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+                    <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">Average UDI</p>
+                    <PercentRing
+                      value={quarter.usefulDaylightIlluminance.simulation1.avgValue ?? null}
+                      color="stroke-violet-500 dark:stroke-violet-400"
+                    />
+                  </div>
                 )}
               </div>
             )}
@@ -385,11 +414,13 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
                 />
                 {hasData(quarter.usefulDaylightIlluminance.simulation2.avgValue) && (
-                  <MetricCard
-                    label="Average UDI"
-                    value={quarter.usefulDaylightIlluminance.simulation2.avgValue || null}
-                    unit="%"
-                  />
+                  <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+                    <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">Average UDI</p>
+                    <PercentRing
+                      value={quarter.usefulDaylightIlluminance.simulation2.avgValue ?? null}
+                      color="stroke-violet-500 dark:stroke-violet-400"
+                    />
+                  </div>
                 )}
               </div>
             )}

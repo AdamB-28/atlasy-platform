@@ -18,6 +18,29 @@ export function formatMetricValue(value: number | string | null): string {
   return String(value)
 }
 
+/** Parse a European-format number string like "2,9", "32%", "12,65" into a number */
+export function parseEuroNumber(val: string | number | null): number | null {
+  if (val === null || val === undefined) return null
+  if (typeof val === 'number') return val
+  const cleaned = val.replace(/%\.?$/, '').replace(/\s/g, '').replace(',', '.')
+  const num = parseFloat(cleaned)
+  return isNaN(num) ? null : num
+}
+
+/** Check if a string value already contains the given unit suffix */
+export function valueContainsUnit(value: string | number | null, unit: string): boolean {
+  if (value === null || value === undefined) return false
+  return String(value).trimEnd().endsWith(unit)
+}
+
+/** Extract a percentage number from a text string like "The average sDA value is 49,54%" */
+export function extractPercentage(text: string | null): number | null {
+  if (!text) return null
+  const match = text.match(/([\d]+[,.]?\d*)\s*%/)
+  if (!match) return null
+  return parseFloat(match[1].replace(',', '.'))
+}
+
 export function hasData(value: any): boolean {
   return value !== null && value !== undefined && value !== ''
 }
