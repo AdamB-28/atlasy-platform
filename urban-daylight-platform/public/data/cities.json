@@ -1,0 +1,297 @@
+[
+  {
+    "id": "elephant-and-castle",
+    "name": "Elephant and Castle",
+    "location": {
+      "country": "Great Britain, \nLondon, \nElephant And Castle",
+      "coordinates": {
+        "lat": 51.4937,
+        "lng": -0.0996,
+        "zoom": 15
+      },
+      "imageUrl": "Elephant_and_Castle_lokalizacja"
+    },
+    "timeline": {
+      "years": "2013-2028",
+      "description": "Elephant Park forms part of the Elephant & Castle regeneration area in south London, situated on the site of the former Heygate housing estate, which consisted of tower blocks built in the 1960s and 1970s, with a complex transport network, and which had gained a notorious reputation due to social factors and systemic neglect \nsystemic factors, which were exacerbated by the estate’s urban structure.Elephant Park most closely resembles a densely built-up, mixed-use neighbourhood in the spirit of the Compact City model and the 5-minute City concept. Its distinguishing feature is its compact structure: intensive \nuse of land for housing, services and green spaces, with a clear priority given to local service and recreational functions. It also provides excellent transport links and mobility for pedestrians and cyclists, which is typical of Compact City developments."
+    },
+    "overview": {
+      "schwarzplanImage": "Elephant_and_Castle_schwarzplan",
+      "model3dImage": "Elephant_and_Castle_model_3D",
+      "far": "2,9"
+    },
+    "urbanIndicators": {
+      "buildingIntensity": "2,9",
+      "greenSpacePercentage": "39%",
+      "buildingTypes": "The development is dominated by blocks of dense housing (rectangular or trapezoidal in plan); the areas within the blocks are raised by one storey and converted into semi-public green spaces; within the development comprising these blocks, there is at least one high-rise building that serves as a prominent landmark",
+      "transport": "The redevelopment project covers the road and pedestrian network around the district, including plans to modernise and rebuild the underground station. The layout of the buildings and internal streets has been designed to improve pedestrian and cycling access in the area, thereby encouraging the use of public transport, bicycles and walking routes. There are numerous public transport stops and safe cycle paths in the area. The volume of car traffic has been minimised and the number of parking spaces reduced.‘, ’reducing emissions, promoting  sustainable transport‘, ’Prioritising cycling as the main mode of transport"
+    },
+    "shadingAnalysis": {
+      "marchSeptember": "Elephant_and_Castle_zacienianie_21marzec_wrzesien",
+      "june": "Elephant_and_Castle_zacienianie_21czerwiec",
+      "december": "Elephant_and_Castle_zacienianie_21grudzien"
+    },
+    "siteAnalysis": {
+      "sunHoursImage": "Elephant_and_Castle_sun_hours",
+      "daylightPotentialImage": "Elephant_and_Castle_Daylight_potential",
+      "solarEnergyImage": "Elephant_and_Castle_Solar_energy_analysis"
+    },
+    "quarters": [
+      {
+        "id": 1,
+        "name": "Quarter 1",
+        "plan": "Elephant_and_Castle_kwartal_1_rzut",
+        "form3d": "Elephant_and_Castle_kwartal_1_forma_3D",
+        "far": "3,3",
+        "indicators": {
+          "buildingIntensity": "3,3",
+          "greenSpaceRatio": "32%",
+          "buildingCoverage": "42%",
+          "avgFloors": "11",
+          "treeCount": "21 existing and 160 new",
+          "heightToWidthRatio": "between 1,4 - 1,9:1",
+          "streetWidth": "18 - 20m, 20- 22 m, 15 - 16m"
+        },
+        "function": "mainly multi-family residential function with services on the ground floors",
+        "sunHours": "Elephant_and_Castle_sun_hours_kwartal_1",
+        "daylightPotential": "Elephant_and_Castle_Daylight_potential_kwartal_1",
+        "daylightPotential2": null,
+        "solarEnergy": "Elephant_and_Castle_Solar_energy_analysis",
+        "daylightFactor": {
+          "simulation1": {
+            "image": "Elephant_and_Castle_DF",
+            "avgValue": "5,17%",
+            "description": "The maximum value reaches 19.33% near the glazing, whilst the minimum is 2.32%"
+          },
+          "simulation2": {
+            "image": null,
+            "avgValue": null,
+            "description": null
+          }
+        },
+        "spatialDaylightAutonomy": {
+          "simulation1": {
+            "image": "Elephant_and_Castle_sDA750lx",
+            "autonomy": "?rednia warto?? sDA wynosi 49,54%"
+          },
+          "simulation2": {
+            "image": null,
+            "autonomy": null
+          },
+          "interpretation": "Around 47% of the room’s floor area (the window area marked in pink) meets the specified criterion for half of the time it is in use. The remaining 53% of the floor area requires artificial lighting when carrying out tasks that demand high precision (750 lux)."
+        },
+        "usefulDaylightIlluminance": {
+          "simulation1": {
+            "image": "Elephant_and_Castle_UDI_a",
+            "avgValue": "64,09%"
+          },
+          "simulation2": {
+            "image": null,
+            "avgValue": null
+          },
+          "interpretation": null,
+          "conclusions": "The maximum value of 76.07% and the fact that as much as 94.5% of the area falls below the glare threshold (Below Target) suggests that the room is very well protected against overheating and excessive glare, whilst maintaining a usable level of natural light for most of the year."
+        }
+      }
+    ]
+  },
+  {
+    "id": "garnizon",
+    "name": "Garnizon",
+    "location": {
+      "country": "Poland, Gda?sk,  Strzy?a/Wrzeszcz Górny",
+      "coordinates": {
+        "lat": 54.3813,
+        "lng": 18.5955,
+        "zoom": 15
+      },
+      "imageUrl": "Garnizon_lokalizacja"
+    },
+    "timeline": {
+      "years": "2005 - currently",
+      "description": "Garnizon is a residential district developed on the site of former militarybarracks. The primary objective of the project was to reclaim and revitalize an area previously excluded from urban life, while preserving its historical\ncharacter. This included retaining existing buildings of high architectural and historical value.The development is designed to combine high-quality residential and office spaces with a full range of services, while offering excellent connectivity for pedestrians, cyclists, and motorists. It also benefits from outstandingaccess to public transport and nearby green spaces."
+    },
+    "overview": {
+      "schwarzplanImage": "Garnizon_schwarzplan",
+      "model3dImage": "Garnizon_model_3D",
+      "far": "2,75"
+    },
+    "urbanIndicators": {
+      "buildingIntensity": "2,75",
+      "greenSpacePercentage": "38%",
+      "buildingTypes": "building blocks (mainly rectangular in plan); within some of these blocks there are tower blocks, green spaces and pedestrian routes; the areas within some of these blocks are raised by one storey and converted into semi-public green spaces",
+      "transport": "Rail: 1,200 m from the railway station\nTram: two tram stops within 800 m\nBus: three bus stops within 600 m\nCycling: metropolitan bike-share stations\ncycle paths\nshared-use paths within the development area"
+    },
+    "shadingAnalysis": {
+      "marchSeptember": null,
+      "june": null,
+      "december": null
+    },
+    "siteAnalysis": {
+      "sunHoursImage": "Garnizon_sun_hours",
+      "daylightPotentialImage": "Garnizon_Daylight_potential",
+      "solarEnergyImage": "Garnizon_Solar_energy_analysis"
+    },
+    "quarters": [
+      {
+        "id": 1,
+        "name": "Quarter 1",
+        "plan": "Garnizon_kwartal_1_rzut",
+        "form3d": "Garnizon_kwartal_1_forma_3D",
+        "far": "2,89",
+        "indicators": {
+          "buildingIntensity": "2,89",
+          "greenSpaceRatio": "61%",
+          "buildingCoverage": "52%",
+          "avgFloors": "5,66",
+          "treeCount": "8",
+          "heightToWidthRatio": "1:1 ; 1,25 (1: 0,8)",
+          "streetWidth": "14m, 16m"
+        },
+        "function": "multi-family residential and commercial function (services on the ground floor)",
+        "sunHours": "Garnizon_sun_hours_kwartal_1",
+        "daylightPotential": "Garnizon_Daylight_potential_kwartal_1",
+        "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_1",
+        "solarEnergy": null
+      },
+      {
+        "id": 2,
+        "name": "Quarter 2",
+        "plan": "Garnizon_kwartal_2_rzut",
+        "form3d": "Garnizon_kwartal_2_forma_3D",
+        "far": "1,98",
+        "indicators": {
+          "buildingIntensity": "1,98",
+          "greenSpaceRatio": "79%",
+          "buildingCoverage": "39%",
+          "avgFloors": "5",
+          "treeCount": "16",
+          "heightToWidthRatio": "1,07 ( 1: 0,93)",
+          "streetWidth": "16m"
+        },
+        "function": "multi-family residential and commercial function (services on the ground floor)",
+        "sunHours": "Garnizon_sun_hours_kwartal_2",
+        "daylightPotential": "Garnizon_Daylight_potential_kwartal_2",
+        "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_2",
+        "solarEnergy": null
+      },
+      {
+        "id": 3,
+        "name": "Quarter 3",
+        "plan": "Garnizon_kwartal_3_rzut",
+        "form3d": "Garnizon_kwartal_3_forma_3D",
+        "far": "2,82",
+        "indicators": {
+          "buildingIntensity": "2,82",
+          "greenSpaceRatio": "54,20%",
+          "buildingCoverage": "50,60%",
+          "avgFloors": "6",
+          "treeCount": "22",
+          "heightToWidthRatio": "0,74 (1: 1,35); 1,85 (1:0,54)",
+          "streetWidth": "34m, 13,5m"
+        },
+        "function": "multi-family residential and commercial function (services on the ground floor)",
+        "sunHours": "Garnizon_sun_hours_kwartal_3",
+        "daylightPotential": "Garnizon_Daylight_potential_kwartal_3",
+        "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_3",
+        "solarEnergy": null
+      }
+    ]
+  },
+  {
+    "id": "hudson-yards",
+    "name": "Hudson Yards",
+    "location": {
+      "country": "The United States ,  New\nYork, Hudson Yards",
+      "coordinates": {
+        "lat": 40.7536,
+        "lng": -74.0019,
+        "zoom": 15
+      },
+      "imageUrl": "Hudson_Yards_lokalizacja"
+    },
+    "timeline": {
+      "years": "2012 - 2019 (phase 1)",
+      "description": "Hudson Yards is a mixed-use urban development located in the western part of Manhattan, New York (USA), on the Far West Side of Midtown Manhattan. The development occupies the area between West 30th Street and West 34th Street, and stretches east–west from 10th Avenue towards the Hudson River and the West Side Highway. The complex largely faces the Hudson River to the west and borders other Manhattan neighbourhoods, such as Chelsea and Hell’s \nKitchen."
+    },
+    "overview": {
+      "schwarzplanImage": "Hudson_Yards_schwarzplan",
+      "model3dImage": "Hudson_Yards_model_3D",
+      "far": "12,65"
+    },
+    "urbanIndicators": {
+      "buildingIntensity": "12,65",
+      "greenSpacePercentage": "14,73%",
+      "buildingTypes": "kwarta? zwartej zabudowy na planie prostok?ta tworzony przez wie?owce, wewn?trz kwarta?u przestrze? publiczna",
+      "transport": "\"Hudson Yards zosta? zaprojektowany z my?l? o p?ynnej integracji z istniej?c? tkank? miejsk?:\n· bezpo?rednie po??czenie z High Line, popularnym parkiem linearowym.\n· nowa stacja metra 34th Street–Hudson Yards, zapewniaj?ca ?atwy dost?p do innych cz??ci miasta.\""
+    },
+    "shadingAnalysis": {
+      "marchSeptember": "Hudson_Yards_21marzec_wrzesien",
+      "june": "Hudson_Yards_21lipiec",
+      "december": "Hudson_Yards_21grudzien"
+    },
+    "siteAnalysis": {
+      "sunHoursImage": null,
+      "daylightPotentialImage": null,
+      "solarEnergyImage": null
+    },
+    "quarters": [
+      {
+        "id": 1,
+        "name": "Quarter 1",
+        "plan": null,
+        "form3d": null,
+        "far": null,
+        "indicators": {
+          "buildingIntensity": null,
+          "greenSpaceRatio": null,
+          "buildingCoverage": null,
+          "avgFloors": null,
+          "treeCount": null,
+          "heightToWidthRatio": null,
+          "streetWidth": null
+        },
+        "function": null,
+        "sunHours": null,
+        "daylightPotential": null,
+        "daylightPotential2": null,
+        "solarEnergy": null,
+        "daylightFactor": {
+          "simulation1": {
+            "image": "Hudson_Yards_DF_najgorsza_charakterystyka",
+            "avgValue": "6,96%",
+            "description": "The maximum value is 23.96%, whilst \nthe minimum is 2.37%"
+          },
+          "simulation2": {
+            "image": "Hudson_Yards_DF_najlepsza_charakterystyka",
+            "avgValue": "10,68%",
+            "description": "The maximum value is 26.21%, whilst \nthe minimum is 4.01%"
+          }
+        },
+        "spatialDaylightAutonomy": {
+          "simulation1": {
+            "image": "Hudson_Yards_DA_najgorsza_charakterystyka",
+            "autonomy": "?rednia warto?? sDA wynosi 75,77%"
+          },
+          "simulation2": {
+            "image": "Hudson_Yards_DA_najlepsza_charakterystyka",
+            "autonomy": "The average sDA value is 84.37%"
+          },
+          "interpretation": "\"A room facing south and with a higher window-to-floor area ratio spends a greater proportion of the year with daylight illuminance exceeding the threshold value of 300 lx used in the calculations, without the need for artificial lighting.\""
+        },
+        "usefulDaylightIlluminance": {
+          "simulation1": {
+            "image": "Hudson_Yards_UDI_najgorsza_charakterystyka",
+            "avgValue": "68,21%"
+          },
+          "simulation2": {
+            "image": "Hudson_Yards_UDI_najlepsza_charakterystyka",
+            "avgValue": "53,66%."
+          },
+          "interpretation": null,
+          "conclusions": "\"Ni?sze warto?ci UDI w strefie przyokiennej wynikaj? z przekroczenia górnego progu u?ytecznego nat??enia o?wietlenia (3000 lx). Pomimo wysokiego poziomu do?wietlenia, warto?ci te klasyfikowane s? jako nadmierne (UDI-high) i nie s? uwzgl?dniane w wska?niku UDI-acceptable. UDI nie mierzy „ile ?wiat?a”, tylko czy ?wiat?o mie?ci si? w przedziale u?ytecznym.\""
+        }
+      }
+    ]
+  }
+]

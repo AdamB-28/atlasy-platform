@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-neutral-200 dark:border-neutral-700;
+  }
+  
+  body {
+    @apply bg-neutral-50 text-neutral-900 antialiased;
+    @apply dark:bg-neutral-900 dark:text-neutral-100;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+    @apply dark:text-white;
+  }
+  
+  h1 {
+    @apply text-4xl tracking-tight;
+  }
+  
+  h2 {
+    @apply text-3xl tracking-tight;
+  }
+  
+  h3 {
+    @apply text-2xl;
+  }
+  
+  h4 {
+    @apply text-xl;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-sm border border-neutral-200 p-6;
+    @apply dark:bg-neutral-800 dark:border-neutral-700;
+  }
+  
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-colors duration-200;
+  }
+  
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700;
+    @apply dark:bg-primary-500 dark:hover:bg-primary-600;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-neutral-100 text-neutral-900 hover:bg-neutral-200;
+    @apply dark:bg-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-600;
+  }
+  
+  .metric-label {
+    @apply text-sm font-medium text-neutral-500 uppercase tracking-wide;
+    @apply dark:text-neutral-400;
+  }
+  
+  .metric-value {
+    @apply text-2xl font-semibold text-neutral-900 mt-1;
+    @apply dark:text-white;
+  }
+  
+  .section-title {
+    @apply text-lg font-semibold text-neutral-900 mb-4;
+    @apply dark:text-white transition-colors duration-500;
+  }
+}
+
+/* Leaflet map styling */
+.leaflet-container {
+  @apply h-full w-full rounded-lg;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply rounded-lg shadow-lg;
+}
+
+.leaflet-popup-content {
+  @apply text-sm;
+}
+
+/* Smooth transitions */
+.transition-height {
+  transition: height 0.3s ease-in-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-neutral-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-400;
+}
