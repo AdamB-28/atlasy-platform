@@ -1,6 +1,9 @@
 import { hasData, formatMetricValue, getCityFolderName } from '../utils/helpers'
 import type { Quarter } from '../types'
 import SafeImage from './SafeImage'
+import DistributionChart from './DistributionChart'
+import SolarEnergyTable from './SolarEnergyTable'
+import UrbanSectionDiagram from './UrbanSectionDiagram'
 
 interface MetricCardProps {
   label: string
@@ -113,6 +116,16 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
             value={quarter.indicators.streetWidth}
           />
         </div>
+
+        {/* H/W Ratio & Street Width Visualizations */}
+        {(hasData(quarter.indicators.heightToWidthRatio) || hasData(quarter.indicators.streetWidth)) && (
+          <div className="mt-4">
+            <UrbanSectionDiagram
+              heightToWidthRatio={quarter.indicators.heightToWidthRatio}
+              streetWidth={quarter.indicators.streetWidth}
+            />
+          </div>
+        )}
       </div>
       
       {/* Sun Hours Analysis */}
@@ -124,6 +137,32 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
             alt="Sun hours analysis"
             className="w-full rounded-lg"
           />
+        </div>
+      )}
+
+      {/* Sun Hours Distribution */}
+      {quarter.sunHoursDistribution && (
+        <div className="card">
+          <h4 className="section-title text-base md:text-lg">Sun Hours Distribution</h4>
+          <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
+            Percentage of area receiving different amounts of daily sunlight hours (21 March)
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {quarter.sunHoursDistribution.ground && (
+              <DistributionChart
+                data={quarter.sunHoursDistribution.ground}
+                title="Ground Level"
+                color="amber"
+              />
+            )}
+            {quarter.sunHoursDistribution.facades && (
+              <DistributionChart
+                data={quarter.sunHoursDistribution.facades}
+                title="Facades, Roofs & Other"
+                color="amber"
+              />
+            )}
+          </div>
         </div>
       )}
       
@@ -153,16 +192,40 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
           </div>
         </div>
       )}
+
+      {/* Daylight Potential Distribution */}
+      {quarter.daylightPotentialDistribution && (
+        <div className="card">
+          <h4 className="section-title text-base md:text-lg">Daylight Potential Distribution</h4>
+          <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
+            Percentage of facades receiving different levels of daylight potential
+          </p>
+          <div className="max-w-lg">
+            <DistributionChart
+              data={quarter.daylightPotentialDistribution}
+              color="blue"
+            />
+          </div>
+        </div>
+      )}
       
       {/* Solar Energy Analysis */}
-      {hasData(quarter.solarEnergy) && (
+      {(hasData(quarter.solarEnergy) || quarter.solarEnergySpecs) && (
         <div className="card">
           <h4 className="section-title text-base md:text-lg">Solar Energy Analysis</h4>
-          <SafeImage
-            src={getImagePath(quarter.solarEnergy || null)}
-            alt="Solar energy analysis"
-            className="w-full rounded-lg"
-          />
+          {hasData(quarter.solarEnergy) && (
+            <SafeImage
+              src={getImagePath(quarter.solarEnergy || null)}
+              alt="Solar energy analysis"
+              className="w-full rounded-lg"
+            />
+          )}
+          {quarter.solarEnergySpecs && (
+            <div className="mt-4">
+              <h5 className="text-sm font-semibold text-neutral-900 dark:text-white mb-2 transition-colors duration-500">Solar Energy Specifications</h5>
+              <SolarEnergyTable specs={quarter.solarEnergySpecs} />
+            </div>
+          )}
         </div>
       )}
       

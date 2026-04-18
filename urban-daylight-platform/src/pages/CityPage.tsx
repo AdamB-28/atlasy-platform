@@ -3,6 +3,8 @@ import { ArrowLeft, MapPin, Calendar, Building, Leaf, Train, GitCompare, Chevron
 import Layout from '../components/Layout'
 import QuarterDetail from '../components/QuarterDetail'
 import SafeImage from '../components/SafeImage'
+import DistributionChart from '../components/DistributionChart'
+import SolarEnergyTable from '../components/SolarEnergyTable'
 import { LoadingSpinner, ErrorMessage, NoData } from '../components/LoadingStates'
 import { useCity, useCities } from '../hooks/useCitiesData'
 import { hasData, getCityFolderName } from '../utils/helpers'
@@ -386,6 +388,59 @@ export default function CityPage() {
                 </div>
               )}
             </div>
+
+            {/* Site-Level Distribution Charts */}
+            {city.siteAnalysis?.sunHoursDistribution && (
+              <div className="mt-6 card">
+                <h3 className="section-title text-base md:text-lg">Site Sun Hours Distribution</h3>
+                <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
+                  Percentage of area receiving different amounts of daily sunlight hours (21 March)
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {city.siteAnalysis.sunHoursDistribution.ground && (
+                    <DistributionChart
+                      data={city.siteAnalysis.sunHoursDistribution.ground}
+                      title="Ground Level"
+                      color="amber"
+                    />
+                  )}
+                  {city.siteAnalysis.sunHoursDistribution.facades && (
+                    <DistributionChart
+                      data={city.siteAnalysis.sunHoursDistribution.facades}
+                      title="Facades, Roofs & Other"
+                      color="amber"
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+
+            {city.siteAnalysis?.daylightPotentialDistribution && (
+              <div className="mt-6 card">
+                <h3 className="section-title text-base md:text-lg">Site Daylight Potential Distribution</h3>
+                <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
+                  Percentage of facades receiving different levels of daylight potential
+                </p>
+                <div className="max-w-lg">
+                  <DistributionChart
+                    data={city.siteAnalysis.daylightPotentialDistribution}
+                    color="blue"
+                  />
+                </div>
+              </div>
+            )}
+
+            {city.siteAnalysis?.solarEnergySpecs && (
+              <div className="mt-6 card">
+                <h3 className="section-title text-base md:text-lg">Solar Energy Specifications</h3>
+                <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">
+                  Solar energy potential and electricity production estimates for the site
+                </p>
+                <div className="max-w-lg">
+                  <SolarEnergyTable specs={city.siteAnalysis.solarEnergySpecs} />
+                </div>
+              </div>
+            )}
           </div>
         )}
         

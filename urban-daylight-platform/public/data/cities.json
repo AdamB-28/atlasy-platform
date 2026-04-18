@@ -14,7 +14,7 @@
       },
       "timeline": {
         "years": "2013-2028",
-        "description": "Elephant Park forms part of the Elephant & Castle regeneration area in south London, situated on the site of the former Heygate housing estate, which consisted of tower blocks built in the 1960s and 1970s, with a complex transport network, and which had gained a notorious reputation due to social factors and systemic neglect \nsystemic factors, which were exacerbated by the estateâ€™s urban structure.Elephant Park most closely resembles a densely built-up, mixed-use neighbourhood in the spirit of the Compact City model and the 5-minute City concept. Its distinguishing feature is its compact structure: intensive \nuse of land for housing, services and green spaces, with a clear priority given to local service and recreational functions. It also provides excellent transport links and mobility for pedestrians and cyclists, which is typical of Compact City developments."
+        "description": "Elephant Park forms part of the Elephant & Castle regeneration area in south London, situated on the site of the former Heygate housing estate, which consisted of tower blocks built in the 1960s and 1970s, with a complex transport network, and which had gained a notorious reputation due to social factors and systemic neglect \nsystemic factors, which were exacerbated by the estate’s urban structure.Elephant Park most closely resembles a densely built-up, mixed-use neighbourhood in the spirit of the Compact City model and the 5-minute City concept. Its distinguishing feature is its compact structure: intensive \nuse of land for housing, services and green spaces, with a clear priority given to local service and recreational functions. It also provides excellent transport links and mobility for pedestrians and cyclists, which is typical of Compact City developments."
       },
       "overview": {
         "schwarzplanImage": "Elephant_and_Castle_schwarzplan",
@@ -25,7 +25,7 @@
         "buildingIntensity": "2,9",
         "greenSpacePercentage": "39%",
         "buildingTypes": "The development is dominated by blocks of dense housing (rectangular or trapezoidal in plan); the areas within the blocks are raised by one storey and converted into semi-public green spaces; within the development comprising these blocks, there is at least one high-rise building that serves as a prominent landmark",
-        "transport": "The redevelopment project covers the road and pedestrian network around the district, including plans to modernise and rebuild the underground station. The layout of the buildings and internal streets has been designed to improve pedestrian and cycling access in the area, thereby encouraging the use of public transport, bicycles and walking routes. There are numerous public transport stops and safe cycle paths in the area. The volume of car traffic has been minimised and the number of parking spaces reduced.â€, â€™reducing emissions, promoting  sustainable transportâ€, â€™Prioritising cycling as the main mode of transport"
+        "transport": "The redevelopment project covers the road and pedestrian network around the district, including plans to modernise and rebuild the underground station. The layout of the buildings and internal streets has been designed to improve pedestrian and cycling access in the area, thereby encouraging the use of public transport, bicycles and walking routes. There are numerous public transport stops and safe cycle paths in the area. The volume of car traffic has been minimised and the number of parking spaces reduced.‘, ’reducing emissions, promoting  sustainable transport‘, ’Prioritising cycling as the main mode of transport"
       },
       "shadingAnalysis": {
         "marchSeptember": "Elephant_and_Castle_zacienianie_21marzec_wrzesien",
@@ -35,7 +35,147 @@
       "siteAnalysis": {
         "sunHoursImage": "Elephant_and_Castle_sun_hours",
         "daylightPotentialImage": "Elephant_and_Castle_Daylight_potential",
-        "solarEnergyImage": "Elephant_and_Castle_Solar_energy_analysis"
+        "solarEnergyImage": "Elephant_and_Castle_Solar_energy_analysis",
+        "sunHoursDistribution": {
+          "ground": {
+            "bins": [
+              {
+                "label": "0-1",
+                "value": 14.0
+              },
+              {
+                "label": "1-2",
+                "value": 10.0
+              },
+              {
+                "label": "2-3",
+                "value": 9.0
+              },
+              {
+                "label": "3-4",
+                "value": 11.0
+              },
+              {
+                "label": "4-5",
+                "value": 11.0
+              },
+              {
+                "label": "5-6",
+                "value": 13.0
+              },
+              {
+                "label": "6-7",
+                "value": 21.0
+              },
+              {
+                "label": "7-8",
+                "value": 7.0
+              },
+              {
+                "label": "8-9",
+                "value": 2.0
+              },
+              {
+                "label": "9+",
+                "value": 2.0
+              }
+            ],
+            "unit": "hours"
+          },
+          "facades": {
+            "bins": [
+              {
+                "label": "0-1",
+                "value": 21.0
+              },
+              {
+                "label": "1-2",
+                "value": 12.0
+              },
+              {
+                "label": "2-3",
+                "value": 8.0
+              },
+              {
+                "label": "3-4",
+                "value": 8.0
+              },
+              {
+                "label": "4-5",
+                "value": 10.0
+              },
+              {
+                "label": "5-6",
+                "value": 9.0
+              },
+              {
+                "label": "6-7",
+                "value": 8.0
+              },
+              {
+                "label": "7-8",
+                "value": 6.0
+              },
+              {
+                "label": "8-9",
+                "value": 4.0
+              },
+              {
+                "label": "9+",
+                "value": 13.0
+              }
+            ],
+            "unit": "hours"
+          }
+        },
+        "daylightPotentialDistribution": {
+          "bins": [
+            {
+              "label": "0-5",
+              "value": 1.0
+            },
+            {
+              "label": "5-10",
+              "value": 3.0
+            },
+            {
+              "label": "10-15",
+              "value": 6.0
+            },
+            {
+              "label": "15-19",
+              "value": 8.0
+            },
+            {
+              "label": "19-23",
+              "value": 10.0
+            },
+            {
+              "label": "23-27",
+              "value": 9.0
+            },
+            {
+              "label": "27-32",
+              "value": 14.0
+            },
+            {
+              "label": "32-37",
+              "value": 17.0
+            },
+            {
+              "label": "37+",
+              "value": 31.0
+            }
+          ],
+          "unit": "%"
+        },
+        "solarEnergySpecs": {
+          "area": 29804.0,
+          "totalSolarEnergy": 26400000.0,
+          "avgSolarEnergy": 880.0,
+          "panelArea": 17882.0,
+          "annualElectricity": 2520000.0
+        }
       },
       "quarters": [
         {
@@ -58,6 +198,139 @@
           "daylightPotential": "Elephant_and_Castle_Daylight_potential_kwartal_1",
           "daylightPotential2": null,
           "solarEnergy": "Elephant_and_Castle_Solar_energy_analysis",
+          "sunHoursDistribution": {
+            "ground": {
+              "bins": [
+                {
+                  "label": "0-1",
+                  "value": 2.0
+                },
+                {
+                  "label": "1-2",
+                  "value": 2.0
+                },
+                {
+                  "label": "2-3",
+                  "value": 7.0
+                },
+                {
+                  "label": "3-4",
+                  "value": 9.0
+                },
+                {
+                  "label": "4-5",
+                  "value": 10.0
+                },
+                {
+                  "label": "5-6",
+                  "value": 14.0
+                },
+                {
+                  "label": "6-7",
+                  "value": 9.0
+                },
+                {
+                  "label": "7-8",
+                  "value": 10.0
+                },
+                {
+                  "label": "8-9",
+                  "value": 8.0
+                },
+                {
+                  "label": "9+",
+                  "value": 29.0
+                }
+              ],
+              "unit": "hours"
+            },
+            "facades": {
+              "bins": [
+                {
+                  "label": "0-1",
+                  "value": 5.0
+                },
+                {
+                  "label": "1-2",
+                  "value": 4.0
+                },
+                {
+                  "label": "2-3",
+                  "value": 9.0
+                },
+                {
+                  "label": "3-4",
+                  "value": 9.0
+                },
+                {
+                  "label": "4-5",
+                  "value": 10.0
+                },
+                {
+                  "label": "5-6",
+                  "value": 16.0
+                },
+                {
+                  "label": "6-7",
+                  "value": 10.0
+                },
+                {
+                  "label": "7-8",
+                  "value": 9.0
+                },
+                {
+                  "label": "8-9",
+                  "value": 7.0
+                },
+                {
+                  "label": "9+",
+                  "value": 21.0
+                }
+              ],
+              "unit": "hours"
+            }
+          },
+          "daylightPotentialDistribution": {
+            "bins": [
+              {
+                "label": "0-5",
+                "value": 1.0
+              },
+              {
+                "label": "5-10",
+                "value": 2.0
+              },
+              {
+                "label": "10-15",
+                "value": 8.0
+              },
+              {
+                "label": "15-19",
+                "value": 11.0
+              },
+              {
+                "label": "19-23",
+                "value": 12.0
+              },
+              {
+                "label": "23-27",
+                "value": 9.0
+              },
+              {
+                "label": "27-32",
+                "value": 16.0
+              },
+              {
+                "label": "32-37",
+                "value": 16.0
+              },
+              {
+                "label": "37+",
+                "value": 25.0
+              }
+            ],
+            "unit": "%"
+          },
           "daylightFactor": {
             "simulation1": {
               "image": "Elephant_and_Castle_DF",
@@ -73,13 +346,13 @@
           "spatialDaylightAutonomy": {
             "simulation1": {
               "image": "Elephant_and_Castle_sDA750lx",
-              "autonomy": "?rednia warto?? sDA wynosi 49,54%"
+              "autonomy": "The average sDA value is 49,54%"
             },
             "simulation2": {
               "image": null,
               "autonomy": null
             },
-            "interpretation": "Around 47% of the roomâ€™s floor area (the window area marked in pink) meets the specified criterion for half of the time it is in use. The remaining 53% of the floor area requires artificial lighting when carrying out tasks that demand high precision (750 lux)."
+            "interpretation": "Around 47% of the room’s floor area (the window area marked in pink) meets the specified criterion for half of the time it is in use. The remaining 53% of the floor area requires artificial lighting when carrying out tasks that demand high precision (750 lux)."
           },
           "usefulDaylightIlluminance": {
             "simulation1": {
@@ -100,7 +373,7 @@
       "id": "garnizon",
       "name": "Garnizon",
       "location": {
-        "country": "Poland, Gda?sk,  Strzy?a/Wrzeszcz GĂłrny",
+        "country": "Poland, Gda?sk,  Strzy?a/Wrzeszcz Górny",
         "coordinates": {
           "lat": 54.3813,
           "lng": 18.5955,
@@ -131,7 +404,147 @@
       "siteAnalysis": {
         "sunHoursImage": "Garnizon_sun_hours",
         "daylightPotentialImage": "Garnizon_Daylight_potential",
-        "solarEnergyImage": "Garnizon_Solar_energy_analysis"
+        "solarEnergyImage": "Garnizon_Solar_energy_analysis",
+        "sunHoursDistribution": {
+          "ground": {
+            "bins": [
+              {
+                "label": "0-1",
+                "value": 11.0
+              },
+              {
+                "label": "1-2",
+                "value": 12.0
+              },
+              {
+                "label": "2-3",
+                "value": 16.0
+              },
+              {
+                "label": "3-4",
+                "value": 16.0
+              },
+              {
+                "label": "4-5",
+                "value": 12.0
+              },
+              {
+                "label": "5-6",
+                "value": 8.0
+              },
+              {
+                "label": "6-7",
+                "value": 7.0
+              },
+              {
+                "label": "7-8",
+                "value": 4.0
+              },
+              {
+                "label": "8-9",
+                "value": 4.0
+              },
+              {
+                "label": "9+",
+                "value": 10.0
+              }
+            ],
+            "unit": "hours"
+          },
+          "facades": {
+            "bins": [
+              {
+                "label": "0-1",
+                "value": 15.0
+              },
+              {
+                "label": "1-2",
+                "value": 9.0
+              },
+              {
+                "label": "2-3",
+                "value": 11.0
+              },
+              {
+                "label": "3-4",
+                "value": 11.0
+              },
+              {
+                "label": "4-5",
+                "value": 6.0
+              },
+              {
+                "label": "5-6",
+                "value": 5.0
+              },
+              {
+                "label": "6-7",
+                "value": 5.0
+              },
+              {
+                "label": "7-8",
+                "value": 6.0
+              },
+              {
+                "label": "8-9",
+                "value": 7.0
+              },
+              {
+                "label": "9+",
+                "value": 26.0
+              }
+            ],
+            "unit": "hours"
+          }
+        },
+        "daylightPotentialDistribution": {
+          "bins": [
+            {
+              "label": "0-5",
+              "value": 1.0
+            },
+            {
+              "label": "5-10",
+              "value": 2.0
+            },
+            {
+              "label": "10-15",
+              "value": 5.0
+            },
+            {
+              "label": "15-19",
+              "value": 7.0
+            },
+            {
+              "label": "19-23",
+              "value": 9.0
+            },
+            {
+              "label": "23-27",
+              "value": 9.0
+            },
+            {
+              "label": "27-32",
+              "value": 12.0
+            },
+            {
+              "label": "32-37",
+              "value": 15.0
+            },
+            {
+              "label": "37+",
+              "value": 41.0
+            }
+          ],
+          "unit": "%"
+        },
+        "solarEnergySpecs": {
+          "area": 43660.0,
+          "totalSolarEnergy": 47300000.0,
+          "avgSolarEnergy": 1080.0,
+          "panelArea": 26196.0,
+          "annualElectricity": 4500000.0
+        }
       },
       "quarters": [
         {
@@ -153,7 +566,140 @@
           "sunHours": "Garnizon_sun_hours_kwartal_1",
           "daylightPotential": "Garnizon_Daylight_potential_kwartal_1",
           "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_1",
-          "solarEnergy": null
+          "solarEnergy": null,
+          "sunHoursDistribution": {
+            "ground": {
+              "bins": [
+                {
+                  "label": "0-1",
+                  "value": 6.0
+                },
+                {
+                  "label": "1-2",
+                  "value": 12.0
+                },
+                {
+                  "label": "2-3",
+                  "value": 31.0
+                },
+                {
+                  "label": "3-4",
+                  "value": 24.0
+                },
+                {
+                  "label": "4-5",
+                  "value": 14.0
+                },
+                {
+                  "label": "5-6",
+                  "value": 5.0
+                },
+                {
+                  "label": "6-7",
+                  "value": 4.0
+                },
+                {
+                  "label": "7-8",
+                  "value": 2.0
+                },
+                {
+                  "label": "8-9",
+                  "value": 1.0
+                },
+                {
+                  "label": "9+",
+                  "value": 0.0
+                }
+              ],
+              "unit": "hours"
+            },
+            "facades": {
+              "bins": [
+                {
+                  "label": "0-1",
+                  "value": 13.0
+                },
+                {
+                  "label": "1-2",
+                  "value": 9.0
+                },
+                {
+                  "label": "2-3",
+                  "value": 14.0
+                },
+                {
+                  "label": "3-4",
+                  "value": 13.0
+                },
+                {
+                  "label": "4-5",
+                  "value": 6.0
+                },
+                {
+                  "label": "5-6",
+                  "value": 5.0
+                },
+                {
+                  "label": "6-7",
+                  "value": 4.0
+                },
+                {
+                  "label": "7-8",
+                  "value": 4.0
+                },
+                {
+                  "label": "8-9",
+                  "value": 6.0
+                },
+                {
+                  "label": "9+",
+                  "value": 25.0
+                }
+              ],
+              "unit": "hours"
+            }
+          },
+          "daylightPotentialDistribution": {
+            "bins": [
+              {
+                "label": "0-5",
+                "value": 2.0
+              },
+              {
+                "label": "5-10",
+                "value": 2.0
+              },
+              {
+                "label": "10-15",
+                "value": 5.0
+              },
+              {
+                "label": "15-19",
+                "value": 8.0
+              },
+              {
+                "label": "19-23",
+                "value": 10.0
+              },
+              {
+                "label": "23-27",
+                "value": 10.0
+              },
+              {
+                "label": "27-32",
+                "value": 12.0
+              },
+              {
+                "label": "32-37",
+                "value": 15.0
+              },
+              {
+                "label": "37+",
+                "value": 36.0
+              }
+            ],
+            "unit": "%"
+          }
         },
         {
           "id": 2,
@@ -174,7 +720,140 @@
           "sunHours": "Garnizon_sun_hours_kwartal_2",
           "daylightPotential": "Garnizon_Daylight_potential_kwartal_2",
           "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_2",
-          "solarEnergy": null
+          "solarEnergy": null,
+          "sunHoursDistribution": {
+            "ground": {
+              "bins": [
+                {
+                  "label": "0-1",
+                  "value": 11.0
+                },
+                {
+                  "label": "1-2",
+                  "value": 33.0
+                },
+                {
+                  "label": "2-3",
+                  "value": 33.0
+                },
+                {
+                  "label": "3-4",
+                  "value": 16.0
+                },
+                {
+                  "label": "4-5",
+                  "value": 6.0
+                },
+                {
+                  "label": "5-6",
+                  "value": 1.0
+                },
+                {
+                  "label": "6-7",
+                  "value": 0.0
+                },
+                {
+                  "label": "7-8",
+                  "value": 0.0
+                },
+                {
+                  "label": "8-9",
+                  "value": 0.0
+                },
+                {
+                  "label": "9+",
+                  "value": 0.0
+                }
+              ],
+              "unit": "hours"
+            },
+            "facades": {
+              "bins": [
+                {
+                  "label": "0-1",
+                  "value": 18.0
+                },
+                {
+                  "label": "1-2",
+                  "value": 17.0
+                },
+                {
+                  "label": "2-3",
+                  "value": 13.0
+                },
+                {
+                  "label": "3-4",
+                  "value": 9.0
+                },
+                {
+                  "label": "4-5",
+                  "value": 7.0
+                },
+                {
+                  "label": "5-6",
+                  "value": 5.0
+                },
+                {
+                  "label": "6-7",
+                  "value": 4.0
+                },
+                {
+                  "label": "7-8",
+                  "value": 3.0
+                },
+                {
+                  "label": "8-9",
+                  "value": 2.0
+                },
+                {
+                  "label": "9+",
+                  "value": 22.0
+                }
+              ],
+              "unit": "hours"
+            }
+          },
+          "daylightPotentialDistribution": {
+            "bins": [
+              {
+                "label": "0-5",
+                "value": 1.0
+              },
+              {
+                "label": "5-10",
+                "value": 3.0
+              },
+              {
+                "label": "10-15",
+                "value": 12.0
+              },
+              {
+                "label": "15-19",
+                "value": 12.0
+              },
+              {
+                "label": "19-23",
+                "value": 14.0
+              },
+              {
+                "label": "23-27",
+                "value": 13.0
+              },
+              {
+                "label": "27-32",
+                "value": 12.0
+              },
+              {
+                "label": "32-37",
+                "value": 9.0
+              },
+              {
+                "label": "37+",
+                "value": 25.0
+              }
+            ],
+            "unit": "%"
+          }
         },
         {
           "id": 3,
@@ -195,7 +874,140 @@
           "sunHours": "Garnizon_sun_hours_kwartal_3",
           "daylightPotential": "Garnizon_Daylight_potential_kwartal_3",
           "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_3",
-          "solarEnergy": null
+          "solarEnergy": null,
+          "sunHoursDistribution": {
+            "ground": {
+              "bins": [
+                {
+                  "label": "0-1",
+                  "value": 16.0
+                },
+                {
+                  "label": "1-2",
+                  "value": 16.0
+                },
+                {
+                  "label": "2-3",
+                  "value": 13.0
+                },
+                {
+                  "label": "3-4",
+                  "value": 12.0
+                },
+                {
+                  "label": "4-5",
+                  "value": 15.0
+                },
+                {
+                  "label": "5-6",
+                  "value": 10.0
+                },
+                {
+                  "label": "6-7",
+                  "value": 6.0
+                },
+                {
+                  "label": "7-8",
+                  "value": 3.0
+                },
+                {
+                  "label": "8-9",
+                  "value": 2.0
+                },
+                {
+                  "label": "9+",
+                  "value": 8.0
+                }
+              ],
+              "unit": "hours"
+            },
+            "facades": {
+              "bins": [
+                {
+                  "label": "0-1",
+                  "value": 13.0
+                },
+                {
+                  "label": "1-2",
+                  "value": 7.0
+                },
+                {
+                  "label": "2-3",
+                  "value": 13.0
+                },
+                {
+                  "label": "3-4",
+                  "value": 15.0
+                },
+                {
+                  "label": "4-5",
+                  "value": 9.0
+                },
+                {
+                  "label": "5-6",
+                  "value": 4.0
+                },
+                {
+                  "label": "6-7",
+                  "value": 4.0
+                },
+                {
+                  "label": "7-8",
+                  "value": 4.0
+                },
+                {
+                  "label": "8-9",
+                  "value": 6.0
+                },
+                {
+                  "label": "9+",
+                  "value": 24.0
+                }
+              ],
+              "unit": "hours"
+            }
+          },
+          "daylightPotentialDistribution": {
+            "bins": [
+              {
+                "label": "0-5",
+                "value": 2.0
+              },
+              {
+                "label": "5-10",
+                "value": 2.0
+              },
+              {
+                "label": "10-15",
+                "value": 4.0
+              },
+              {
+                "label": "15-19",
+                "value": 7.0
+              },
+              {
+                "label": "19-23",
+                "value": 7.0
+              },
+              {
+                "label": "23-27",
+                "value": 7.0
+              },
+              {
+                "label": "27-32",
+                "value": 11.0
+              },
+              {
+                "label": "32-37",
+                "value": 15.0
+              },
+              {
+                "label": "37+",
+                "value": 44.0
+              }
+            ],
+            "unit": "%"
+          }
         }
       ]
     },
@@ -213,7 +1025,7 @@
       },
       "timeline": {
         "years": "2012 - 2019 (phase 1)",
-        "description": "Hudson Yards is a mixed-use urban development located in the western part of Manhattan, New York (USA), on the Far West Side of Midtown Manhattan. The development occupies the area between West 30th Street and West 34th Street, and stretches eastâ€“west from 10th Avenue towards the Hudson River and the West Side Highway. The complex largely faces the Hudson River to the west and borders other Manhattan neighbourhoods, such as Chelsea and Hellâ€™s \nKitchen."
+        "description": "Hudson Yards is a mixed-use urban development located in the western part of Manhattan, New York (USA), on the Far West Side of Midtown Manhattan. The development occupies the area between West 30th Street and West 34th Street, and stretches east–west from 10th Avenue towards the Hudson River and the West Side Highway. The complex largely faces the Hudson River to the west and borders other Manhattan neighbourhoods, such as Chelsea and Hell’s \nKitchen."
       },
       "overview": {
         "schwarzplanImage": "Hudson_Yards_schwarzplan",
@@ -223,8 +1035,8 @@
       "urbanIndicators": {
         "buildingIntensity": "12,65",
         "greenSpacePercentage": "14,73%",
-        "buildingTypes": "kwarta? zwartej zabudowy na planie prostok?ta tworzony przez wie?owce, wewn?trz kwarta?u przestrze? publiczna",
-        "transport": "\"Hudson Yards zosta? zaprojektowany z my?l? o p?ynnej integracji z istniej?c? tkank? miejsk?:\nÂ· bezpo?rednie po??czenie z High Line, popularnym parkiem linearowym.\nÂ· nowa stacja metra 34th Streetâ€“Hudson Yards, zapewniaj?ca ?atwy dost?p do innych cz??ci miasta.\""
+        "buildingTypes": "Compact block development on a rectangular plan formed by skyscrapers, with public space inside the block",
+        "transport": "\"Hudson Yards was designed to seamlessly integrate with the existing urban fabric:\n· direct connection to the High Line, a popular linear park.\n· new 34th Street–Hudson Yards metro station, providing easy access to other parts of the city.\""
       },
       "shadingAnalysis": {
         "marchSeptember": "Hudson_Yards_21marzec_wrzesien",
@@ -272,7 +1084,7 @@
           "spatialDaylightAutonomy": {
             "simulation1": {
               "image": "Hudson_Yards_DA_najgorsza_charakterystyka",
-              "autonomy": "?rednia warto?? sDA wynosi 75,77%"
+              "autonomy": "The average sDA value is 75,77%"
             },
             "simulation2": {
               "image": "Hudson_Yards_DA_najlepsza_charakterystyka",
@@ -290,7 +1102,7 @@
               "avgValue": "53,66%."
             },
             "interpretation": null,
-            "conclusions": "\"Ni?sze warto?ci UDI w strefie przyokiennej wynikaj? z przekroczenia gĂłrnego progu u?ytecznego nat??enia o?wietlenia (3000 lx). Pomimo wysokiego poziomu do?wietlenia, warto?ci te klasyfikowane s? jako nadmierne (UDI-high) i nie s? uwzgl?dniane w wska?niku UDI-acceptable. UDI nie mierzy â€žile ?wiat?aâ€ť, tylko czy ?wiat?o mie?ci si? w przedziale u?ytecznym.\""
+            "conclusions": "\"Lower UDI values in the window zone result from exceeding the upper threshold of useful lighting intensity (3000 lx). Despite high light levels, these values are classified as excessive (UDI-high) and are not included in the UDI-acceptable indicator. UDI does not measure \"how much light\" but whether the light falls within the useful range.\""
           }
         }
       ]

@@ -38,6 +38,32 @@ export interface SiteAnalysis {
   sunHoursImage: string | null;
   daylightPotentialImage: string | null;
   solarEnergyImage: string | null;
+  sunHoursDistribution?: SunHoursDistribution;
+  daylightPotentialDistribution?: DistributionData;
+  solarEnergySpecs?: SolarEnergySpecs;
+}
+
+export interface DistributionBin {
+  label: string;
+  value: number | null;
+}
+
+export interface DistributionData {
+  bins: DistributionBin[];
+  unit: string;
+}
+
+export interface SunHoursDistribution {
+  ground?: DistributionData;
+  facades?: DistributionData;
+}
+
+export interface SolarEnergySpecs {
+  area: number | null;
+  totalSolarEnergy: number | null;
+  avgSolarEnergy: number | null;
+  panelArea: number | null;
+  annualElectricity: number | null;
 }
 
 export interface QuarterIndicators {
@@ -87,6 +113,9 @@ export interface Quarter {
   daylightPotential: string | null;
   daylightPotential2?: string | null;
   solarEnergy?: string | null;
+  sunHoursDistribution?: SunHoursDistribution;
+  daylightPotentialDistribution?: DistributionData;
+  solarEnergySpecs?: SolarEnergySpecs;
   daylightFactor?: DaylightFactor;
   spatialDaylightAutonomy?: SpatialDaylightAutonomy;
   usefulDaylightIlluminance?: UsefulDaylightIlluminance;
