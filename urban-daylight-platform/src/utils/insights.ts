@@ -54,9 +54,13 @@ export function generateDaylightInsights(
   cityA: City,
   cityB: City,
   quarterA?: Quarter,
-  quarterB?: Quarter
+  quarterB?: Quarter,
+  labelA?: string,
+  labelB?: string
 ): Insight[] {
   const insights: Insight[] = []
+  const sourceA = labelA ?? cityA.name
+  const sourceB = labelB ?? cityB.name
   
   const dfA = quarterA?.daylightFactor?.simulation1?.avgValue
   const dfB = quarterB?.daylightFactor?.simulation1?.avgValue
@@ -68,13 +72,13 @@ export function generateDaylightInsights(
     if (valA > valB) {
       insights.push({
         title: 'Daylight Factor Performance',
-        content: `${cityA.name} achieves ${((valA - valB) / valB * 100).toFixed(0)}% higher Daylight Factor than ${cityB.name}. This indicates better access to natural daylight under overcast conditions, reducing artificial lighting needs and improving occupant wellbeing.`,
+        content: `${sourceA} achieves ${((valA - valB) / valB * 100).toFixed(0)}% higher Daylight Factor than ${sourceB}. This indicates better access to natural daylight under overcast conditions, reducing artificial lighting needs and improving occupant wellbeing.`,
         category: 'better'
       })
     } else if (valB > valA) {
       insights.push({
         title: 'Daylight Factor Performance',
-        content: `${cityB.name} achieves ${((valB - valA) / valA * 100).toFixed(0)}% higher Daylight Factor than ${cityA.name}. Superior DF values suggest more effective window design and/or favorable urban geometry for daylight penetration.`,
+        content: `${sourceB} achieves ${((valB - valA) / valA * 100).toFixed(0)}% higher Daylight Factor than ${sourceA}. Superior DF values suggest more effective window design and/or favorable urban geometry for daylight penetration.`,
         category: 'better'
       })
     }
@@ -90,13 +94,13 @@ export function generateDaylightInsights(
     if (valA > valB) {
       insights.push({
         title: 'Spatial Daylight Autonomy',
-        content: `${cityA.name}'s spaces achieve daylight autonomy for ${valA}% of floor area, compared to ${valB}% in ${cityB.name}. Higher sDA means less reliance on electric lighting during occupied hours, with significant energy savings.`,
+        content: `${sourceA} achieves daylight autonomy for ${valA}% of floor area, compared to ${valB}% in ${sourceB}. Higher sDA means less reliance on electric lighting during occupied hours, with significant energy savings.`,
         category: 'better'
       })
     } else if (valB > valA) {
       insights.push({
         title: 'Spatial Daylight Autonomy',
-        content: `${cityB.name}'s spaces achieve daylight autonomy for ${valB}% of floor area, compared to ${valA}% in ${cityA.name}. This superior performance reflects effective orientation and facade design strategies.`,
+        content: `${sourceB} achieves daylight autonomy for ${valB}% of floor area, compared to ${valA}% in ${sourceA}. This superior performance reflects effective orientation and facade design strategies.`,
         category: 'better'
       })
     }
@@ -112,13 +116,13 @@ export function generateDaylightInsights(
     if (valA > valB) {
       insights.push({
         title: 'Useful Daylight Range',
-        content: `${cityA.name} maintains useful daylight levels ${valA}% of the time, versus ${valB}% in ${cityB.name}. Better UDI indicates balanced daylight—neither too dim nor causing glare or overheating risks.`,
+        content: `${sourceA} maintains useful daylight levels ${valA}% of the time, versus ${valB}% in ${sourceB}. Better UDI indicates balanced daylight-neither too dim nor causing glare or overheating risks.`,
         category: 'better'
       })
     } else if (valB > valA) {
       insights.push({
         title: 'Useful Daylight Range',
-        content: `${cityB.name} maintains useful daylight levels ${valB}% of the time, versus ${valA}% in ${cityA.name}. This balance prevents both underlit conditions and excessive brightness, optimizing comfort and productivity.`,
+        content: `${sourceB} maintains useful daylight levels ${valB}% of the time, versus ${valA}% in ${sourceA}. This balance prevents both underlit conditions and excessive brightness, optimizing comfort and productivity.`,
         category: 'better'
       })
     }
@@ -131,9 +135,13 @@ export function generateUrbanMorphologyInsights(
   cityA: City,
   cityB: City,
   quarterA?: Quarter,
-  quarterB?: Quarter
+  quarterB?: Quarter,
+  labelA?: string,
+  labelB?: string
 ): Insight[] {
   const insights: Insight[] = []
+  const sourceA = labelA ?? cityA.name
+  const sourceB = labelB ?? cityB.name
   
   if (cityA.urbanIndicators.buildingTypes && cityB.urbanIndicators.buildingTypes) {
     const hasPerimetersA = cityA.urbanIndicators.buildingTypes.toLowerCase().includes('kwartal')
@@ -164,13 +172,13 @@ export function generateUrbanMorphologyInsights(
     if (valA > valB * 1.5) {
       insights.push({
         title: 'Building Height & Daylight Access',
-        content: `${cityA.name}'s taller buildings (avg ${valA} floors vs ${valB}) may cast longer shadows on adjacent streets and buildings. Adequate spacing and orientation become critical to maintain daylight access at ground level.`,
+        content: `${sourceA} has taller buildings (avg ${valA} floors vs ${valB}), which may cast longer shadows on adjacent streets and buildings. Adequate spacing and orientation become critical to maintain daylight access at ground level.`,
         category: 'worse'
       })
     } else if (valB > valA * 1.5) {
       insights.push({
         title: 'Building Height & Daylight Access',
-        content: `${cityB.name}'s taller buildings (avg ${valB} floors vs ${valA}) require careful urban design to prevent overshadowing. Height-to-width ratios and setbacks are essential for preserving daylight in public spaces.`,
+        content: `${sourceB} has taller buildings (avg ${valB} floors vs ${valA}), requiring careful urban design to prevent overshadowing. Height-to-width ratios and setbacks are essential for preserving daylight in public spaces.`,
         category: 'worse'
       })
     }

@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, MapPin, Calendar, Building, Leaf, Train, GitCompare, ChevronRight, Lightbulb, ChevronDown, ChevronUp, Sun } from 'lucide-react'
 import Layout from '../components/Layout'
 import QuarterDetail from '../components/QuarterDetail'
@@ -6,7 +6,7 @@ import SafeImage from '../components/SafeImage'
 import { LoadingSpinner, ErrorMessage, NoData } from '../components/LoadingStates'
 import { useCity, useCities } from '../hooks/useCitiesData'
 import { hasData, getCityFolderName } from '../utils/helpers'
-import { useState } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import { DensityGauge, PercentRing } from '../components/MetricVisuals'
 
 export default function CityPage() {
@@ -14,20 +14,86 @@ export default function CityPage() {
   const { city, loading, error } = useCity(cityId || '')
   const { cities } = useCities()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const [showUrbanInsights, setShowUrbanInsights] = useState(false)
   const [showShadingInsights, setShowShadingInsights] = useState(false)
-  
-  if (loading) return <Layout><LoadingSpinner /></Layout>
-  if (error) return <Layout><ErrorMessage error={error} /></Layout>
-  if (!city) return <Layout><NoData message="City not found" /></Layout>
-  
-  const cityFolder = getCityFolderName(city.name)
+
+  const cityFolder = getCityFolderName(city?.name ?? '')
   const getImagePath = (imageName: string | null) => {
     if (!imageName) return ''
     return `${import.meta.env.BASE_URL}${cityFolder}/${imageName}.PNG`
   }
-  
-  const otherCities = cities.filter(c => c.id !== city.id)
+
+  const cityQuarters = city?.quarters ?? []
+  const otherCities = city ? cities.filter(c => c.id !== city.id) : []
+
+  const selectedQuarterId = useMemo(() => {
+    const fallback = cityQuarters[0]?.id
+    if (!fallback) return null
+
+    const requestedQuarter = searchParams.get('quarter')
+    if (!requestedQuarter) return fallback
+
+    const parsed = Number.parseInt(requestedQuarter, 10)
+    if (!Number.isInteger(parsed)) return fallback
+
+    const exists = cityQuarters.some((quarter) => quarter.id === parsed)
+    return exists ? parsed : fallback
+  }, [cityQuarters, searchParams])
+
+  const selectedQuarter = useMemo(() => {
+    if (selectedQuarterId === null) return null
+    return cityQuarters.find((quarter) => quarter.id === selectedQuarterId) ?? cityQuarters[0] ?? null
+  }, [cityQuarters, selectedQuarterId])
+
+  useEffect(() => {
+    if (selectedQuarterId === null) return
+
+    const current = searchParams.get('quarter')
+    if (current === String(selectedQuarterId)) return
+
+    const next = new URLSearchParams(searchParams)
+    next.set('quarter', String(selectedQuarterId))
+    setSearchParams(next, { replace: true })
+  }, [searchParams, selectedQuarterId, setSearchParams])
+
+  const handleQuarterChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const next = new URLSearchParams(searchParams)
+    next.set('quarter', event.target.value)
+    setSearchParams(next)
+  }
+
+  const navigateToCompare = (otherCityId: string, otherCityFirstQuarterId?: number) => {
+    if (!city) return
+
+    const quarterA = selectedQuarter?.id ?? cityQuarters[0]?.id
+    const quarterB = otherCityFirstQuarterId
+    const params = new URLSearchParams()
+
+    params.set('mode', 'between')
+    if (quarterA) params.set('quarterA', String(quarterA))
+    if (quarterB) params.set('quarterB', String(quarterB))
+
+    navigate(`/compare/${city.id}/${otherCityId}?${params.toString()}`)
+  }
+
+  const navigateToSameCityQuarterCompare = () => {
+    if (!city || cityQuarters.length < 2 || !selectedQuarter) return
+
+    const alternativeQuarter = cityQuarters.find((quarter) => quarter.id !== selectedQuarter.id)
+    if (!alternativeQuarter) return
+
+    const params = new URLSearchParams()
+    params.set('mode', 'same')
+    params.set('quarterA', String(selectedQuarter.id))
+    params.set('quarterB', String(alternativeQuarter.id))
+
+    navigate(`/compare/${city.id}?${params.toString()}`)
+  }
+
+  if (loading) return <Layout><LoadingSpinner /></Layout>
+  if (error) return <Layout><ErrorMessage error={error} /></Layout>
+  if (!city) return <Layout><NoData message="City not found" /></Layout>
   
   return (
     <Layout>
@@ -78,7 +144,7 @@ export default function CityPage() {
                       {otherCities.map((otherCity) => (
                         <button
                           key={otherCity.id}
-                          onClick={() => navigate(`/compare/${city.id}/${otherCity.id}`)}
+                          onClick={() => navigateToCompare(otherCity.id, otherCity.quarters[0]?.id)}
                           className="w-full text-left px-3 md:px-4 py-2 md:py-3 rounded-md hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors flex items-center justify-between group/item">
                           <div>
                             <div className="text-sm md:text-base font-medium text-neutral-900 dark:text-white group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400 transition-colors duration-500">
@@ -206,6 +272,18 @@ export default function CityPage() {
                 </div>
                 <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed transition-colors duration-500">
                   {city.urbanIndicators.transport}
+                </p>
+              </div>
+            )}
+
+            {hasData(city.urbanIndicators.greenBlueInfrastructure) && (
+              <div className="card sm:col-span-2">
+                <div className="flex items-center gap-3 mb-3">
+                  <Leaf className="w-4 h-4 md:w-5 md:h-5 text-emerald-600" />
+                  <h3 className="text-sm md:text-base font-semibold text-neutral-900 dark:text-white transition-colors duration-500">Green, Natural & Blue Infrastructure</h3>
+                </div>
+                <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed transition-colors duration-500">
+                  {city.urbanIndicators.greenBlueInfrastructure}
                 </p>
               </div>
             )}
@@ -393,18 +471,54 @@ export default function CityPage() {
         {/* Quarters */}
         {city.quarters.length > 0 && (
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-4 md:mb-6 transition-colors duration-500">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-4 md:mb-6">
+              <h2 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white transition-colors duration-500">
               Detailed Analysis by Quarter
-            </h2>
-            
-            <div className="space-y-12">
-              {city.quarters.map((quarter) => (
-                <div key={quarter.id} className="border-t border-neutral-200 dark:border-neutral-700 pt-12 first:border-t-0 first:pt-0 transition-colors duration-500">
-                  <QuarterDetail quarter={quarter} cityName={city.name} />
+              </h2>
+
+              {city.quarters.length > 1 && selectedQuarter && (
+                <div className="w-full sm:w-72">
+                  <label className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 block mb-2 transition-colors duration-500">
+                    Selected Quarter
+                  </label>
+                  <select
+                    value={selectedQuarter.id}
+                    onChange={handleQuarterChange}
+                    className="w-full p-2 border border-primary-300 dark:border-primary-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors duration-500"
+                  >
+                    {city.quarters.map((quarter) => (
+                      <option key={quarter.id} value={quarter.id}>
+                        {quarter.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              ))}
+              )}
             </div>
-          </div>
+
+            {city.quarters.length > 1 && selectedQuarter && (
+              <div className="mb-6">
+                <button
+                  onClick={navigateToSameCityQuarterCompare}
+                  className="btn-primary text-sm md:text-base"
+                >
+                  Compare This Quarter with Another Quarter in {city.name}
+                </button>
+              </div>
+            )}
+
+            {selectedQuarter && (
+              <div className="border-t border-neutral-200 dark:border-neutral-700 pt-12 first:border-t-0 first:pt-0 transition-colors duration-500">
+                <QuarterDetail quarter={selectedQuarter} cityName={city.name} />
+              </div>
+            )}
+
+            {!selectedQuarter && (
+              <div className="card">
+                <NoData message="Quarter data not found" />
+              </div>
+            )}
+            </div>
         )}
       </div>
     </Layout>

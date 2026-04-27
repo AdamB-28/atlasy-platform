@@ -81,6 +81,8 @@ export function PercentRing({
   if (num === null) return null
 
   const capped = Math.min(num, 100)
+  const thresholdClamped =
+    threshold !== undefined ? Math.max(0, Math.min(threshold, 100)) : undefined
   const r = 28
   const circ = 2 * Math.PI * r
 
@@ -110,13 +112,13 @@ export function PercentRing({
           strokeLinecap="round"
         />
         {/* Threshold marker */}
-        {threshold !== undefined && threshold <= 100 && (
+        {thresholdClamped !== undefined && (
           <line
             x1="36" y1={36 - r - 5}
             x2="36" y2={36 - r + 5}
             strokeWidth="1.5"
             className="stroke-red-500"
-            transform={`rotate(${(threshold / 100) * 360}, 36, 36)`}
+            transform={`rotate(${(thresholdClamped / 100) * 360 + 90}, 36, 36)`}
           />
         )}
         {/* Center text */}

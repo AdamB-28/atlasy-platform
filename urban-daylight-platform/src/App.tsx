@@ -11,6 +11,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/city/:cityId" element={<CityPage />} />
         <Route path="/compare/:cityAId/:cityBId" element={<ComparePage />} />
+        <Route path="/compare/:cityId" element={<ComparePage />} />
       </Routes>
     </PasswordGate>
   )

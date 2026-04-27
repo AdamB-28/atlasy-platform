@@ -26,6 +26,7 @@ export interface UrbanIndicators {
   greenSpacePercentage: number | string | null;
   buildingTypes: string | null;
   transport: string | null;
+  greenBlueInfrastructure?: string | null;
 }
 
 export interface ShadingAnalysis {

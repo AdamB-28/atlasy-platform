@@ -136,6 +136,9 @@ export default function Layout({ children }: LayoutProps) {
                   <span className="text-neutral-400 text-[10px] sm:text-xs">Head of Department</span>
                 </p>
                 <p>
+                  <strong className="text-white">prof. Cláudia Amorim</strong>
+                </p>
+                <p>
                   <strong className="text-white">dr inż. Natalia Sokół</strong>
                 </p>
                 <p>

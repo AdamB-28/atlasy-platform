@@ -5,6 +5,7 @@ interface DistributionChartProps {
   title?: string
   color?: 'amber' | 'blue' | 'green'
   height?: number
+  unitLabel?: string
 }
 
 const COLOR_MAP = {
@@ -25,7 +26,7 @@ const COLOR_MAP = {
   },
 }
 
-export default function DistributionChart({ data, title, color = 'amber', height = 120 }: DistributionChartProps) {
+export default function DistributionChart({ data, title, color = 'amber', height = 120, unitLabel }: DistributionChartProps) {
   const colors = COLOR_MAP[color]
   const values = data.bins.map(b => b.value ?? 0)
   const maxVal = Math.max(...values, 1)
@@ -69,7 +70,7 @@ export default function DistributionChart({ data, title, color = 'amber', height
       {/* Unit label */}
       <div className="text-center">
         <span className="text-[10px] text-neutral-400 dark:text-neutral-500">
-          {data.unit === 'hours' ? 'Hours of sunlight' : data.unit === '%' ? 'Daylight factor (%)' : data.unit}
+          {unitLabel ?? (data.unit === 'hours' ? 'Hours of sunlight' : data.unit === '%' ? 'Share (%)' : data.unit)}
         </span>
       </div>
     </div>

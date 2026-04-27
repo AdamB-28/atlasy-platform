@@ -25,7 +25,8 @@
         "buildingIntensity": "2,9",
         "greenSpacePercentage": "39%",
         "buildingTypes": "The development is dominated by blocks of dense housing (rectangular or trapezoidal in plan); the areas within the blocks are raised by one storey and converted into semi-public green spaces; within the development comprising these blocks, there is at least one high-rise building that serves as a prominent landmark",
-        "transport": "The redevelopment project covers the road and pedestrian network around the district, including plans to modernise and rebuild the underground station. The layout of the buildings and internal streets has been designed to improve pedestrian and cycling access in the area, thereby encouraging the use of public transport, bicycles and walking routes. There are numerous public transport stops and safe cycle paths in the area. The volume of car traffic has been minimised and the number of parking spaces reduced.‘, ’reducing emissions, promoting  sustainable transport‘, ’Prioritising cycling as the main mode of transport"
+        "transport": "The redevelopment project covers the road and pedestrian network around the district, including plans to modernise and rebuild the underground station. The layout of the buildings and internal streets has been designed to improve pedestrian and cycling access in the area, thereby encouraging the use of public transport, bicycles and walking routes. There are numerous public transport stops and safe cycle paths in the area. The volume of car traffic has been minimised and the number of parking spaces reduced.‘, ’reducing emissions, promoting  sustainable transport‘, ’Prioritising cycling as the main mode of transport",
+        "greenBlueInfrastructure": "39% of Elephant Park's area consists of green spaces, including a park covering approximately 1 hectare. Existing trees, including some rare specimens, have been preserved and incorporated into the design. Vegetation promoting biodiversity has been introduced, e.g. flower meadows and insect houses. A system for collecting and reusing rainwater has been installed. Rain gardens have been created. High water retention rate."
       },
       "shadingAnalysis": {
         "marchSeptember": "Elephant_and_Castle_zacienianie_21marzec_wrzesien",
@@ -373,7 +374,7 @@
       "id": "garnizon",
       "name": "Garnizon",
       "location": {
-        "country": "Poland, Gda?sk,  Strzy?a/Wrzeszcz Górny",
+        "country": "Poland, Gdańsk, Strzyża/Wrzeszcz Górny",
         "coordinates": {
           "lat": 54.3813,
           "lng": 18.5955,
@@ -394,7 +395,8 @@
         "buildingIntensity": "2,75",
         "greenSpacePercentage": "38%",
         "buildingTypes": "building blocks (mainly rectangular in plan); within some of these blocks there are tower blocks, green spaces and pedestrian routes; the areas within some of these blocks are raised by one storey and converted into semi-public green spaces",
-        "transport": "Rail: 1,200 m from the railway station\nTram: two tram stops within 800 m\nBus: three bus stops within 600 m\nCycling: metropolitan bike-share stations\ncycle paths\nshared-use paths within the development area"
+        "transport": "Rail: 1,200 m from the railway station\nTram: two tram stops within 800 m\nBus: three bus stops within 600 m\nCycling: metropolitan bike-share stations\ncycle paths\nshared-use paths within the development area",
+        "greenBlueInfrastructure": "In Garnizon, the buildings have green roofs. Within the quarters, there are landscaped green spaces designed for leisure activities. There are also public squares, and trees have been planted along footpaths and roads."
       },
       "shadingAnalysis": {
         "marchSeptember": null,
@@ -565,7 +567,7 @@
           "function": "multi-family residential and commercial function (services on the ground floor)",
           "sunHours": "Garnizon_sun_hours_kwartal_1",
           "daylightPotential": "Garnizon_Daylight_potential_kwartal_1",
-          "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_1",
+          "daylightPotential2": null,
           "solarEnergy": null,
           "sunHoursDistribution": {
             "ground": {
@@ -1036,7 +1038,8 @@
         "buildingIntensity": "12,65",
         "greenSpacePercentage": "14,73%",
         "buildingTypes": "Compact block development on a rectangular plan formed by skyscrapers, with public space inside the block",
-        "transport": "\"Hudson Yards was designed to seamlessly integrate with the existing urban fabric:\n· direct connection to the High Line, a popular linear park.\n· new 34th Street–Hudson Yards metro station, providing easy access to other parts of the city.\""
+        "transport": "\"Hudson Yards was designed to seamlessly integrate with the existing urban fabric:\n· direct connection to the High Line, a popular linear park.\n· new 34th Street–Hudson Yards metro station, providing easy access to other parts of the city.\"",
+        "greenBlueInfrastructure": "The project integrated advanced ecological technologies, including rainwater recovery systems for irrigating green areas, on-site energy sources such as cogeneration micro-plants, green roofs, and intelligent energy management systems."
       },
       "shadingAnalysis": {
         "marchSeptember": "Hudson_Yards_21marzec_wrzesien",
