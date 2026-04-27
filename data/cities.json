@@ -565,7 +565,7 @@
           "function": "multi-family residential and commercial function (services on the ground floor)",
           "sunHours": "Garnizon_sun_hours_kwartal_1",
           "daylightPotential": "Garnizon_Daylight_potential_kwartal_1",
-          "daylightPotential2": "Garnizon_Daylight_potential_2_kwartal_1",
+          "daylightPotential2": null,
           "solarEnergy": null,
           "sunHoursDistribution": {
             "ground": {
