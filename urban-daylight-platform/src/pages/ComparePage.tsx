@@ -4,12 +4,16 @@ import { ArrowLeft, ArrowLeftRight, ChevronDown, ChevronUp, Lightbulb, Minus, Tr
 import Layout from '../components/Layout'
 import SafeImage from '../components/SafeImage'
 import { LoadingSpinner, NoData } from '../components/LoadingStates'
-import DistributionChart from '../components/DistributionChart'
+import { ComparisonDistributionChart } from '../components/DistributionChart'
 import SolarEnergyTable from '../components/SolarEnergyTable'
 import UrbanSectionDiagram from '../components/UrbanSectionDiagram'
+import StreetSunSimulator from '../components/StreetSunSimulator'
 import { useCities, useCity } from '../hooks/useCitiesData'
-import { formatMetricValue, getCityFolderName, hasData, valueContainsUnit } from '../utils/helpers'
+import { findImageLink, formatMetricValue, getCityFolderName, hasData, tempSourcePath, valueContainsUnit } from '../utils/helpers'
+import AdminDataPanel from '../components/AdminDataPanel'
+import type { ImageLink } from '../types'
 import { generateDaylightInsights, generateUrbanFormInsights, generateUrbanMorphologyInsights } from '../utils/insights'
+import { getFirstStreetSimulationInput } from '../utils/streetGeometry'
 
 type CompareMode = 'between' | 'same'
 
@@ -39,22 +43,19 @@ export default function ComparePage() {
   const { city: cityB, loading: loadingB } = useCity(selectedCityBId)
 
   const resolveQuarterId = (cityKey: 'quarterA' | 'quarterB', city: typeof cityA | null) => {
-    const fallback = city?.quarters[0]?.id
+    const fallback = city?.analysisUnits[0]?.id
     if (!fallback) return null
 
-    const raw = searchParams.get(cityKey)
+    const raw = searchParams.get(cityKey.replace('quarter', 'unit')) ?? searchParams.get(cityKey)
     if (!raw) return fallback
 
-    const parsed = Number.parseInt(raw, 10)
-    if (!Number.isInteger(parsed)) return fallback
-
-    return city.quarters.some((quarter) => quarter.id === parsed) ? parsed : fallback
+    return city.analysisUnits.some((quarter) => String(quarter.id) === raw) ? raw : fallback
   }
 
   const quarterAId = resolveQuarterId('quarterA', cityA)
   const quarterBId = resolveQuarterId('quarterB', cityB)
-  const quarterA = cityA?.quarters.find((quarter) => quarter.id === quarterAId) ?? cityA?.quarters[0] ?? null
-  const quarterB = cityB?.quarters.find((quarter) => quarter.id === quarterBId) ?? cityB?.quarters[0] ?? null
+  const quarterA = cityA?.analysisUnits.find((quarter) => String(quarter.id) === String(quarterAId)) ?? cityA?.analysisUnits[0] ?? null
+  const quarterB = cityB?.analysisUnits.find((quarter) => String(quarter.id) === String(quarterBId)) ?? cityB?.analysisUnits[0] ?? null
 
   useEffect(() => {
     if (!cityA || !cityB) return
@@ -67,20 +68,20 @@ export default function ComparePage() {
       changed = true
     }
 
-    if (quarterA?.id && next.get('quarterA') !== String(quarterA.id)) {
-      next.set('quarterA', String(quarterA.id))
+    if (quarterA?.id && next.get('unitA') !== String(quarterA.id)) {
+      next.set('unitA', String(quarterA.id))
       changed = true
     }
 
-    if (quarterB?.id && next.get('quarterB') !== String(quarterB.id)) {
-      next.set('quarterB', String(quarterB.id))
+    if (quarterB?.id && next.get('unitB') !== String(quarterB.id)) {
+      next.set('unitB', String(quarterB.id))
       changed = true
     }
 
-    if (mode === 'same' && quarterA?.id && quarterB?.id && quarterA.id === quarterB.id && cityA.quarters.length > 1) {
-      const alternative = cityA.quarters.find((quarter) => quarter.id !== quarterA.id)
+    if (mode === 'same' && quarterA?.id && quarterB?.id && String(quarterA.id) === String(quarterB.id) && cityA.analysisUnits.length > 1) {
+      const alternative = cityA.analysisUnits.find((quarter) => String(quarter.id) !== String(quarterA.id))
       if (alternative) {
-        next.set('quarterB', String(alternative.id))
+        next.set('unitB', String(alternative.id))
         changed = true
       }
     }
@@ -92,7 +93,7 @@ export default function ComparePage() {
 
   if (loadingA || loadingB) return <Layout><LoadingSpinner /></Layout>
   if (!cityA || !cityB) return <Layout><NoData message="Cities not found" /></Layout>
-  if (!quarterA || !quarterB) return <Layout><NoData message="Quarter data not found" /></Layout>
+  if (!quarterA || !quarterB) return <Layout><NoData message="Analysis unit data not found" /></Layout>
 
   const cityFolderA = getCityFolderName(cityA.name)
   const cityFolderB = getCityFolderName(cityB.name)
@@ -100,46 +101,49 @@ export default function ComparePage() {
   const getImagePathA = (imageName: string | null) => (imageName ? `${import.meta.env.BASE_URL}${cityFolderA}/${imageName}.PNG` : '')
   const getImagePathB = (imageName: string | null) => (imageName ? `${import.meta.env.BASE_URL}${cityFolderB}/${imageName}.PNG` : '')
 
-  const panelNameA = mode === 'same' ? `${cityA.name} - ${quarterA?.name ?? 'Quarter'}` : cityA.name
-  const panelNameB = mode === 'same' ? `${cityB.name} - ${quarterB?.name ?? 'Quarter'}` : cityB.name
+  const panelNameA = mode === 'same' ? `${cityA.name} - ${quarterA?.name ?? 'Analysis unit'}` : cityA.name
+  const panelNameB = mode === 'same' ? `${cityB.name} - ${quarterB?.name ?? 'Analysis unit'}` : cityB.name
+  const sameAnalysisScale = (quarterA.comparisonKey ?? quarterA.analysisLevel) === (quarterB.comparisonKey ?? quarterB.analysisLevel)
 
   const urbanFormInsights = mode === 'same' ? [] : generateUrbanFormInsights(cityA, cityB)
   const morphologyInsights = generateUrbanMorphologyInsights(cityA, cityB, quarterA, quarterB, panelNameA, panelNameB)
-  const daylightInsights = generateDaylightInsights(cityA, cityB, quarterA, quarterB, panelNameA, panelNameB)
+  const daylightInsights = sameAnalysisScale
+    ? generateDaylightInsights(cityA, cityB, quarterA, quarterB, panelNameA, panelNameB)
+    : []
 
-  const queryString = (nextMode: CompareMode, nextQuarterA?: number, nextQuarterB?: number) => {
+  const queryString = (nextMode: CompareMode, nextQuarterA?: number | string, nextQuarterB?: number | string) => {
     const params = new URLSearchParams()
     params.set('mode', nextMode)
-    if (nextQuarterA) params.set('quarterA', String(nextQuarterA))
-    if (nextQuarterB) params.set('quarterB', String(nextQuarterB))
+    if (nextQuarterA) params.set('unitA', String(nextQuarterA))
+    if (nextQuarterB) params.set('unitB', String(nextQuarterB))
     return `?${params.toString()}`
   }
 
   const switchToBetweenMode = () => {
     const defaultCityB = cities.find((city) => city.id !== cityA.id)
     if (!defaultCityB) return
-    navigate(`/compare/${cityA.id}/${defaultCityB.id}${queryString('between', quarterA?.id, defaultCityB.quarters[0]?.id)}`)
+    navigate(`/compare/${cityA.id}/${defaultCityB.id}${queryString('between', quarterA?.id, defaultCityB.analysisUnits[0]?.id)}`)
   }
 
   const switchToSameMode = () => {
-    const alternativeQuarter = cityA.quarters.find((quarter) => quarter.id !== quarterA?.id)
+    const alternativeQuarter = cityA.analysisUnits.find((quarter) => quarter.id !== quarterA?.id)
     navigate(`/compare/${cityA.id}${queryString('same', quarterA?.id, alternativeQuarter?.id ?? quarterA?.id)}`)
   }
 
-  const updateQuarterParams = (nextQuarterA?: number, nextQuarterB?: number) => {
+  const updateQuarterParams = (nextQuarterA?: number | string, nextQuarterB?: number | string) => {
     const next = new URLSearchParams(searchParams)
-    if (nextQuarterA) next.set('quarterA', String(nextQuarterA))
-    if (nextQuarterB) next.set('quarterB', String(nextQuarterB))
+    if (nextQuarterA) next.set('unitA', String(nextQuarterA))
+    if (nextQuarterB) next.set('unitB', String(nextQuarterB))
     next.set('mode', mode)
     setSearchParams(next)
   }
 
   const onQuarterAChange = (value: string) => {
-    const parsed = Number.parseInt(value, 10)
-    if (!Number.isInteger(parsed)) return
+    const parsed = value
+    if (!parsed) return
 
-    if (mode === 'same' && quarterB && quarterB.id === parsed && cityA.quarters.length > 1) {
-      const alternative = cityA.quarters.find((quarter) => quarter.id !== parsed)
+    if (mode === 'same' && quarterB && String(quarterB.id) === parsed && cityA.analysisUnits.length > 1) {
+      const alternative = cityA.analysisUnits.find((quarter) => String(quarter.id) !== parsed)
       updateQuarterParams(parsed, alternative?.id)
       return
     }
@@ -148,9 +152,9 @@ export default function ComparePage() {
   }
 
   const onQuarterBChange = (value: string) => {
-    const parsed = Number.parseInt(value, 10)
-    if (!Number.isInteger(parsed)) return
-    if (mode === 'same' && quarterA && parsed === quarterA.id && cityA.quarters.length > 1) return
+    const parsed = value
+    if (!parsed) return
+    if (mode === 'same' && quarterA && parsed === String(quarterA.id) && cityA.analysisUnits.length > 1) return
     updateQuarterParams(quarterA?.id, parsed)
   }
 
@@ -190,20 +194,11 @@ export default function ComparePage() {
     )
   }
 
-  const ComparisonMetric = ({ label, valueA, valueB, unit, higherIsBetter = true }: { label: string; valueA: string | number | null | undefined; valueB: string | number | null | undefined; unit?: string; higherIsBetter?: boolean }) => {
+  const ComparisonMetric = ({ label, valueA, valueB, unit }: { label: string; valueA: string | number | null | undefined; valueB: string | number | null | undefined; unit?: string }) => {
     const hasA = hasData(valueA)
     const hasB = hasData(valueB)
 
-    if (!hasA || !hasB) return null
-
-    let isBetter: 'A' | 'B' | 'equal' | null = null
-    const numA = typeof valueA === 'number' ? valueA : parseFloat(String(valueA))
-    const numB = typeof valueB === 'number' ? valueB : parseFloat(String(valueB))
-    if (!isNaN(numA) && !isNaN(numB)) {
-      if (numA > numB) isBetter = higherIsBetter ? 'A' : 'B'
-      if (numB > numA) isBetter = higherIsBetter ? 'B' : 'A'
-      if (numB === numA) isBetter = 'equal'
-    }
+    if (!hasA && !hasB) return null
 
     const shouldShowUnitA = unit ? !valueContainsUnit(valueA ?? null, unit) : false
     const shouldShowUnitB = unit ? !valueContainsUnit(valueB ?? null, unit) : false
@@ -212,31 +207,33 @@ export default function ComparePage() {
       <div className="border-b border-neutral-200 dark:border-neutral-700 py-4 last:border-b-0 transition-colors duration-500">
         <p className="text-xs md:text-sm font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-3 transition-colors duration-500">{label}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-          <div className={`relative p-3 md:p-4 rounded-lg border-2 transition-colors duration-500 ${isBetter === 'A' ? 'bg-green-50 dark:bg-green-900/30 border-green-400 dark:border-green-700 shadow-sm' : 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700'}`}>
-            <p className={`text-xl md:text-2xl font-bold transition-colors duration-500 ${isBetter === 'A' ? 'text-green-800 dark:text-green-300' : 'text-blue-900 dark:text-blue-300'}`}>{formatMetricValue(valueA ?? null)}{shouldShowUnitA && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}</p>
+          <div className="relative p-3 md:p-4 rounded-lg border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 transition-colors duration-500">
+            <p className="text-xl md:text-2xl font-bold text-blue-900 dark:text-blue-200">{hasA ? formatMetricValue(valueA ?? null) : 'Not reported'}{hasA && shouldShowUnitA && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}</p>
           </div>
-          <div className={`relative p-3 md:p-4 rounded-lg border-2 transition-colors duration-500 ${isBetter === 'B' ? 'bg-green-50 dark:bg-green-900/30 border-green-400 dark:border-green-700 shadow-sm' : 'bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-700'}`}>
-            <p className={`text-xl md:text-2xl font-bold transition-colors duration-500 ${isBetter === 'B' ? 'text-green-800 dark:text-green-300' : 'text-amber-900 dark:text-amber-300'}`}>{formatMetricValue(valueB ?? null)}{shouldShowUnitB && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}</p>
+          <div className="relative p-3 md:p-4 rounded-lg border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 transition-colors duration-500">
+            <p className="text-xl md:text-2xl font-bold text-amber-900 dark:text-amber-200">{hasB ? formatMetricValue(valueB ?? null) : 'Not reported'}{hasB && shouldShowUnitB && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}</p>
           </div>
         </div>
       </div>
     )
   }
 
-  const ComparisonImage = ({ imageA, imageB, title, leftTitle, rightTitle }: { imageA: string | null; imageB: string | null; title: string; leftTitle: string; rightTitle: string }) => {
+  const ComparisonImage = ({ imageA, imageB, title, leftTitle, rightTitle, field, linksA, linksB }: { imageA: string | null; imageB: string | null; title: string; leftTitle: string; rightTitle: string; field?: string; linksA?: ImageLink[]; linksB?: ImageLink[] }) => {
     const hasA = hasData(imageA)
     const hasB = hasData(imageB)
-    if (!hasA || !hasB) return null
+    if (!hasA && !hasB) return null
+    const linkA = field ? findImageLink(linksA, field) : null
+    const linkB = field ? findImageLink(linksB, field) : null
 
     return (
       <div className="mb-6 md:mb-8">
         <h4 className="font-semibold text-sm md:text-base text-neutral-900 dark:text-white mb-3 md:mb-4 transition-colors duration-500">{title}</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div>
-            {hasA ? <div className="border-2 border-blue-300 dark:border-blue-700 rounded-lg overflow-hidden transition-colors duration-500"><div className="bg-blue-100 dark:bg-blue-900 px-3 py-1.5 text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide transition-colors duration-500">{leftTitle}</div><SafeImage src={getImagePathA(imageA)} alt={`${leftTitle} - ${title}`} className="w-full aspect-video object-cover" /></div> : <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500"><p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p></div>}
+            {hasA ? <div className="border-2 border-blue-300 dark:border-blue-700 rounded-lg overflow-hidden transition-colors duration-500"><div className="bg-blue-100 dark:bg-blue-900 px-3 py-1.5 text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide transition-colors duration-500">{leftTitle}</div><SafeImage src={getImagePathA(imageA)} alt={`${leftTitle} - ${title}`} className="w-full aspect-video object-cover" imageLink={linkA} /></div> : <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500"><p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p></div>}
           </div>
           <div>
-            {hasB ? <div className="border-2 border-amber-300 dark:border-amber-700 rounded-lg overflow-hidden transition-colors duration-500"><div className="bg-amber-100 dark:bg-amber-900 px-3 py-1.5 text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide transition-colors duration-500">{rightTitle}</div><SafeImage src={getImagePathB(imageB)} alt={`${rightTitle} - ${title}`} className="w-full aspect-video object-cover" /></div> : <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500"><p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p></div>}
+            {hasB ? <div className="border-2 border-amber-300 dark:border-amber-700 rounded-lg overflow-hidden transition-colors duration-500"><div className="bg-amber-100 dark:bg-amber-900 px-3 py-1.5 text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide transition-colors duration-500">{rightTitle}</div><SafeImage src={getImagePathB(imageB)} alt={`${rightTitle} - ${title}`} className="w-full aspect-video object-cover" imageLink={linkB} /></div> : <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500"><p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p></div>}
           </div>
         </div>
       </div>
@@ -244,6 +241,8 @@ export default function ComparePage() {
   }
 
   const ComparisonStreetSection = () => {
+    const [streetSunAngle, setStreetSunAngle] = useState(35)
+    const [streetSunFrom, setStreetSunFrom] = useState<'left' | 'right'>('left')
     const hasSectionA = hasData(quarterA.indicators.heightToWidthRatio) || hasData(quarterA.indicators.streetWidth)
     const hasSectionB = hasData(quarterB.indicators.heightToWidthRatio) || hasData(quarterB.indicators.streetWidth)
 
@@ -252,12 +251,16 @@ export default function ComparePage() {
     return (
       <div className="card mb-12">
         <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Street Geometry & Cross-Sections</h3>
+        <p className="mb-5 max-w-5xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">Blue W spans facade-to-facade using the source street width. Red H is estimated as H:W × average W, not directly measured. Dark fill marks the receiving facade; a dashed arrow shows where the shadow would continue if that building were absent. Both views share scale; surroundings are schematic.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="p-3 md:p-4 rounded-lg border-2 border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 transition-colors duration-500">
             <div className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-3">{panelNameA}</div>
             <UrbanSectionDiagram
               heightToWidthRatio={quarterA.indicators.heightToWidthRatio}
               streetWidth={quarterA.indicators.streetWidth}
+              showNotes={false}
+              sunAngle={streetSunAngle}
+              sunFrom={streetSunFrom}
             />
           </div>
           <div className="p-3 md:p-4 rounded-lg border-2 border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 transition-colors duration-500">
@@ -265,26 +268,40 @@ export default function ComparePage() {
             <UrbanSectionDiagram
               heightToWidthRatio={quarterB.indicators.heightToWidthRatio}
               streetWidth={quarterB.indicators.streetWidth}
+              showNotes={false}
+              sunAngle={streetSunAngle}
+              sunFrom={streetSunFrom}
             />
           </div>
         </div>
+        <StreetSunSimulator
+          angle={streetSunAngle}
+          onAngleChange={setStreetSunAngle}
+          sunFrom={streetSunFrom}
+          onSunFromChange={setStreetSunFrom}
+          dataA={getFirstStreetSimulationInput(quarterA.indicators.heightToWidthRatio, quarterA.indicators.streetWidth)}
+          dataB={getFirstStreetSimulationInput(quarterB.indicators.heightToWidthRatio, quarterB.indicators.streetWidth)}
+          labelA={panelNameA}
+          labelB={panelNameB}
+        />
       </div>
     )
   }
 
   const hasComparableSunHours =
-    (hasData(quarterA.sunHours) && hasData(quarterB.sunHours)) ||
-    (Boolean(quarterA.sunHoursDistribution?.ground) && Boolean(quarterB.sunHoursDistribution?.ground)) ||
-    (Boolean(quarterA.sunHoursDistribution?.facades) && Boolean(quarterB.sunHoursDistribution?.facades))
+    hasData(quarterA.sunHours) || hasData(quarterB.sunHours) ||
+    Boolean(quarterA.sunHoursDistribution?.ground || quarterB.sunHoursDistribution?.ground) ||
+    Boolean(quarterA.sunHoursDistribution?.facades || quarterB.sunHoursDistribution?.facades) ||
+    Boolean(quarterA.sunHoursDistribution?.roofs || quarterB.sunHoursDistribution?.roofs)
 
   const hasComparableDaylightPotential =
-    (hasData(quarterA.daylightPotential) && hasData(quarterB.daylightPotential)) ||
-    (hasData(quarterA.daylightPotential2) && hasData(quarterB.daylightPotential2)) ||
-    (Boolean(quarterA.daylightPotentialDistribution) && Boolean(quarterB.daylightPotentialDistribution))
+    hasData(quarterA.daylightPotential) || hasData(quarterB.daylightPotential) ||
+    hasData(quarterA.daylightPotential2) || hasData(quarterB.daylightPotential2) ||
+    Boolean(quarterA.daylightPotentialDistribution || quarterB.daylightPotentialDistribution)
 
   const hasComparableSolarEnergy =
-    (hasData(quarterA.solarEnergy) && hasData(quarterB.solarEnergy)) ||
-    (Boolean(quarterA.solarEnergySpecs) && Boolean(quarterB.solarEnergySpecs))
+    hasData(quarterA.solarEnergy) || hasData(quarterB.solarEnergy) ||
+    Boolean(quarterA.solarEnergySpecs || quarterB.solarEnergySpecs)
 
   return (
     <Layout>
@@ -295,119 +312,119 @@ export default function ComparePage() {
           <div className="mb-4">
             <div className="inline-block px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-200 text-xs font-semibold rounded-full mb-2 md:mb-3 uppercase tracking-wide transition-colors duration-500">Comparison Mode</div>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white transition-colors duration-500">Side-by-Side Analysis</h1>
-            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-2 mb-3 transition-colors duration-500">Compare different examples or compare two quarters inside the same place.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-              <button onClick={switchToBetweenMode} className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors duration-500 ${mode === 'between' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700 hover:border-primary-400'}`}>Between Cities</button>
-              <button onClick={switchToSameMode} className={`px-4 py-2 rounded-lg border text-sm font-semibold transition-colors duration-500 ${mode === 'same' ? 'bg-primary-600 text-white border-primary-600' : 'bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700 hover:border-primary-400'}`}>Same City, Different Quarters</button>
+            <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 mt-2 mb-3 transition-colors duration-500">Compare case studies or inspect different analysis units within one place.</p>
+            <div role="group" aria-label="Comparison mode" className="inline-flex max-w-full rounded-lg border border-neutral-300 bg-neutral-100 p-1 dark:border-neutral-700 dark:bg-neutral-800">
+              <button onClick={switchToBetweenMode} aria-pressed={mode === 'between'} className={`min-h-10 rounded-md px-4 text-sm font-semibold transition-colors ${mode === 'between' ? 'bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white' : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white'}`}>Between Cities</button>
+              <button onClick={switchToSameMode} aria-pressed={mode === 'same'} className={`min-h-10 rounded-md px-4 text-sm font-semibold transition-colors ${mode === 'same' ? 'bg-white text-neutral-900 shadow-sm dark:bg-neutral-700 dark:text-white' : 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white'}`}>Same Place, Different Units</button>
             </div>
           </div>
 
           {mode === 'between' ? (
             <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-3 md:gap-4 items-center mt-6">
-              <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-300 dark:border-blue-700 transition-colors duration-500">
+              <div className="rounded-md border-l-4 border-blue-600 bg-blue-50/70 p-3 md:p-4 dark:bg-blue-950/30">
                 <label className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-2 block transition-colors duration-500">City A</label>
                 <select value={cityA.id} onChange={(event) => navigate(`/compare/${event.target.value}/${cityB.id}${queryString('between', quarterA?.id, quarterB?.id)}`)} className="w-full p-2 border border-blue-300 dark:border-blue-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-500">{cities.map((city) => <option key={city.id} value={city.id} disabled={city.id === cityB.id}>{city.name}</option>)}</select>
               </div>
               <div className="flex justify-center py-2 md:py-0"><ArrowLeftRight className="w-5 h-5 md:w-6 md:h-6 text-neutral-400 dark:text-neutral-500 transform rotate-90 md:rotate-0" /></div>
-              <div className="p-3 md:p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border-2 border-amber-300 dark:border-amber-700 transition-colors duration-500">
+              <div className="rounded-md border-l-4 border-amber-500 bg-amber-50/70 p-3 md:p-4 dark:bg-amber-950/30">
                 <label className="text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide mb-2 block transition-colors duration-500">City B</label>
                 <select value={cityB.id} onChange={(event) => navigate(`/compare/${cityA.id}/${event.target.value}${queryString('between', quarterA?.id, quarterB?.id)}`)} className="w-full p-2 border border-amber-300 dark:border-amber-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors duration-500">{cities.map((city) => <option key={city.id} value={city.id} disabled={city.id === cityA.id}>{city.name}</option>)}</select>
               </div>
             </div>
           ) : (
-            <div className="mt-6 p-3 md:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-300 dark:border-blue-700 transition-colors duration-500">
+            <div className="mt-6 rounded-md border-l-4 border-blue-600 bg-blue-50/70 p-3 md:p-4 dark:bg-blue-950/30">
               <label className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-2 block transition-colors duration-500">City</label>
               <select value={cityA.id} onChange={(event) => navigate(`/compare/${event.target.value}${queryString('same')}`)} className="w-full p-2 border border-blue-300 dark:border-blue-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-500">{cities.map((city) => <option key={city.id} value={city.id}>{city.name}</option>)}</select>
             </div>
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <div className="p-3 md:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700 transition-colors duration-500">
-              <label className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-2 block transition-colors duration-500">Quarter A</label>
-              <select value={quarterA?.id ?? ''} onChange={(event) => onQuarterAChange(event.target.value)} className="w-full p-2 border border-blue-300 dark:border-blue-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-500">{cityA.quarters.map((quarter) => <option key={quarter.id} value={quarter.id}>{quarter.name}</option>)}</select>
+            <div className="rounded-md border-l-4 border-blue-600 bg-blue-50/50 p-3 md:p-4 dark:bg-blue-950/20">
+              <label className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-2 block transition-colors duration-500">Analysis unit A</label>
+              <select value={quarterA?.id ?? ''} onChange={(event) => onQuarterAChange(event.target.value)} className="w-full p-2 border border-blue-300 dark:border-blue-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-500">{cityA.analysisUnits.map((quarter) => <option key={quarter.id} value={quarter.id}>{quarter.name}</option>)}</select>
             </div>
-            <div className="p-3 md:p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-700 transition-colors duration-500">
-              <label className="text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide mb-2 block transition-colors duration-500">Quarter B</label>
-              <select value={quarterB?.id ?? ''} onChange={(event) => onQuarterBChange(event.target.value)} className="w-full p-2 border border-amber-300 dark:border-amber-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors duration-500">{cityB.quarters.map((quarter) => <option key={quarter.id} value={quarter.id} disabled={mode === 'same' && quarterA?.id === quarter.id && cityB.quarters.length > 1}>{quarter.name}</option>)}</select>
+            <div className="rounded-md border-l-4 border-amber-500 bg-amber-50/50 p-3 md:p-4 dark:bg-amber-950/20">
+              <label className="text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide mb-2 block transition-colors duration-500">Analysis unit B</label>
+              <select value={quarterB?.id ?? ''} onChange={(event) => onQuarterBChange(event.target.value)} className="w-full p-2 border border-amber-300 dark:border-amber-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors duration-500">{cityB.analysisUnits.map((quarter) => <option key={quarter.id} value={quarter.id} disabled={mode === 'same' && quarterA?.id === quarter.id && cityB.analysisUnits.length > 1}>{quarter.name}</option>)}</select>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <AdminDataPanel title={`${cityA.name} · source row ${cityA.source.row}`} data={cityA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={`${cityA.source.sheet} row ${cityA.source.row}`} />
+              <AdminDataPanel title={`${quarterA.name} · source row ${quarterA.sourceRow ?? 'see parent record'}`} data={quarterA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={quarterA.sourceRow ? `Arkusz1 row ${quarterA.sourceRow}` : null} />
+            </div>
+            <div>
+              <AdminDataPanel title={`${cityB.name} · source row ${cityB.source.row}`} data={cityB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={`${cityB.source.sheet} row ${cityB.source.row}`} />
+              <AdminDataPanel title={`${quarterB.name} · source row ${quarterB.sourceRow ?? 'see parent record'}`} data={quarterB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={quarterB.sourceRow ? `Arkusz1 row ${quarterB.sourceRow}` : null} />
             </div>
           </div>
         </div>
       </section>
 
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div className="card mb-12">
-          <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Urban Indicators</h3>
-          {mode === 'same' ? <><ComparisonMetric label="Building Intensity" valueA={quarterA?.indicators.buildingIntensity} valueB={quarterB?.indicators.buildingIntensity} /><ComparisonMetric label="Green Space" valueA={quarterA?.indicators.greenSpaceRatio} valueB={quarterB?.indicators.greenSpaceRatio} unit="%" higherIsBetter={true} /></> : <><ComparisonMetric label="Building Intensity" valueA={cityA.urbanIndicators.buildingIntensity} valueB={cityB.urbanIndicators.buildingIntensity} /><ComparisonMetric label="Green Space" valueA={cityA.urbanIndicators.greenSpacePercentage} valueB={cityB.urbanIndicators.greenSpacePercentage} unit="%" higherIsBetter={true} /></>}
+        <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
+          <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Urban Indicators</h3>
+          <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">FAR is total floor area relative to site area; green-space ratio is the reported share of green space. Average floors, building coverage, and tree count describe the selected analysis unit. Values are shown only where reported.</p>
+          {mode === 'same' ? <><ComparisonMetric label="Building Intensity (FAR)" valueA={quarterA?.indicators.buildingIntensity} valueB={quarterB?.indicators.buildingIntensity} /><ComparisonMetric label="Green Space Ratio" valueA={quarterA?.indicators.greenSpaceRatio} valueB={quarterB?.indicators.greenSpaceRatio} unit="%" /></> : <><ComparisonMetric label="Building Intensity (FAR)" valueA={cityA.urbanIndicators.buildingIntensity} valueB={cityB.urbanIndicators.buildingIntensity} /><ComparisonMetric label="Green Space Ratio" valueA={cityA.urbanIndicators.greenSpacePercentage} valueB={cityB.urbanIndicators.greenSpacePercentage} unit="%" /></>}
           <ComparisonMetric label="Average Floors" valueA={quarterA?.indicators.avgFloors} valueB={quarterB?.indicators.avgFloors} />
-          <ComparisonMetric label="Building Coverage" valueA={quarterA?.indicators.buildingCoverage} valueB={quarterB?.indicators.buildingCoverage} unit="%" higherIsBetter={false} />
-          <ComparisonMetric label="Tree Count" valueA={quarterA?.indicators.treeCount} valueB={quarterB?.indicators.treeCount} higherIsBetter={true} />
+          <ComparisonMetric label="Building Coverage" valueA={quarterA?.indicators.buildingCoverage} valueB={quarterB?.indicators.buildingCoverage} unit="%" />
+          <ComparisonMetric label="Tree Count" valueA={quarterA?.indicators.treeCount} valueB={quarterB?.indicators.treeCount} />
           <InsightsSection insights={morphologyInsights} isOpen={showMorphologyInsights} onToggle={() => setShowMorphologyInsights(!showMorphologyInsights)} />
         </div>
 
-        <div className="card mb-12">
-          <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Urban Form</h3>
-          <ComparisonImage imageA={quarterA?.plan ?? null} imageB={quarterB?.plan ?? null} title="Quarter Plan" leftTitle={panelNameA} rightTitle={panelNameB} />
-          <ComparisonImage imageA={quarterA?.form3d ?? null} imageB={quarterB?.form3d ?? null} title="3D Form" leftTitle={panelNameA} rightTitle={panelNameB} />
+        <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
+          <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Urban Form</h3>
+          <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">The plan is a top-down view of built and open space; the 3D image shows building massing. Both images belong to the selected units below.</p>
+          <ComparisonImage imageA={quarterA?.plan ?? null} imageB={quarterB?.plan ?? null} title="Urban Block Plan" leftTitle={panelNameA} rightTitle={panelNameB} field="plan" linksA={quarterA.imageLinks} linksB={quarterB.imageLinks} />
+          <ComparisonImage imageA={quarterA?.form3d ?? null} imageB={quarterB?.form3d ?? null} title="3D Form" leftTitle={panelNameA} rightTitle={panelNameB} field="form3d" linksA={quarterA.imageLinks} linksB={quarterB.imageLinks} />
           <InsightsSection insights={urbanFormInsights} isOpen={showUrbanFormInsights} onToggle={() => setShowUrbanFormInsights(!showUrbanFormInsights)} />
         </div>
 
-        <div className="card mb-12">
-          <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Seasonal Shading</h3>
-          <ComparisonImage imageA={quarterA?.shadingAnalysis?.marchSeptember ?? cityA.shadingAnalysis.marchSeptember} imageB={quarterB?.shadingAnalysis?.marchSeptember ?? cityB.shadingAnalysis.marchSeptember} title="March/September (Equinox)" leftTitle={panelNameA} rightTitle={panelNameB} />
-          <ComparisonImage imageA={quarterA?.shadingAnalysis?.june ?? cityA.shadingAnalysis.june} imageB={quarterB?.shadingAnalysis?.june ?? cityB.shadingAnalysis.june} title="June (Summer Solstice)" leftTitle={panelNameA} rightTitle={panelNameB} />
-          <ComparisonImage imageA={quarterA?.shadingAnalysis?.december ?? cityA.shadingAnalysis.december} imageB={quarterB?.shadingAnalysis?.december ?? cityB.shadingAnalysis.december} title="December (Winter Solstice)" leftTitle={panelNameA} rightTitle={panelNameB} />
+        <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
+          <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Seasonal Shading</h3>
+          <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">The image pairs show source-provided shading for the equinoxes, summer solstice, and winter solstice. Color scales remain as supplied in each study.</p>
+          <ComparisonImage imageA={quarterA?.shadingAnalysis?.marchSeptember ?? cityA.shadingAnalysis.marchSeptember} imageB={quarterB?.shadingAnalysis?.marchSeptember ?? cityB.shadingAnalysis.marchSeptember} title="March/September (Equinox)" leftTitle={panelNameA} rightTitle={panelNameB} field="shadingAnalysis.marchSeptember" linksA={cityA.imageLinks} linksB={cityB.imageLinks} />
+          <ComparisonImage imageA={quarterA?.shadingAnalysis?.june ?? cityA.shadingAnalysis.june} imageB={quarterB?.shadingAnalysis?.june ?? cityB.shadingAnalysis.june} title="June (Summer Solstice)" leftTitle={panelNameA} rightTitle={panelNameB} field="shadingAnalysis.june" linksA={cityA.imageLinks} linksB={cityB.imageLinks} />
+          <ComparisonImage imageA={quarterA?.shadingAnalysis?.december ?? cityA.shadingAnalysis.december} imageB={quarterB?.shadingAnalysis?.december ?? cityB.shadingAnalysis.december} title="December (Winter Solstice)" leftTitle={panelNameA} rightTitle={panelNameB} field="shadingAnalysis.december" linksA={cityA.imageLinks} linksB={cityB.imageLinks} />
         </div>
 
         <ComparisonStreetSection />
 
         {hasComparableSunHours && (
-          <div className="card mb-12">
-            <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Sun Hours Analysis</h3>
-            <ComparisonImage
-              imageA={quarterA.sunHours}
-              imageB={quarterB.sunHours}
-              title="Sun Hours Map"
-              leftTitle={panelNameA}
-              rightTitle={panelNameB}
-            />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {quarterA.sunHoursDistribution?.ground && quarterB.sunHoursDistribution?.ground && (
-                <div className="p-3 md:p-4 rounded-lg border border-blue-200 dark:border-blue-700 bg-white dark:bg-neutral-800 transition-colors duration-500 space-y-4">
-                  <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100">{panelNameA} Ground Distribution</h4>
-                  <DistributionChart data={quarterA.sunHoursDistribution.ground} title="Ground Level" color="amber" />
-                </div>
-              )}
-              {quarterA.sunHoursDistribution?.facades && quarterB.sunHoursDistribution?.facades && (
-                <div className="p-3 md:p-4 rounded-lg border border-blue-200 dark:border-blue-700 bg-white dark:bg-neutral-800 transition-colors duration-500 space-y-4">
-                  <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100">{panelNameA} Facades Distribution</h4>
-                  <DistributionChart data={quarterA.sunHoursDistribution.facades} title="Facades, Roofs & Other" color="amber" />
-                </div>
-              )}
-              {quarterA.sunHoursDistribution?.ground && quarterB.sunHoursDistribution?.ground && (
-                <div className="p-3 md:p-4 rounded-lg border border-amber-200 dark:border-amber-700 bg-white dark:bg-neutral-800 transition-colors duration-500 space-y-4">
-                  <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100">{panelNameB} Ground Distribution</h4>
-                  <DistributionChart data={quarterB.sunHoursDistribution.ground} title="Ground Level" color="amber" />
-                </div>
-              )}
-              {quarterA.sunHoursDistribution?.facades && quarterB.sunHoursDistribution?.facades && (
-                <div className="p-3 md:p-4 rounded-lg border border-amber-200 dark:border-amber-700 bg-white dark:bg-neutral-800 transition-colors duration-500 space-y-4">
-                  <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100">{panelNameB} Facades Distribution</h4>
-                  <DistributionChart data={quarterB.sunHoursDistribution.facades} title="Facades, Roofs & Other" color="amber" />
-                </div>
-              )}
+          <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
+            <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Sun Hours Analysis</h3>
+            <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">Maps show the selected unit. Each chart groups the area receiving a daily-sunlight range on 21 March: the Y-axis is surface-area share, and the X-axis is hours of sunlight.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-start mb-6">
+              <div className="rounded-lg border-2 border-blue-300 dark:border-blue-700 overflow-hidden">
+                <div className="bg-blue-100 dark:bg-blue-900 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-blue-900 dark:text-blue-100">{panelNameA}</div>
+                {hasData(quarterA.sunHours) ? <SafeImage src={getImagePathA(quarterA.sunHours)} alt={`${panelNameA} sun hours map`} className="w-full aspect-video object-cover" imageLink={findImageLink(quarterA.imageLinks, 'sunHours')} /> : <p className="p-4 text-sm text-neutral-500">No sun-hours map reported.</p>}
+              </div>
+              <div className="rounded-lg border-2 border-amber-300 dark:border-amber-700 overflow-hidden">
+                <div className="bg-amber-100 dark:bg-amber-900 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-amber-900 dark:text-amber-100">{panelNameB}</div>
+                {hasData(quarterB.sunHours) ? <SafeImage src={getImagePathB(quarterB.sunHours)} alt={`${panelNameB} sun hours map`} className="w-full aspect-video object-cover" imageLink={findImageLink(quarterB.imageLinks, 'sunHours')} /> : <p className="p-4 text-sm text-neutral-500">No sun-hours map reported.</p>}
+              </div>
+            </div>
+            <div className="space-y-6">
+              <ComparisonDistributionChart dataA={quarterA.sunHoursDistribution?.ground} dataB={quarterB.sunHoursDistribution?.ground} labelA={panelNameA} labelB={panelNameB} title="Ground" measureAxisLabel="Ground area share (%)" categoryAxisLabel="Daily sunlight hours on 21 March" />
+              <ComparisonDistributionChart dataA={quarterA.sunHoursDistribution?.facades} dataB={quarterB.sunHoursDistribution?.facades} labelA={panelNameA} labelB={panelNameB} title="Facades and other surfaces" measureAxisLabel="Facade and other area share (%)" categoryAxisLabel="Daily sunlight hours on 21 March" />
+              <ComparisonDistributionChart dataA={quarterA.sunHoursDistribution?.roofs} dataB={quarterB.sunHoursDistribution?.roofs} labelA={panelNameA} labelB={panelNameB} title="Roofs" measureAxisLabel="Roof area share (%)" categoryAxisLabel="Daily sunlight hours on 21 March" />
             </div>
           </div>
         )}
 
         {hasComparableDaylightPotential && (
-          <div className="card mb-12">
-            <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Daylight Potential</h3>
+          <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
+            <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Daylight Potential</h3>
+            <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">The maps show reported daylight-potential results. The paired chart groups facade area by score band; compare the shares within the same band, not the color of separate source maps.</p>
             <ComparisonImage
               imageA={quarterA.daylightPotential}
               imageB={quarterB.daylightPotential}
               title="Daylight Potential (Primary)"
               leftTitle={panelNameA}
               rightTitle={panelNameB}
+              field="daylightPotential"
+              linksA={quarterA.imageLinks}
+              linksB={quarterB.imageLinks}
             />
             <ComparisonImage
               imageA={quarterA.daylightPotential2 ?? null}
@@ -415,56 +432,69 @@ export default function ComparePage() {
               title="Daylight Potential (Secondary)"
               leftTitle={panelNameA}
               rightTitle={panelNameB}
+              field="daylightPotential2"
+              linksA={quarterA.imageLinks}
+              linksB={quarterB.imageLinks}
             />
-            {quarterA.daylightPotentialDistribution && quarterB.daylightPotentialDistribution && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              <div className="p-3 md:p-4 rounded-lg border border-blue-200 dark:border-blue-700 bg-white dark:bg-neutral-800 transition-colors duration-500">
-                <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-3">{panelNameA} Facade Distribution</h4>
-                <DistributionChart data={quarterA.daylightPotentialDistribution} color="blue" unitLabel="Daylight potential (scores)" />
-              </div>
-              <div className="p-3 md:p-4 rounded-lg border border-amber-200 dark:border-amber-700 bg-white dark:bg-neutral-800 transition-colors duration-500">
-                <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100 mb-3">{panelNameB} Facade Distribution</h4>
-                <DistributionChart data={quarterB.daylightPotentialDistribution} color="blue" unitLabel="Daylight potential (scores)" />
-              </div>
-            </div>
-            )}
+            <ComparisonDistributionChart
+              dataA={quarterA.daylightPotentialDistribution}
+              dataB={quarterB.daylightPotentialDistribution}
+              labelA={panelNameA}
+              labelB={panelNameB}
+              title="Facade distribution"
+              measureAxisLabel="Facade area share (%)"
+              categoryAxisLabel="Daylight-potential score band"
+            />
           </div>
         )}
 
         {hasComparableSolarEnergy && (
-          <div className="card mb-12">
-            <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Solar Energy Analysis</h3>
+          <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
+            <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Solar Energy Analysis</h3>
+            <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">The maps are source-generated solar analyses. The specifications list reported area and energy figures; blank entries mean that value was not provided.</p>
             <ComparisonImage
               imageA={quarterA.solarEnergy ?? null}
               imageB={quarterB.solarEnergy ?? null}
               title="Solar Energy Map"
               leftTitle={panelNameA}
               rightTitle={panelNameB}
+              field="solarEnergy"
+              linksA={quarterA.imageLinks}
+              linksB={quarterB.imageLinks}
             />
-            {quarterA.solarEnergySpecs && quarterB.solarEnergySpecs && (
+            {(quarterA.solarEnergySpecs || quarterB.solarEnergySpecs) && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                <div className="p-3 md:p-4 rounded-lg border border-blue-200 dark:border-blue-700 bg-white dark:bg-neutral-800 transition-colors duration-500">
+                {quarterA.solarEnergySpecs ? <div className="p-3 md:p-4 rounded-lg border border-blue-200 dark:border-blue-700 bg-white dark:bg-neutral-800 transition-colors duration-500">
                   <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-100 mb-3">{panelNameA} Solar Specs</h4>
                   <SolarEnergyTable specs={quarterA.solarEnergySpecs} />
-                </div>
-                <div className="p-3 md:p-4 rounded-lg border border-amber-200 dark:border-amber-700 bg-white dark:bg-neutral-800 transition-colors duration-500">
+                </div> : <p className="p-4 text-sm text-neutral-500">{panelNameA}: no solar specifications reported.</p>}
+                {quarterB.solarEnergySpecs ? <div className="p-3 md:p-4 rounded-lg border border-amber-200 dark:border-amber-700 bg-white dark:bg-neutral-800 transition-colors duration-500">
                   <h4 className="text-sm font-semibold text-amber-900 dark:text-amber-100 mb-3">{panelNameB} Solar Specs</h4>
                   <SolarEnergyTable specs={quarterB.solarEnergySpecs} />
-                </div>
+                </div> : <p className="p-4 text-sm text-neutral-500">{panelNameB}: no solar specifications reported.</p>}
               </div>
             )}
           </div>
         )}
 
-        <div className="card mb-12">
-          <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Daylight Performance Metrics</h3>
-          <ComparisonMetric label="Average DF" valueA={quarterA?.daylightFactor?.simulation1?.avgValue} valueB={quarterB?.daylightFactor?.simulation1?.avgValue} unit="%" higherIsBetter={true} />
-          <ComparisonImage imageA={quarterA?.daylightFactor?.simulation1?.image ?? null} imageB={quarterB?.daylightFactor?.simulation1?.image ?? null} title="Daylight Factor Distribution" leftTitle={panelNameA} rightTitle={panelNameB} />
-          <ComparisonMetric label="sDA Value" valueA={quarterA?.spatialDaylightAutonomy?.simulation1?.autonomy} valueB={quarterB?.spatialDaylightAutonomy?.simulation1?.autonomy} unit="%" higherIsBetter={true} />
-          <ComparisonImage imageA={quarterA?.spatialDaylightAutonomy?.simulation1?.image ?? null} imageB={quarterB?.spatialDaylightAutonomy?.simulation1?.image ?? null} title="Spatial Daylight Autonomy" leftTitle={panelNameA} rightTitle={panelNameB} />
-          <ComparisonMetric label="Average UDI" valueA={quarterA?.usefulDaylightIlluminance?.simulation1?.avgValue} valueB={quarterB?.usefulDaylightIlluminance?.simulation1?.avgValue} unit="%" higherIsBetter={true} />
-          <ComparisonImage imageA={quarterA?.usefulDaylightIlluminance?.simulation1?.image ?? null} imageB={quarterB?.usefulDaylightIlluminance?.simulation1?.image ?? null} title="Useful Daylight Illuminance" leftTitle={panelNameA} rightTitle={panelNameB} />
-          <InsightsSection insights={daylightInsights} isOpen={showDaylightInsights} onToggle={() => setShowDaylightInsights(!showDaylightInsights)} />
+        <div className="mb-14 border-b border-neutral-200 pb-8 last:border-b-0 dark:border-neutral-700">
+          <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Daylight Performance Metrics</h3>
+          <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">DF compares indoor with outdoor illuminance under the study sky condition. sDA reports floor-area daylight autonomy against the study target; UDI describes how often illuminance falls within a useful range. Criteria can differ by study.</p>
+          {sameAnalysisScale ? (
+            <>
+              <ComparisonMetric label="DF · Scenario 1" valueA={quarterA?.daylightFactor?.simulation1?.avgValue} valueB={quarterB?.daylightFactor?.simulation1?.avgValue} unit="%" />
+              <ComparisonImage imageA={quarterA?.daylightFactor?.simulation1?.image ?? null} imageB={quarterB?.daylightFactor?.simulation1?.image ?? null} title="Daylight Factor Distribution" leftTitle={panelNameA} rightTitle={panelNameB} field="daylightFactor.simulation1.image" linksA={quarterA.imageLinks} linksB={quarterB.imageLinks} />
+              <ComparisonMetric label="sDA · Scenario 1" valueA={quarterA?.spatialDaylightAutonomy?.simulation1?.autonomy} valueB={quarterB?.spatialDaylightAutonomy?.simulation1?.autonomy} unit="%" />
+              <ComparisonImage imageA={quarterA?.spatialDaylightAutonomy?.simulation1?.image ?? null} imageB={quarterB?.spatialDaylightAutonomy?.simulation1?.image ?? null} title="Spatial Daylight Autonomy" leftTitle={panelNameA} rightTitle={panelNameB} field="spatialDaylightAutonomy.simulation1.image" linksA={quarterA.imageLinks} linksB={quarterB.imageLinks} />
+              <ComparisonMetric label="UDI · Scenario 1" valueA={quarterA?.usefulDaylightIlluminance?.simulation1?.avgValue} valueB={quarterB?.usefulDaylightIlluminance?.simulation1?.avgValue} unit="%" />
+              <ComparisonImage imageA={quarterA?.usefulDaylightIlluminance?.simulation1?.image ?? null} imageB={quarterB?.usefulDaylightIlluminance?.simulation1?.image ?? null} title="Useful Daylight Illuminance" leftTitle={panelNameA} rightTitle={panelNameB} field="usefulDaylightIlluminance.simulation1.image" linksA={quarterA.imageLinks} linksB={quarterB.imageLinks} />
+              <InsightsSection insights={daylightInsights} isOpen={showDaylightInsights} onToggle={() => setShowDaylightInsights(!showDaylightInsights)} />
+            </>
+          ) : (
+            <p className="border-l-4 border-amber-500 bg-amber-50 dark:bg-amber-950/40 p-4 text-sm text-neutral-700 dark:text-neutral-200">
+              Daylight metrics are not directly compared: the selected units use different spatial scales or simulation criteria.
+            </p>
+          )}
         </div>
       </div>
     </Layout>

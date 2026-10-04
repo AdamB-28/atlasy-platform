@@ -1,4 +1,5 @@
-import { City, Quarter } from '../types'
+import { City, UrbanBlock } from '../types'
+import { parseEuroNumber } from './helpers'
 
 interface Insight {
   title: string
@@ -9,8 +10,8 @@ interface Insight {
 export function generateUrbanFormInsights(cityA: City, cityB: City): Insight[] {
   const insights: Insight[] = []
   
-  const intensityA = parseFloat(String(cityA.urbanIndicators.buildingIntensity || 0))
-  const intensityB = parseFloat(String(cityB.urbanIndicators.buildingIntensity || 0))
+  const intensityA = parseEuroNumber(cityA.urbanIndicators.buildingIntensity) ?? 0
+  const intensityB = parseEuroNumber(cityB.urbanIndicators.buildingIntensity) ?? 0
   
   if (intensityA && intensityB) {
     if (intensityA > intensityB) {
@@ -28,21 +29,21 @@ export function generateUrbanFormInsights(cityA: City, cityB: City): Insight[] {
     }
   }
   
-  const greenA = parseFloat(String(cityA.urbanIndicators.greenSpacePercentage || 0))
-  const greenB = parseFloat(String(cityB.urbanIndicators.greenSpacePercentage || 0))
+  const greenA = parseEuroNumber(cityA.urbanIndicators.greenSpacePercentage) ?? 0
+  const greenB = parseEuroNumber(cityB.urbanIndicators.greenSpacePercentage) ?? 0
   
   if (greenA && greenB) {
     if (greenA > greenB) {
       insights.push({
-        title: 'Green Space Access',
-        content: `${cityA.name} provides ${(greenA - greenB).toFixed(0)}% more green space than ${cityB.name}. Greater green space typically correlates with better environmental quality and increased opportunities for outdoor activities in daylit environments.`,
-        category: 'better'
+        title: 'Green Area Ratio',
+        content: `${cityA.name} records ${(greenA - greenB).toFixed(1)} percentage points more green area than ${cityB.name}. This describes a land-allocation difference; it does not establish overall environmental or daylight performance.`,
+        category: 'neutral'
       })
     } else if (greenB > greenA) {
       insights.push({
-        title: 'Green Space Access',
-        content: `${cityB.name} provides ${(greenB - greenA).toFixed(0)}% more green space than ${cityA.name}. This supports biodiversity, stormwater management, and creates daylit outdoor spaces for residents.`,
-        category: 'better'
+        title: 'Green Area Ratio',
+        content: `${cityB.name} records ${(greenB - greenA).toFixed(1)} percentage points more green area than ${cityA.name}. This describes a land-allocation difference; it does not establish overall environmental or daylight performance.`,
+        category: 'neutral'
       })
     }
   }
@@ -53,8 +54,8 @@ export function generateUrbanFormInsights(cityA: City, cityB: City): Insight[] {
 export function generateDaylightInsights(
   cityA: City,
   cityB: City,
-  quarterA?: Quarter,
-  quarterB?: Quarter,
+  quarterA?: UrbanBlock,
+  quarterB?: UrbanBlock,
   labelA?: string,
   labelB?: string
 ): Insight[] {
@@ -66,8 +67,8 @@ export function generateDaylightInsights(
   const dfB = quarterB?.daylightFactor?.simulation1?.avgValue
   
   if (dfA && dfB) {
-    const valA = parseFloat(String(dfA))
-    const valB = parseFloat(String(dfB))
+    const valA = parseEuroNumber(dfA) ?? 0
+    const valB = parseEuroNumber(dfB) ?? 0
     
     if (valA > valB) {
       insights.push({
@@ -88,8 +89,8 @@ export function generateDaylightInsights(
   const sdaB = quarterB?.spatialDaylightAutonomy?.simulation1?.autonomy
   
   if (sdaA && sdaB) {
-    const valA = parseFloat(String(sdaA))
-    const valB = parseFloat(String(sdaB))
+    const valA = parseEuroNumber(sdaA) ?? 0
+    const valB = parseEuroNumber(sdaB) ?? 0
     
     if (valA > valB) {
       insights.push({
@@ -110,8 +111,8 @@ export function generateDaylightInsights(
   const udiB = quarterB?.usefulDaylightIlluminance?.simulation1?.avgValue
   
   if (udiA && udiB) {
-    const valA = parseFloat(String(udiA))
-    const valB = parseFloat(String(udiB))
+    const valA = parseEuroNumber(udiA) ?? 0
+    const valB = parseEuroNumber(udiB) ?? 0
     
     if (valA > valB) {
       insights.push({
@@ -134,8 +135,8 @@ export function generateDaylightInsights(
 export function generateUrbanMorphologyInsights(
   cityA: City,
   cityB: City,
-  quarterA?: Quarter,
-  quarterB?: Quarter,
+  quarterA?: UrbanBlock,
+  quarterB?: UrbanBlock,
   labelA?: string,
   labelB?: string
 ): Insight[] {
@@ -166,8 +167,8 @@ export function generateUrbanMorphologyInsights(
   const floorsB = quarterB?.indicators.avgFloors
   
   if (floorsA && floorsB) {
-    const valA = parseFloat(String(floorsA))
-    const valB = parseFloat(String(floorsB))
+    const valA = parseEuroNumber(floorsA) ?? 0
+    const valB = parseEuroNumber(floorsB) ?? 0
     
     if (valA > valB * 1.5) {
       insights.push({

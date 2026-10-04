@@ -83,6 +83,7 @@ export function PercentRing({
   const capped = Math.min(num, 100)
   const thresholdClamped =
     threshold !== undefined ? Math.max(0, Math.min(threshold, 100)) : undefined
+  const displayValue = num.toLocaleString('en-US', { maximumFractionDigits: 2 })
   const r = 28
   const circ = 2 * Math.PI * r
 
@@ -131,7 +132,7 @@ export function PercentRing({
           fontSize="14"
           fontWeight="700"
         >
-          {num % 1 === 0 ? num : num.toFixed(1)}
+          {displayValue}
         </text>
       </svg>
       {threshold !== undefined && thresholdLabel && (

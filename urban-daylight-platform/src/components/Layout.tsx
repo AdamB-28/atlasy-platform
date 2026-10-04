@@ -1,12 +1,17 @@
 import { Link } from 'react-router-dom'
-import { Building2, Home } from 'lucide-react'
+import { Building2, Home, Moon, Shield, ShieldCheck, Sun } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { useAdminMode } from '../contexts/AdminModeContext'
 
 interface LayoutProps {
   children: React.ReactNode
 }
 
 export default function Layout({ children }: LayoutProps) {
+  const { isAdminMode, enableAdminMode, disableAdminMode } = useAdminMode()
+  const [showAdminAccess, setShowAdminAccess] = useState(false)
+  const [adminPassword, setAdminPassword] = useState('')
+  const [adminError, setAdminError] = useState('')
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('darkMode') === 'true'
@@ -26,6 +31,18 @@ export default function Layout({ children }: LayoutProps) {
   
   const toggleDarkMode = () => {
     setDarkMode(!darkMode)
+  }
+
+  const handleAdminSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (enableAdminMode(adminPassword)) {
+      setAdminPassword('')
+      setAdminError('')
+      setShowAdminAccess(false)
+    } else {
+      setAdminPassword('')
+      setAdminError('Incorrect administrator password')
+    }
   }
   
   return (
@@ -53,55 +70,60 @@ export default function Layout({ children }: LayoutProps) {
                 <Home className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Home</span>
               </Link>
+
+              <div className="relative">
+                {isAdminMode ? (
+                  <button
+                    type="button"
+                    onClick={disableAdminMode}
+                    aria-label="Disable admin mode"
+                    title="Admin mode on · switch off"
+                    className="inline-flex min-h-10 items-center gap-1.5 rounded-md border border-amber-500 bg-amber-100 px-2 text-xs font-semibold text-amber-950 hover:bg-amber-200 dark:bg-amber-950 dark:text-amber-100 dark:hover:bg-amber-900"
+                  >
+                    <ShieldCheck className="h-4 w-4" />
+                    <span className="hidden sm:inline">Admin on</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => { setShowAdminAccess((open) => !open); setAdminError('') }}
+                    aria-expanded={showAdminAccess}
+                    aria-controls="admin-access-panel"
+                    className={`inline-flex min-h-10 items-center gap-1.5 rounded-md border px-2 text-xs font-semibold ${darkMode ? 'border-neutral-600 text-neutral-300 hover:border-amber-500 hover:text-amber-300' : 'border-neutral-300 text-neutral-600 hover:border-amber-500 hover:text-amber-800'}`}
+                  >
+                    <Shield className="h-4 w-4" />
+                    <span className="hidden sm:inline">Admin</span>
+                  </button>
+                )}
+                {!isAdminMode && showAdminAccess && (
+                  <form
+                    id="admin-access-panel"
+                    onSubmit={handleAdminSubmit}
+                    className="absolute right-0 top-full mt-2 z-[60] w-[min(19rem,calc(100vw-1.5rem))] rounded-md border border-neutral-200 bg-white p-3 shadow-xl dark:border-neutral-700 dark:bg-neutral-800"
+                  >
+                    <label htmlFor="admin-password" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Administrator password</label>
+                    <input
+                      id="admin-password"
+                      type="password"
+                      autoComplete="current-password"
+                      value={adminPassword}
+                      onChange={(event) => setAdminPassword(event.target.value)}
+                      className="mt-2 min-h-10 w-full rounded border border-neutral-300 bg-white px-3 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-white"
+                    />
+                    {adminError && <p className="mt-2 text-xs text-red-600 dark:text-red-400" role="alert">{adminError}</p>}
+                    <button type="submit" className="mt-3 min-h-10 w-full rounded bg-amber-700 px-3 text-sm font-semibold text-white hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-500">Enable admin mode</button>
+                    <p className="mt-2 text-[10px] leading-relaxed text-neutral-500 dark:text-neutral-400">Local inspection only. Source data is bundled with this app and is not protected by this switch.</p>
+                  </form>
+                )}
+              </div>
               
-              {/* Dark Mode Toggle with Sunrise/Sunset Animation */}
               <button
                 onClick={toggleDarkMode}
-                className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden group shadow-lg flex-shrink-0"
-                aria-label="Toggle dark mode"
-                title={darkMode ? "Switch to day mode" : "Switch to night mode"}
+                className={`inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border transition-colors ${darkMode ? 'border-neutral-600 text-amber-300 hover:bg-neutral-700' : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'}`}
+                aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
               >
-                <div className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-                  darkMode 
-                    ? 'bg-gradient-to-b from-indigo-900 via-purple-900 to-orange-900' 
-                    : 'bg-gradient-to-b from-sky-400 via-orange-400 to-yellow-300'
-                }`}>
-                  {/* Stars for night mode */}
-                  {darkMode && (
-                    <>
-                      <div className="absolute top-2 left-3 w-1 h-1 bg-white rounded-full animate-pulse"></div>
-                      <div className="absolute top-4 right-4 w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-                      <div className="absolute top-6 left-6 w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s' }}></div>
-                    </>
-                  )}
-                  
-                  {/* Sun/Moon with gradient */}
-                  <div 
-                    className={`absolute w-5 h-5 sm:w-6 sm:h-6 rounded-full transition-all duration-1000 ease-in-out ${
-                      darkMode 
-                        ? 'top-8 right-3 bg-gradient-to-br from-slate-200 to-slate-400 shadow-lg shadow-slate-400/50' 
-                        : 'top-3 right-4 bg-gradient-to-br from-yellow-200 via-yellow-300 to-orange-400 shadow-lg shadow-yellow-400/50'
-                    }`}
-                  >
-                    {/* Moon craters */}
-                    {darkMode && (
-                      <>
-                        <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-slate-300/40"></div>
-                        <div className="absolute bottom-2 left-1 w-1 h-1 rounded-full bg-slate-300/40"></div>
-                      </>
-                    )}
-                  </div>
-                  
-                  {/* Horizon line */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-4 transition-all duration-1000 ${
-                    darkMode 
-                      ? 'bg-gradient-to-t from-neutral-900 to-transparent' 
-                      : 'bg-gradient-to-t from-green-600/20 to-transparent'
-                  }`}></div>
-                </div>
-                
-                {/* Hover effect */}
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+                {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </button>
             </nav>
           </div>

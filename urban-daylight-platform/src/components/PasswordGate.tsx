@@ -1,30 +1,56 @@
 import { useState, useEffect } from 'react'
 import { Lock } from 'lucide-react'
+import { AdminModeContext } from '../contexts/AdminModeContext'
 
 interface PasswordGateProps {
   children: React.ReactNode
 }
 
 const CORRECT_PASSWORD = 'KTM2026!' // Change this to your desired password
+const ADMIN_PASSWORD = 'KTMadmin!'
 
 export default function PasswordGate({ children }: PasswordGateProps) {
   const [password, setPassword] = useState('')
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(() => sessionStorage.getItem('authenticated') === 'true')
+  const [isAdminMode, setIsAdminMode] = useState(() => sessionStorage.getItem('adminMode') === 'true')
   const [error, setError] = useState('')
 
   useEffect(() => {
-    // Check if user was previously authenticated
-    const auth = sessionStorage.getItem('authenticated')
-    if (auth === 'true') {
-      setIsAuthenticated(true)
+    if (!isAuthenticated) {
+      sessionStorage.removeItem('authenticated')
+      sessionStorage.removeItem('adminMode')
+      setIsAdminMode(false)
     }
-  }, [])
+  }, [isAuthenticated])
+
+  const enableAdminMode = (candidate: string) => {
+    if (candidate !== ADMIN_PASSWORD) return false
+    setIsAuthenticated(true)
+    setIsAdminMode(true)
+    sessionStorage.setItem('authenticated', 'true')
+    sessionStorage.setItem('adminMode', 'true')
+    setError('')
+    return true
+  }
+
+  const disableAdminMode = () => {
+    setIsAdminMode(false)
+    sessionStorage.removeItem('adminMode')
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (password === CORRECT_PASSWORD) {
+    if (password === ADMIN_PASSWORD) {
       setIsAuthenticated(true)
+      setIsAdminMode(true)
       sessionStorage.setItem('authenticated', 'true')
+      sessionStorage.setItem('adminMode', 'true')
+      setError('')
+    } else if (password === CORRECT_PASSWORD) {
+      setIsAuthenticated(true)
+      setIsAdminMode(false)
+      sessionStorage.setItem('authenticated', 'true')
+      sessionStorage.removeItem('adminMode')
       setError('')
     } else {
       setError('Incorrect password')
@@ -33,7 +59,11 @@ export default function PasswordGate({ children }: PasswordGateProps) {
   }
 
   if (isAuthenticated) {
-    return <>{children}</>
+    return (
+      <AdminModeContext.Provider value={{ isAdminMode, enableAdminMode, disableAdminMode }}>
+        {children}
+      </AdminModeContext.Provider>
+    )
   }
 
   return (
@@ -48,7 +78,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
               Work in Progress
             </h1>
             <p className="text-neutral-400 text-center text-sm">
-              This platform is currently under development. Please enter the password to continue.
+              Enter your access password to continue. The administrator password opens source-data inspection tools.
             </p>
           </div>
 
@@ -77,6 +107,7 @@ export default function PasswordGate({ children }: PasswordGateProps) {
             >
               Access Platform
             </button>
+            <p className="text-center text-xs text-neutral-500">Admin inspection displays data bundled with this static site; it is not a secure access boundary.</p>
           </form>
 
           <div className="mt-6 pt-6 border-t border-neutral-700">

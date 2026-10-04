@@ -8,6 +8,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "data:import": "node scripts/run-python.mjs scripts/import_data.py",
+    "test": "npm run test:data && npm run test:import",
+    "test:data": "node --test tests/data.test.mjs",
+    "test:import": "node scripts/run-python.mjs -m unittest discover -s tests -p test_import_data.py -v",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist --dotfiles"

@@ -45,6 +45,15 @@ export function hasData(value: any): boolean {
   return value !== null && value !== undefined && value !== ''
 }
 
+export function findImageLink<T extends { field: string }>(links: T[] | undefined, field: string): T | null {
+  return links?.find((link) => link.field === field) ?? null
+}
+
+export function tempSourcePath(tempPath?: string | null): string | null {
+  if (!tempPath) return null
+  return tempPath.startsWith('.venv/TEMP/') ? tempPath : `.venv/TEMP/${tempPath}`
+}
+
 export function getCityFolderName(cityName: string): string {
   const folderMap: Record<string, string> = {
     'Elephant and Castle': 'ELEPHANT_AND_CASTLE',

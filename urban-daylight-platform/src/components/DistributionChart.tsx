@@ -26,6 +26,85 @@ const COLOR_MAP = {
   },
 }
 
+interface ComparisonDistributionChartProps {
+  dataA?: DistributionData | null
+  dataB?: DistributionData | null
+  labelA: string
+  labelB: string
+  title: string
+  height?: number
+  unitLabel?: string
+  measureAxisLabel?: string
+  categoryAxisLabel?: string
+}
+
+function formatShare(value: number | null | undefined, unit: string | undefined) {
+  if (value === null || value === undefined) return 'No data'
+  return `${value}${unit === '%' ? '%' : ''}`
+}
+
+export function ComparisonDistributionChart({ dataA, dataB, labelA, labelB, title, height = 160, unitLabel, measureAxisLabel, categoryAxisLabel }: ComparisonDistributionChartProps) {
+  if (!dataA && !dataB) return null
+  const bins = dataA?.bins ?? dataB?.bins ?? []
+  const unit = dataA?.unit ?? dataB?.unit
+  const values = bins.flatMap((_, index) => [dataA?.bins[index]?.value ?? 0, dataB?.bins[index]?.value ?? 0])
+  const maxVal = unit === '%' ? 100 : Math.max(...values, 1)
+  const ticks = unit === '%' ? [0, 25, 50, 75, 100] : [0, 0.25, 0.5, 0.75, 1].map((fraction) => maxVal * fraction)
+
+  return (
+    <div className="border-t border-neutral-200 pt-5 first:border-t-0 first:pt-0 dark:border-neutral-700">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h6 className="text-sm font-semibold text-neutral-900 dark:text-white">{title}</h6>
+          <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">Y-axis · {measureAxisLabel ?? unitLabel ?? (unit === '%' ? 'Share of area (%)' : unit)}</p>
+        </div>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs font-medium">
+          <span className="inline-flex items-center gap-2 text-blue-800 dark:text-blue-200"><span className="h-3 w-3 rounded-sm bg-blue-600 dark:bg-blue-400" />{labelA}</span>
+          <span className="inline-flex items-center gap-2 text-amber-800 dark:text-amber-200"><span className="h-3 w-3 rounded-sm bg-amber-500 dark:bg-amber-400" />{labelB}</span>
+        </div>
+      </div>
+      <div className="grid grid-cols-[2rem_minmax(0,1fr)] gap-2">
+        <div className="relative text-[10px] tabular-nums text-neutral-400 dark:text-neutral-500" style={{ height }} aria-hidden="true">
+          {ticks.map((tick) => (
+            <span key={tick} className="absolute right-0 -translate-y-1/2" style={{ bottom: `${(tick / maxVal) * 100}%` }}>{Math.round(tick)}{unit === '%' ? '%' : ''}</span>
+          ))}
+        </div>
+        <div className="relative" style={{ height }}>
+          <div className="pointer-events-none absolute inset-0 flex flex-col justify-between" aria-hidden="true">
+            {ticks.slice().reverse().map((tick) => (
+              <div key={tick} className="border-t border-neutral-200/80 dark:border-neutral-700/80" />
+            ))}
+          </div>
+          <div className="relative z-10 flex h-full items-end gap-2">
+            {bins.map((bin, index) => {
+              const valueA = dataA?.bins[index]?.value ?? null
+              const valueB = dataB?.bins[index]?.value ?? null
+              const heightFor = (value: number | null) => (value === null || value <= 0 ? '0%' : `${Math.min((value / maxVal) * 100, 100)}%`)
+              return (
+                <div key={`${bin.label}-${index}`} className="group relative flex h-full min-w-0 flex-1 items-end justify-center gap-1 focus:outline-none" role="img" aria-label={`${bin.label}: ${labelA} ${formatShare(valueA, unit)}, ${labelB} ${formatShare(valueB, unit)}`} tabIndex={0}>
+                  <div className="pointer-events-none absolute bottom-full left-1/2 z-20 mb-2 w-max -translate-x-1/2 rounded bg-neutral-950 px-2 py-1 text-[10px] font-medium text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 group-focus:opacity-100">
+                    <span className="block text-neutral-300">{bin.label}</span>
+                    <span className="block text-blue-200">A {formatShare(valueA, unit)}</span>
+                    <span className="block text-amber-200">B {formatShare(valueB, unit)}</span>
+                  </div>
+                  <div className="w-[calc((100%-0.25rem)/2)] max-w-10 rounded-t-sm bg-blue-600 transition-[height,width] duration-300 dark:bg-blue-400" style={{ height: heightFor(valueA) }} />
+                  <div className="w-[calc((100%-0.25rem)/2)] max-w-10 rounded-t-sm bg-amber-500 transition-[height,width] duration-300 dark:bg-amber-400" style={{ height: heightFor(valueB) }} />
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+      <div className="ml-10 mt-1 flex gap-1">
+        {bins.map((bin, index) => (
+          <span key={`${bin.label}-label-${index}`} className="min-w-0 flex-1 text-center text-[10px] leading-tight text-neutral-600 dark:text-neutral-300">{bin.label}</span>
+        ))}
+      </div>
+      <p className="ml-10 mt-1 text-center text-[10px] text-neutral-500 dark:text-neutral-400">X-axis · {categoryAxisLabel ?? 'Distribution band'}</p>
+    </div>
+  )
+}
+
 export default function DistributionChart({ data, title, color = 'amber', height = 120, unitLabel }: DistributionChartProps) {
   const colors = COLOR_MAP[color]
   const values = data.bins.map(b => b.value ?? 0)
@@ -43,15 +122,21 @@ export default function DistributionChart({ data, title, color = 'amber', height
           const val = bin.value ?? 0
           const pct = (val / maxVal) * 100
           return (
-            <div key={i} className="flex-1 flex flex-col items-center gap-1 h-full justify-end group relative">
+            <div
+              key={i}
+              className="flex-1 flex flex-col items-center gap-1 h-full justify-end group relative"
+              role="img"
+              aria-label={`${bin.label}: ${bin.value === null ? 'no data' : `${bin.value}${data.unit === '%' ? '%' : ''}`}`}
+              tabIndex={0}
+            >
               {/* Tooltip */}
-              <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-[10px] font-medium px-1.5 py-0.5 rounded whitespace-nowrap pointer-events-none z-10">
-                {val}{data.unit === '%' ? '%' : ''}
+              <div className="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-[10px] font-medium px-1.5 py-0.5 rounded whitespace-nowrap pointer-events-none z-10">
+                {bin.value === null ? 'No data' : `${val}${data.unit === '%' ? '%' : ''}`}
               </div>
               {/* Bar */}
               <div
                 className={`w-full rounded-t-sm transition-all duration-300 ${colors.bar} ${colors.barHover} min-h-[2px]`}
-                style={{ height: `${Math.max(pct, 2)}%` }}
+                style={{ height: val === 0 ? '0%' : `${Math.max(pct, 2)}%` }}
               />
             </div>
           )

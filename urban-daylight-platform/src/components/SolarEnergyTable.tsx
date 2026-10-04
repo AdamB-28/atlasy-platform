@@ -4,8 +4,9 @@ interface SolarEnergyTableProps {
   specs: SolarEnergySpecs
 }
 
-function formatNumber(val: number | null): string {
+function formatNumber(val: number | null, unit: string): string {
   if (val === null) return '—'
+  if (unit === 'kWh/m²') return val.toLocaleString('en-US', { maximumFractionDigits: 1 })
   if (val >= 1_000_000) return `${(val / 1_000_000).toFixed(1)}M`
   if (val >= 1_000) return `${(val / 1_000).toFixed(1)}k`
   return val.toLocaleString('en-US', { maximumFractionDigits: 1 })
@@ -35,8 +36,8 @@ export default function SolarEnergyTable({ specs }: SolarEnergyTableProps) {
                 {row.label}
               </td>
               <td className="px-3 py-2 text-right font-semibold text-neutral-900 dark:text-white text-xs md:text-sm">
-                {formatNumber(row.value)}
-                <span className="text-neutral-400 dark:text-neutral-500 font-normal ml-1 text-[10px] md:text-xs">{row.unit}</span>
+                {formatNumber(row.value, row.unit)}
+                <span className="text-neutral-400 dark:text-neutral-500 font-normal ml-1 text-[10px] md:text-xs"> {row.unit}</span>
               </td>
             </tr>
           ))}

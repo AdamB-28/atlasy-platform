@@ -3,14 +3,16 @@ import { MapPin, ChevronRight } from 'lucide-react'
 interface CityCardProps {
   name: string
   country: string | null
+  isSelected?: boolean
   onClick: () => void
 }
 
-export default function CityCard({ name, country, onClick }: CityCardProps) {
+export default function CityCard({ name, country, isSelected = false, onClick }: CityCardProps) {
   return (
     <button
       onClick={onClick}
-      className="w-full text-left card hover:shadow-lg hover:border-primary-400 dark:hover:border-primary-500 hover:scale-[1.02] transition-all duration-200 cursor-pointer group relative"
+      aria-pressed={isSelected}
+      className="w-full p-4 text-left card hover:border-primary-400 dark:hover:border-primary-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 transition-colors duration-200 cursor-pointer group relative"
     >
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-full bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">
@@ -25,7 +27,7 @@ export default function CityCard({ name, country, onClick }: CityCardProps) {
             <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 transition-colors duration-500">{country}</p>
           )}
           <p className="text-xs text-primary-600 dark:text-primary-400 mt-2 font-medium group-hover:translate-x-1 transition-transform">
-            Click to explore →
+            {isSelected ? 'Selected on map' : 'Select location'}
           </p>
         </div>
         

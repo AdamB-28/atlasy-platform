@@ -1,17 +1,19 @@
-import { hasData, getCityFolderName, extractPercentage } from '../utils/helpers'
-import type { Quarter } from '../types'
+import { hasData, getCityFolderName, extractPercentage, findImageLink, tempSourcePath } from '../utils/helpers'
+import type { UrbanBlock } from '../types'
 import SafeImage from './SafeImage'
 import DistributionChart from './DistributionChart'
 import SolarEnergyTable from './SolarEnergyTable'
 import UrbanSectionDiagram from './UrbanSectionDiagram'
 import { DensityGauge, PercentRing } from './MetricVisuals'
+import AdminDataPanel from './AdminDataPanel'
 
 interface QuarterDetailProps {
-  quarter: Quarter
+  quarter: UrbanBlock
   cityName: string
+  sourcePath?: string | null
 }
 
-export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps) {
+export default function QuarterDetail({ quarter, cityName, sourcePath }: QuarterDetailProps) {
   const cityFolder = getCityFolderName(cityName)
   const getImagePath = (imageName: string | null) => {
     if (!imageName) return ''
@@ -23,9 +25,18 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
       {/* Quarter Header */}
       <div>
         <h3 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors duration-500">{quarter.name}</h3>
+        <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+          {quarter.analysisLevel === 'selected-room' ? 'Room-scale simulation' : 'Urban-block analysis'}
+        </p>
         {hasData(quarter.function) && (
           <p className="text-sm md:text-base text-neutral-600 dark:text-neutral-400 transition-colors duration-500">{quarter.function}</p>
         )}
+        <AdminDataPanel
+          title={`${quarter.name} · source row ${quarter.sourceRow ?? 'see parent record'}`}
+          data={quarter}
+          sourcePath={tempSourcePath(sourcePath ?? quarter.imageLinks?.[0]?.sourceTempPath)}
+          sourceCell={quarter.sourceRow ? `Arkusz1 row ${quarter.sourceRow}` : null}
+        />
       </div>
       
       {/* Plans and 3D Views */}
@@ -38,6 +49,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                 src={getImagePath(quarter.plan)}
                 alt={`${quarter.name} plan`}
                 className="w-full rounded-lg"
+                imageLink={findImageLink(quarter.imageLinks, 'plan')}
               />
             </div>
           )}
@@ -48,6 +60,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
               <SafeImage
                 src={getImagePath(quarter.form3d)}
                 alt={`${quarter.name} 3D`}
+                imageLink={findImageLink(quarter.imageLinks, 'form3d')}
                 className="w-full rounded-lg"
               />
             </div>
@@ -61,7 +74,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
 
         {/* FAR / Building Intensity – full-width density gauge */}
         {hasData(quarter.indicators.buildingIntensity) && (
-          <div className="mb-4 p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+          <div className="mb-4 border-l-2 border-primary-500 py-1 pl-3">
             <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
               Building Intensity (FAR)
             </p>
@@ -72,7 +85,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
         {/* Percentage metrics – ring charts side by side */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-4">
           {hasData(quarter.indicators.greenSpaceRatio) && (
-            <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+            <div className="border-l-2 border-emerald-500 py-1 pl-3">
               <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
                 Green Space
               </p>
@@ -83,7 +96,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
             </div>
           )}
           {hasData(quarter.indicators.buildingCoverage) && (
-            <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+            <div className="border-l-2 border-slate-400 py-1 pl-3 dark:border-slate-500">
               <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
                 Building Coverage
               </p>
@@ -94,7 +107,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
             </div>
           )}
           {hasData(quarter.indicators.avgFloors) && (
-            <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+            <div className="border-l-2 border-neutral-300 py-1 pl-3 dark:border-neutral-600">
               <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
                 Average Floors
               </p>
@@ -105,7 +118,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
             </div>
           )}
           {hasData(quarter.indicators.treeCount) && (
-            <div className="p-3 md:p-4 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
+            <div className="border-l-2 border-neutral-300 py-1 pl-3 dark:border-neutral-600">
               <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
                 Trees
               </p>
@@ -134,6 +147,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
               src={getImagePath(quarter.sunHours)}
               alt="Sun hours analysis"
               className="w-full rounded-lg"
+              imageLink={findImageLink(quarter.imageLinks, 'sunHours')}
             />
           )}
           {quarter.sunHoursDistribution && (
@@ -156,6 +170,13 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                     color="amber"
                   />
                 )}
+                {quarter.sunHoursDistribution.roofs && (
+                  <DistributionChart
+                    data={quarter.sunHoursDistribution.roofs}
+                    title="Roofs"
+                    color="amber"
+                  />
+                )}
               </div>
             </div>
           )}
@@ -174,6 +195,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                     src={getImagePath(quarter.daylightPotential)}
                     alt="Daylight potential"
                     className="w-full rounded-lg"
+                    imageLink={findImageLink(quarter.imageLinks, 'daylightPotential')}
                   />
                 </div>
               )}
@@ -183,6 +205,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                     src={getImagePath(quarter.daylightPotential2 || null)}
                     alt="Daylight potential 2"
                     className="w-full rounded-lg"
+                    imageLink={findImageLink(quarter.imageLinks, 'daylightPotential2')}
                   />
                 </div>
               )}
@@ -214,6 +237,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
               src={getImagePath(quarter.solarEnergy || null)}
               alt="Solar energy analysis"
               className="w-full rounded-lg"
+              imageLink={findImageLink(quarter.imageLinks, 'solarEnergy')}
             />
           )}
           {quarter.solarEnergySpecs && (
@@ -243,6 +267,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   src={getImagePath(quarter.daylightFactor.simulation1.image)}
                   alt="Daylight Factor - Worst Case"
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
+                  imageLink={findImageLink(quarter.imageLinks, 'daylightFactor.simulation1.image')}
                 />
                 {hasData(quarter.daylightFactor.simulation1.avgValue) && (
                   <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
@@ -250,8 +275,6 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                     <PercentRing
                       value={quarter.daylightFactor.simulation1.avgValue ?? null}
                       color="stroke-amber-500 dark:stroke-amber-400"
-                      threshold={2}
-                      thresholdLabel="2% min (European standard)"
                     />
                   </div>
                 )}
@@ -271,6 +294,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   src={getImagePath(quarter.daylightFactor.simulation2.image)}
                   alt="Daylight Factor - Best Case"
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
+                  imageLink={findImageLink(quarter.imageLinks, 'daylightFactor.simulation2.image')}
                 />
                 {hasData(quarter.daylightFactor.simulation2.avgValue) && (
                   <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
@@ -278,8 +302,6 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                     <PercentRing
                       value={quarter.daylightFactor.simulation2.avgValue ?? null}
                       color="stroke-amber-500 dark:stroke-amber-400"
-                      threshold={2}
-                      thresholdLabel="2% min (European standard)"
                     />
                   </div>
                 )}
@@ -299,8 +321,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
         <div className="card">
           <h4 className="section-title text-base md:text-lg">Spatial Daylight Autonomy (sDA)</h4>
           <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 md:mb-6 transition-colors duration-500">
-            sDA measures the percentage of floor area that receives adequate daylight (typically 300 lux) 
-            for at least 50% of annual occupied hours.
+            sDA measures the share of floor area meeting the study's target illuminance for the required share of occupied hours. The target and schedule vary by simulation and are stated in the scenario notes above.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -311,6 +332,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   src={getImagePath(quarter.spatialDaylightAutonomy.simulation1.image)}
                   alt="sDA - Worst Case"
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
+                  imageLink={findImageLink(quarter.imageLinks, 'spatialDaylightAutonomy.simulation1.image')}
                 />
                 {hasData(quarter.spatialDaylightAutonomy.simulation1.autonomy) && (() => {
                   const pct = extractPercentage(quarter.spatialDaylightAutonomy!.simulation1.autonomy as string)
@@ -320,8 +342,6 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                       <PercentRing
                         value={pct}
                         color="stroke-blue-500 dark:stroke-blue-400"
-                        threshold={55}
-                        thresholdLabel="55% LEED threshold"
                       />
                     </div>
                   ) : (
@@ -340,6 +360,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   src={getImagePath(quarter.spatialDaylightAutonomy.simulation2.image)}
                   alt="sDA - Best Case"
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
+                  imageLink={findImageLink(quarter.imageLinks, 'spatialDaylightAutonomy.simulation2.image')}
                 />
                 {hasData(quarter.spatialDaylightAutonomy.simulation2.autonomy) && (() => {
                   const pct = extractPercentage(quarter.spatialDaylightAutonomy!.simulation2.autonomy as string)
@@ -349,8 +370,6 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                       <PercentRing
                         value={pct}
                         color="stroke-blue-500 dark:stroke-blue-400"
-                        threshold={55}
-                        thresholdLabel="55% LEED threshold"
                       />
                     </div>
                   ) : (
@@ -391,6 +410,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   src={getImagePath(quarter.usefulDaylightIlluminance.simulation1.image)}
                   alt="UDI - Worst Case"
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
+                  imageLink={findImageLink(quarter.imageLinks, 'usefulDaylightIlluminance.simulation1.image')}
                 />
                 {hasData(quarter.usefulDaylightIlluminance.simulation1.avgValue) && (
                   <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">
@@ -411,6 +431,7 @@ export default function QuarterDetail({ quarter, cityName }: QuarterDetailProps)
                   src={getImagePath(quarter.usefulDaylightIlluminance.simulation2.image)}
                   alt="UDI - Best Case"
                   className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
+                  imageLink={findImageLink(quarter.imageLinks, 'usefulDaylightIlluminance.simulation2.image')}
                 />
                 {hasData(quarter.usefulDaylightIlluminance.simulation2.avgValue) && (
                   <div className="p-3 bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 transition-colors duration-500">

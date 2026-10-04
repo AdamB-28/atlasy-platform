@@ -41,7 +41,7 @@
   }
   
   .card {
-    @apply bg-white rounded-lg shadow-sm border border-neutral-200 p-6;
+    @apply bg-white rounded-md border border-neutral-200 p-5 sm:p-6;
     @apply dark:bg-neutral-800 dark:border-neutral-700;
   }
   
@@ -72,6 +72,79 @@
   .section-title {
     @apply text-lg font-semibold text-neutral-900 mb-4;
     @apply dark:text-white transition-colors duration-500;
+  }
+
+  .sun-angle-slider {
+    @apply h-12 cursor-grab accent-amber-500 active:cursor-grabbing;
+    appearance: none;
+    -webkit-appearance: none;
+    display: block;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    outline-offset: 3px;
+    touch-action: none;
+    user-select: none;
+  }
+
+  .sun-angle-slider::-webkit-slider-runnable-track {
+    height: 0.625rem;
+    border: 0;
+    border-radius: 9999px;
+    background: #d4d4d4;
+  }
+
+  .sun-angle-slider::-webkit-slider-thumb {
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 2px solid white;
+    border-radius: 9999px;
+    background: #f59e0b;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+    -webkit-appearance: none;
+    margin-top: -0.4375rem;
+  }
+
+  .sun-angle-slider::-moz-range-track {
+    height: 0.625rem;
+    border: 0;
+    border-radius: 9999px;
+    background: #d4d4d4;
+  }
+
+  .sun-angle-slider::-moz-range-progress {
+    height: 0.625rem;
+    border-radius: 9999px;
+    background: #f59e0b;
+  }
+
+  .sun-angle-slider::-moz-range-thumb {
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid white;
+    border-radius: 9999px;
+    background: #f59e0b;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+  }
+
+  .dark .sun-angle-slider::-webkit-slider-thumb {
+    border-color: #171717;
+    background: #fbbf24;
+  }
+
+  .dark .sun-angle-slider::-webkit-slider-runnable-track,
+  .dark .sun-angle-slider::-moz-range-track {
+    background: #525252;
+  }
+
+  .dark .sun-angle-slider::-moz-range-progress {
+    background: #fbbf24;
+  }
+
+  .dark .sun-angle-slider::-moz-range-thumb {
+    border-color: #171717;
+    background: #fbbf24;
   }
 }
 

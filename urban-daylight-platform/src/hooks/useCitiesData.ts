@@ -7,8 +7,11 @@ export function useCitiesData() {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}data/cities.json`)
-      .then((res) => res.json())
+    fetch(`${import.meta.env.BASE_URL}data/atlas.json`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Unable to load atlas data (${res.status})`)
+        return res.json()
+      })
       .then((json) => {
         setData(json)
         setLoading(false)
@@ -33,5 +36,13 @@ export function useCity(cityId: string) {
 export function useCities() {
   const { data, loading, error } = useCitiesData()
   
-  return { cities: data?.cities || [], loading, error }
+  return {
+    cities: data?.cities || [],
+    benchmarks: data?.benchmarks || [],
+    unassignedProfiles: data?.unassignedProfiles || [],
+    notices: data?.notices || [],
+    sourceFolder: data?.sourceFolder,
+    loading,
+    error,
+  }
 }

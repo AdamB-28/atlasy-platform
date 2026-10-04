@@ -37,6 +37,7 @@ export interface ShadingAnalysis {
 
 export interface SiteAnalysis {
   sunHoursImage: string | null;
+  urbanBlocksImage?: string | null;
   daylightPotentialImage: string | null;
   solarEnergyImage: string | null;
   sunHoursDistribution?: SunHoursDistribution;
@@ -57,6 +58,7 @@ export interface DistributionData {
 export interface SunHoursDistribution {
   ground?: DistributionData;
   facades?: DistributionData;
+  roofs?: DistributionData;
 }
 
 export interface SolarEnergySpecs {
@@ -102,9 +104,12 @@ export interface UsefulDaylightIlluminance {
   conclusions?: string | null;
 }
 
-export interface Quarter {
-  id: number;
+export interface UrbanBlock {
+  id: number | string;
   name: string;
+  analysisLevel?: 'urban-block' | 'selected-room';
+  comparisonKey?: string;
+  sourceRow?: number;
   plan: string | null;
   form3d: string | null;
   far?: number | null; // Floor Area Ratio for quarter
@@ -121,6 +126,7 @@ export interface Quarter {
   spatialDaylightAutonomy?: SpatialDaylightAutonomy;
   usefulDaylightIlluminance?: UsefulDaylightIlluminance;
   shadingAnalysis?: ShadingAnalysis; // For Hudson Yards
+  imageLinks?: ImageLink[];
 }
 
 export interface City {
@@ -132,11 +138,79 @@ export interface City {
   urbanIndicators: UrbanIndicators;
   shadingAnalysis: ShadingAnalysis;
   siteAnalysis?: SiteAnalysis;
-  quarters: Quarter[];
+  analysisUnits: UrbanBlock[];
+  source: DataSource;
+  imageLinks?: ImageLink[];
+}
+
+export interface DataSource {
+  file: string;
+  sheet: string;
+  row: number;
+  status: 'source' | 'partial' | 'example';
+  tempPath?: string;
+}
+
+export interface ImageLink {
+  field: string;
+  label: string;
+  column: number;
+  columnLetter: string;
+  rawCell: string | null;
+  referencedName: string | null;
+  resolvedName: string | null;
+  aliasNote: string | null;
+  sourceFile: string;
+  sourceTempPath?: string | null;
+  sheet: string;
+  row: number;
+  tempPath: string | null;
+  publicUrl: string | null;
+  status: 'copied' | 'present' | 'linked' | 'public-only' | 'missing' | 'empty' | 'unresolved';
+  cityId?: string;
+}
+
+export interface DaylightBenchmark {
+  id: string;
+  name: string;
+  distribution: DistributionData;
+  source: DataSource;
+  context?: BenchmarkContext;
+  unassignedProfiles?: UnassignedProfile[];
+}
+
+export interface BenchmarkContext {
+  country?: string | null;
+  floorAreaRatio?: number | null;
+  greenSpaceRatio?: string | null;
+  buildingTypes?: string | null;
+  transport?: string | null;
+  greenBlueInfrastructure?: string | null;
+  sunHoursDistribution?: SunHoursDistribution;
+  daylightPotentialDistribution?: DistributionData | null;
+  solarEnergySpecs?: SolarEnergySpecs;
+  source?: DataSource;
+  sourceNote?: string;
+}
+
+export interface UnassignedProfile {
+  name: string;
+  sourceRow: number;
+  source?: DataSource;
+  sunHoursDistribution?: SunHoursDistribution;
+  daylightPotentialDistribution?: DistributionData | null;
+  attributionNote: string;
 }
 
 export interface CitiesData {
+  version: number;
+  generatedFrom: string[];
+  sourceFolder?: string;
   cities: City[];
+  benchmarks: DaylightBenchmark[];
+  unassignedProfiles: UnassignedProfile[];
+  imageCatalog?: ImageLink[];
+  notices: string[];
 }
 
 export type ComparisonMode = 'single' | 'compare';

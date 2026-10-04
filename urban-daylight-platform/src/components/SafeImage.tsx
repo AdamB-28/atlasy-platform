@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { ImageOff, ZoomIn } from 'lucide-react'
 import ImageLightbox from './ImageLightbox'
+import AdminImageCaption from './AdminImageCaption'
+import type { ImageLink } from '../types'
 
 interface SafeImageProps {
   src: string
   alt: string
   className?: string
+  imageLink?: ImageLink | null
 }
 
-export default function SafeImage({ src, alt, className = '' }: SafeImageProps) {
+export default function SafeImage({ src, alt, className = '', imageLink }: SafeImageProps) {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -23,6 +26,7 @@ export default function SafeImage({ src, alt, className = '' }: SafeImageProps) 
             {decodeURIComponent(src.split('/').pop() || '')}
           </p>
         )}
+        <AdminImageCaption link={imageLink} />
       </div>
     )
   }
@@ -52,6 +56,7 @@ export default function SafeImage({ src, alt, className = '' }: SafeImageProps) 
       {lightboxOpen && (
         <ImageLightbox src={src} alt={alt} onClose={() => setLightboxOpen(false)} />
       )}
+      <AdminImageCaption link={imageLink} />
     </>
   )
 }

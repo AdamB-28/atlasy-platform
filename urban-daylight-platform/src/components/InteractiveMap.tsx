@@ -37,8 +37,8 @@ export default function InteractiveMap({ cities, selectedCity, onCitySelect }: I
   const navigate = useNavigate()
   
   // Center map on Europe/Atlantic
-  const defaultCenter: [number, number] = [50, -10]
-  const defaultZoom = 4
+  const defaultCenter: [number, number] = [45, -30]
+  const defaultZoom = 2
   
   return (
     <div className="h-full w-full rounded-lg overflow-hidden shadow-lg">
