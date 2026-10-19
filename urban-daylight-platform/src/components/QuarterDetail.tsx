@@ -1,11 +1,14 @@
+import { useState } from 'react'
 import { hasData, getCityFolderName, extractPercentage, findImageLink, tempSourcePath } from '../utils/helpers'
 import type { UrbanBlock } from '../types'
 import SafeImage from './SafeImage'
 import DistributionChart from './DistributionChart'
 import SolarEnergyTable from './SolarEnergyTable'
 import UrbanSectionDiagram from './UrbanSectionDiagram'
+import StreetSunSimulator from './StreetSunSimulator'
 import { DensityGauge, PercentRing } from './MetricVisuals'
 import AdminDataPanel from './AdminDataPanel'
+import { getFirstStreetSimulationInput } from '../utils/streetGeometry'
 
 interface QuarterDetailProps {
   quarter: UrbanBlock
@@ -14,6 +17,9 @@ interface QuarterDetailProps {
 }
 
 export default function QuarterDetail({ quarter, cityName, sourcePath }: QuarterDetailProps) {
+  const [streetSunAngle, setStreetSunAngle] = useState(35)
+  const [streetSunEnabled, setStreetSunEnabled] = useState(true)
+  const [streetSunFrom, setStreetSunFrom] = useState<'left' | 'right'>('left')
   const cityFolder = getCityFolderName(cityName)
   const getImagePath = (imageName: string | null) => {
     if (!imageName) return ''
@@ -32,7 +38,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
           <p className="text-sm md:text-base text-neutral-600 dark:text-neutral-400 transition-colors duration-500">{quarter.function}</p>
         )}
         <AdminDataPanel
-          title={`${quarter.name} · source row ${quarter.sourceRow ?? 'see parent record'}`}
+          title={`${quarter.name} Â· source row ${quarter.sourceRow ?? 'see parent record'}`}
           data={quarter}
           sourcePath={tempSourcePath(sourcePath ?? quarter.imageLinks?.[0]?.sourceTempPath)}
           sourceCell={quarter.sourceRow ? `Arkusz1 row ${quarter.sourceRow}` : null}
@@ -72,7 +78,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
       <div className="card">
         <h4 className="section-title text-base md:text-lg">Urban Indicators</h4>
 
-        {/* FAR / Building Intensity – full-width density gauge */}
+        {/* FAR / Building Intensity â€“ full-width density gauge */}
         {hasData(quarter.indicators.buildingIntensity) && (
           <div className="mb-4 border-l-2 border-primary-500 py-1 pl-3">
             <p className="text-[10px] md:text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2 transition-colors duration-500">
@@ -82,7 +88,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
           </div>
         )}
 
-        {/* Percentage metrics – ring charts side by side */}
+        {/* Percentage metrics â€“ ring charts side by side */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 mb-4">
           {hasData(quarter.indicators.greenSpaceRatio) && (
             <div className="border-l-2 border-emerald-500 py-1 pl-3">
@@ -129,12 +135,26 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
           )}
         </div>
 
-        {/* H/W Ratio & Street Width – existing diagram */}
+        {/* H/W Ratio & Street Width â€“ existing diagram */}
         {(hasData(quarter.indicators.heightToWidthRatio) || hasData(quarter.indicators.streetWidth)) && (
-          <UrbanSectionDiagram
-            heightToWidthRatio={quarter.indicators.heightToWidthRatio}
-            streetWidth={quarter.indicators.streetWidth}
-          />
+          <>
+            <UrbanSectionDiagram
+              heightToWidthRatio={quarter.indicators.heightToWidthRatio}
+              streetWidth={quarter.indicators.streetWidth}
+              sunAngle={streetSunEnabled ? streetSunAngle : undefined}
+              sunFrom={streetSunFrom}
+            />
+            <StreetSunSimulator
+              enabled={streetSunEnabled}
+              onEnabledChange={setStreetSunEnabled}
+              angle={streetSunAngle}
+              onAngleChange={setStreetSunAngle}
+              sunFrom={streetSunFrom}
+              onSunFromChange={setStreetSunFrom}
+              dataA={getFirstStreetSimulationInput(quarter.indicators.heightToWidthRatio, quarter.indicators.streetWidth)}
+              labelA={quarter.name}
+            />
+          </>
         )}
       </div>
       

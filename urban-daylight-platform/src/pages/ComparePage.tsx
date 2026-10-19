@@ -242,6 +242,7 @@ export default function ComparePage() {
 
   const ComparisonStreetSection = () => {
     const [streetSunAngle, setStreetSunAngle] = useState(35)
+    const [streetSunEnabled, setStreetSunEnabled] = useState(true)
     const [streetSunFrom, setStreetSunFrom] = useState<'left' | 'right'>('left')
     const hasSectionA = hasData(quarterA.indicators.heightToWidthRatio) || hasData(quarterA.indicators.streetWidth)
     const hasSectionB = hasData(quarterB.indicators.heightToWidthRatio) || hasData(quarterB.indicators.streetWidth)
@@ -251,7 +252,7 @@ export default function ComparePage() {
     return (
       <div className="card mb-12">
         <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Street Geometry & Cross-Sections</h3>
-        <p className="mb-5 max-w-5xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">Blue W spans facade-to-facade using the source street width. Red H is estimated as H:W × average W, not directly measured. Dark fill marks the receiving facade; a dashed arrow shows where the shadow would continue if that building were absent. Both views share scale; surroundings are schematic.</p>
+        <p className="mb-5 max-w-5xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">Blue W spans facade-to-facade using the source street width. Red H is estimated as H:W Ă— average W, not directly measured. Dark fill marks the receiving facade; a dashed arrow shows where the shadow would continue if that building were absent. Both views share scale; surroundings are schematic.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="p-3 md:p-4 rounded-lg border-2 border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 transition-colors duration-500">
             <div className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-3">{panelNameA}</div>
@@ -259,7 +260,7 @@ export default function ComparePage() {
               heightToWidthRatio={quarterA.indicators.heightToWidthRatio}
               streetWidth={quarterA.indicators.streetWidth}
               showNotes={false}
-              sunAngle={streetSunAngle}
+              sunAngle={streetSunEnabled ? streetSunAngle : undefined}
               sunFrom={streetSunFrom}
             />
           </div>
@@ -269,12 +270,14 @@ export default function ComparePage() {
               heightToWidthRatio={quarterB.indicators.heightToWidthRatio}
               streetWidth={quarterB.indicators.streetWidth}
               showNotes={false}
-              sunAngle={streetSunAngle}
+              sunAngle={streetSunEnabled ? streetSunAngle : undefined}
               sunFrom={streetSunFrom}
             />
           </div>
         </div>
         <StreetSunSimulator
+          enabled={streetSunEnabled}
+          onEnabledChange={setStreetSunEnabled}
           angle={streetSunAngle}
           onAngleChange={setStreetSunAngle}
           sunFrom={streetSunFrom}
@@ -350,12 +353,12 @@ export default function ComparePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <AdminDataPanel title={`${cityA.name} · source row ${cityA.source.row}`} data={cityA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={`${cityA.source.sheet} row ${cityA.source.row}`} />
-              <AdminDataPanel title={`${quarterA.name} · source row ${quarterA.sourceRow ?? 'see parent record'}`} data={quarterA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={quarterA.sourceRow ? `Arkusz1 row ${quarterA.sourceRow}` : null} />
+              <AdminDataPanel title={`${cityA.name} Â· source row ${cityA.source.row}`} data={cityA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={`${cityA.source.sheet} row ${cityA.source.row}`} />
+              <AdminDataPanel title={`${quarterA.name} Â· source row ${quarterA.sourceRow ?? 'see parent record'}`} data={quarterA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={quarterA.sourceRow ? `Arkusz1 row ${quarterA.sourceRow}` : null} />
             </div>
             <div>
-              <AdminDataPanel title={`${cityB.name} · source row ${cityB.source.row}`} data={cityB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={`${cityB.source.sheet} row ${cityB.source.row}`} />
-              <AdminDataPanel title={`${quarterB.name} · source row ${quarterB.sourceRow ?? 'see parent record'}`} data={quarterB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={quarterB.sourceRow ? `Arkusz1 row ${quarterB.sourceRow}` : null} />
+              <AdminDataPanel title={`${cityB.name} Â· source row ${cityB.source.row}`} data={cityB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={`${cityB.source.sheet} row ${cityB.source.row}`} />
+              <AdminDataPanel title={`${quarterB.name} Â· source row ${quarterB.sourceRow ?? 'see parent record'}`} data={quarterB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={quarterB.sourceRow ? `Arkusz1 row ${quarterB.sourceRow}` : null} />
             </div>
           </div>
         </div>
@@ -482,11 +485,11 @@ export default function ComparePage() {
           <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">DF compares indoor with outdoor illuminance under the study sky condition. sDA reports floor-area daylight autonomy against the study target; UDI describes how often illuminance falls within a useful range. Criteria can differ by study.</p>
           {sameAnalysisScale ? (
             <>
-              <ComparisonMetric label="DF · Scenario 1" valueA={quarterA?.daylightFactor?.simulation1?.avgValue} valueB={quarterB?.daylightFactor?.simulation1?.avgValue} unit="%" />
+              <ComparisonMetric label="DF Â· Scenario 1" valueA={quarterA?.daylightFactor?.simulation1?.avgValue} valueB={quarterB?.daylightFactor?.simulation1?.avgValue} unit="%" />
               <ComparisonImage imageA={quarterA?.daylightFactor?.simulation1?.image ?? null} imageB={quarterB?.daylightFactor?.simulation1?.image ?? null} title="Daylight Factor Distribution" leftTitle={panelNameA} rightTitle={panelNameB} field="daylightFactor.simulation1.image" linksA={quarterA.imageLinks} linksB={quarterB.imageLinks} />
-              <ComparisonMetric label="sDA · Scenario 1" valueA={quarterA?.spatialDaylightAutonomy?.simulation1?.autonomy} valueB={quarterB?.spatialDaylightAutonomy?.simulation1?.autonomy} unit="%" />
+              <ComparisonMetric label="sDA Â· Scenario 1" valueA={quarterA?.spatialDaylightAutonomy?.simulation1?.autonomy} valueB={quarterB?.spatialDaylightAutonomy?.simulation1?.autonomy} unit="%" />
               <ComparisonImage imageA={quarterA?.spatialDaylightAutonomy?.simulation1?.image ?? null} imageB={quarterB?.spatialDaylightAutonomy?.simulation1?.image ?? null} title="Spatial Daylight Autonomy" leftTitle={panelNameA} rightTitle={panelNameB} field="spatialDaylightAutonomy.simulation1.image" linksA={quarterA.imageLinks} linksB={quarterB.imageLinks} />
-              <ComparisonMetric label="UDI · Scenario 1" valueA={quarterA?.usefulDaylightIlluminance?.simulation1?.avgValue} valueB={quarterB?.usefulDaylightIlluminance?.simulation1?.avgValue} unit="%" />
+              <ComparisonMetric label="UDI Â· Scenario 1" valueA={quarterA?.usefulDaylightIlluminance?.simulation1?.avgValue} valueB={quarterB?.usefulDaylightIlluminance?.simulation1?.avgValue} unit="%" />
               <ComparisonImage imageA={quarterA?.usefulDaylightIlluminance?.simulation1?.image ?? null} imageB={quarterB?.usefulDaylightIlluminance?.simulation1?.image ?? null} title="Useful Daylight Illuminance" leftTitle={panelNameA} rightTitle={panelNameB} field="usefulDaylightIlluminance.simulation1.image" linksA={quarterA.imageLinks} linksB={quarterB.imageLinks} />
               <InsightsSection insights={daylightInsights} isOpen={showDaylightInsights} onToggle={() => setShowDaylightInsights(!showDaylightInsights)} />
             </>

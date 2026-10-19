@@ -113,9 +113,9 @@ function StreetPlan({ width, label, geometry, onEnlarge, sunAngle, sunFrom }: { 
             <rect x={rightBuildingX} y={y} width={buildingWidth} height={blockHeight} rx="2" className="fill-neutral-300 dark:fill-neutral-600" />
           </g>
         ))}
-        {showSun && shadowWidth > 0 && <rect x={shadowX} y="8" width={shadowWidth} height={viewHeight - 28} className="fill-slate-800/30 dark:fill-slate-100/25" />}
+        {showSun && shadowWidth > 0 && <rect x={shadowX} y="8" width={shadowWidth} height={viewHeight - 28} className="fill-slate-800/30 dark:fill-black/50" />}
         {showSun && facadeShadeWidth > 0 && blockYs.map((y) => (
-          <rect key={`facade-shadow-${y}`} x={sunLeft ? receivingBuildingX : receivingBuildingX + buildingWidth - facadeShadeWidth} y={y} width={facadeShadeWidth} height={blockHeight} className="fill-slate-800/60 dark:fill-slate-100/45" />
+          <rect key={`facade-shadow-${y}`} x={sunLeft ? receivingBuildingX : receivingBuildingX + buildingWidth - facadeShadeWidth} y={y} width={facadeShadeWidth} height={blockHeight} className="fill-slate-800/60 dark:fill-black/70" />
         ))}
         {showSun && shadowContinues && (
           <g aria-hidden="true">
@@ -337,10 +337,10 @@ function StreetSection({
         })}
 
         {showSun && shadowEnd !== shadowStart && (
-          <polygon points={`${shadowStart},${groundY} ${shadowStart},${roofY} ${shadowEnd},${groundY}`} className="fill-slate-800/35 dark:fill-slate-100/30" />
+          <polygon points={`${shadowStart},${groundY} ${shadowStart},${roofY} ${shadowEnd},${groundY}`} className="fill-slate-800/35 dark:fill-black/50" />
         )}
         {showSun && facadeShadeHeight > 0 && (
-          <rect x={receivingBuildingX} y={groundY - facadeShadeHeight} width={bldgW} height={facadeShadeHeight} className="fill-slate-800/60 dark:fill-slate-100/45" />
+          <rect x={receivingBuildingX} y={groundY - facadeShadeHeight} width={bldgW} height={facadeShadeHeight} className="fill-slate-800/60 dark:fill-black/70" />
         )}
         {showSun && shadowContinues && (
           <g aria-hidden="true">
