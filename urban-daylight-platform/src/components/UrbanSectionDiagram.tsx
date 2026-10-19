@@ -158,7 +158,7 @@ function StreetPlan({ width, label, geometry, onEnlarge, sunAngle, sunFrom }: { 
 
   return (
     <div>
-      <p className="mb-1 text-[10px] font-semibold text-neutral-600 dark:text-neutral-400">{label} · Top view</p>
+      <p className="mb-1 text-center text-[10px] font-semibold text-neutral-600 dark:text-neutral-400">{label} · Top view</p>
       <button type="button" onClick={() => onEnlarge(`${label} · Top view`, diagram)} aria-label={`Enlarge ${label} top view`} title="Enlarge diagram" className="group relative block w-full cursor-zoom-in rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500">
         {diagram}
         <span className="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded bg-white/90 text-neutral-700 opacity-70 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 dark:bg-neutral-900/90 dark:text-white" aria-hidden="true"><Maximize2 className="h-4 w-4" /></span>
