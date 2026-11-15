@@ -14,7 +14,8 @@ export default function CityCard({ name, country, hasCoordinates = true, isSelec
       onClick={onClick}
       aria-pressed={isSelected}
       aria-label={hasCoordinates ? `Select ${name} on map` : `Select ${name}; no verified map point`}
-      className="w-full p-4 text-left card hover:border-primary-400 dark:hover:border-primary-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 transition-colors duration-200 cursor-pointer group relative"
+      type="button"
+      className="w-full rounded-md p-4 text-left hover:bg-primary-50 dark:hover:bg-primary-900/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 transition-colors duration-200 cursor-pointer group"
     >
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-full bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center flex-shrink-0 group-hover:bg-primary-100 dark:group-hover:bg-primary-900/50 transition-colors">

@@ -1,17 +1,12 @@
 import { Link } from 'react-router-dom'
-import { Building2, Home, Moon, Shield, ShieldCheck, Sun } from 'lucide-react'
+import { Building2, Home, Moon, Sun } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { useAdminMode } from '../contexts/AdminModeContext'
 
 interface LayoutProps {
   children: React.ReactNode
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { isAdminMode, enableAdminMode, disableAdminMode } = useAdminMode()
-  const [showAdminAccess, setShowAdminAccess] = useState(false)
-  const [adminPassword, setAdminPassword] = useState('')
-  const [adminError, setAdminError] = useState('')
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('darkMode') === 'true'
@@ -33,18 +28,6 @@ export default function Layout({ children }: LayoutProps) {
     setDarkMode(!darkMode)
   }
 
-  const handleAdminSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (enableAdminMode(adminPassword)) {
-      setAdminPassword('')
-      setAdminError('')
-      setShowAdminAccess(false)
-    } else {
-      setAdminPassword('')
-      setAdminError('Incorrect administrator password')
-    }
-  }
-  
   return (
     <div className={`min-h-screen flex flex-col ${darkMode ? 'bg-neutral-900' : 'bg-neutral-50'} transition-colors duration-500`}>
       <header className={`${darkMode ? 'bg-neutral-800 border-neutral-700' : 'bg-white border-neutral-200'} border-b sticky top-0 z-50 transition-colors duration-500`}>
@@ -71,52 +54,6 @@ export default function Layout({ children }: LayoutProps) {
                 <span className="hidden sm:inline">Home</span>
               </Link>
 
-              <div className="relative">
-                {isAdminMode ? (
-                  <button
-                    type="button"
-                    onClick={disableAdminMode}
-                    aria-label="Disable admin mode"
-                    title="Admin mode on · switch off"
-                    className="inline-flex min-h-10 items-center gap-1.5 rounded-md border border-amber-500 bg-amber-100 px-2 text-xs font-semibold text-amber-950 hover:bg-amber-200 dark:bg-amber-950 dark:text-amber-100 dark:hover:bg-amber-900"
-                  >
-                    <ShieldCheck className="h-4 w-4" />
-                    <span className="hidden sm:inline">Admin on</span>
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => { setShowAdminAccess((open) => !open); setAdminError('') }}
-                    aria-expanded={showAdminAccess}
-                    aria-controls="admin-access-panel"
-                    className={`inline-flex min-h-10 items-center gap-1.5 rounded-md border px-2 text-xs font-semibold ${darkMode ? 'border-neutral-600 text-neutral-300 hover:border-amber-500 hover:text-amber-300' : 'border-neutral-300 text-neutral-600 hover:border-amber-500 hover:text-amber-800'}`}
-                  >
-                    <Shield className="h-4 w-4" />
-                    <span className="hidden sm:inline">Admin</span>
-                  </button>
-                )}
-                {!isAdminMode && showAdminAccess && (
-                  <form
-                    id="admin-access-panel"
-                    onSubmit={handleAdminSubmit}
-                    className="absolute right-0 top-full mt-2 z-[60] w-[min(19rem,calc(100vw-1.5rem))] rounded-md border border-neutral-200 bg-white p-3 shadow-xl dark:border-neutral-700 dark:bg-neutral-800"
-                  >
-                    <label htmlFor="admin-password" className="block text-xs font-semibold text-neutral-700 dark:text-neutral-200">Administrator password</label>
-                    <input
-                      id="admin-password"
-                      type="password"
-                      autoComplete="current-password"
-                      value={adminPassword}
-                      onChange={(event) => setAdminPassword(event.target.value)}
-                      className="mt-2 min-h-10 w-full rounded border border-neutral-300 bg-white px-3 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-neutral-600 dark:bg-neutral-900 dark:text-white"
-                    />
-                    {adminError && <p className="mt-2 text-xs text-red-600 dark:text-red-400" role="alert">{adminError}</p>}
-                    <button type="submit" className="mt-3 min-h-10 w-full rounded bg-amber-700 px-3 text-sm font-semibold text-white hover:bg-amber-800 dark:bg-amber-600 dark:hover:bg-amber-500">Enable admin mode</button>
-                    <p className="mt-2 text-[10px] leading-relaxed text-neutral-500 dark:text-neutral-400">Local inspection only. Source data is bundled with this app and is not protected by this switch.</p>
-                  </form>
-                )}
-              </div>
-              
               <button
                 onClick={toggleDarkMode}
                 className={`inline-flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border transition-colors ${darkMode ? 'border-neutral-600 text-amber-300 hover:bg-neutral-700' : 'border-neutral-300 text-neutral-700 hover:bg-neutral-100'}`}
@@ -148,16 +85,24 @@ export default function Layout({ children }: LayoutProps) {
             <div>
               <h3 className="font-semibold mb-3 text-sm sm:text-base">Project credits</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed mb-3">
+                Gdańsk University of Technology · Katedra Transformacji Miasta
+              </p>
+              <ul className="text-xs sm:text-sm text-neutral-300 leading-relaxed space-y-1">
+                <li>dr hab. inż. arch. Justyna Martyniuk-Pęczek</li>
+                <li>dr inż. Natalia Sokół</li>
+                <li>dr inż. arch. Adam Bladowski</li>
+                <li>mgr inż. Anna Zackiewicz</li>
+              </ul>
+              <p className="mt-3 text-xs sm:text-sm text-neutral-400 leading-relaxed">
                 Prof. Cláudia Naves David Amorim · University of Brasília, Brazil
                 {' '}(<a href="https://task70.iea-shc.org/participants" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">IEA Task 70 participant</a>).
-                Other author credits are awaiting confirmation.
               </p>
             </div>
             
             <div className="sm:col-span-2 lg:col-span-1">
               <h3 className="font-semibold mb-3 text-sm sm:text-base">Learn More</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                Explore source-reported sun hours, daylight-potential distributions, urban-block indicators, and solar-energy data. Missing values are not estimated.
+                Explore source-reported sun hours, daylight-potential distributions, urban-block indicators, and solar-energy data.
               </p>
             </div>
           </div>

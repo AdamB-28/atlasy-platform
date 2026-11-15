@@ -77,7 +77,7 @@ function BenchmarkExplorer({ benchmarks, unassignedProfiles, sourceFolder }: { b
             {benchmark.context && (
               <div className="mt-7 border-t border-neutral-200 dark:border-neutral-700 pt-5">
                 <h3 className="text-base font-semibold text-neutral-900 dark:text-white">Urban context</h3>
-                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{benchmark.context.country || 'Country not stated in source'}</p>
+                {benchmark.context.country && <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">{benchmark.context.country}</p>}
                 <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3 text-sm">
                   {benchmark.context.floorAreaRatio !== null && benchmark.context.floorAreaRatio !== undefined && (
                     <div className="border-l-2 border-primary-500 pl-3"><p className="text-xs text-neutral-500">Floor area ratio</p><p className="font-semibold text-neutral-900 dark:text-white">{benchmark.context.floorAreaRatio}</p></div>
@@ -200,7 +200,7 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-[300px_minmax(0,1fr)] gap-5 lg:gap-7 items-start">
             <aside className="space-y-3">
               {cities.map((city) => (
-                <div key={city.id} data-testid={`case-study-${city.id}`} className={selectedCity?.id === city.id ? 'ring-2 ring-primary-500 rounded-lg' : ''}>
+                <div key={city.id} data-testid={`case-study-${city.id}`} className={`rounded-md border bg-white dark:bg-neutral-800 ${selectedCity?.id === city.id ? 'border-primary-500 ring-2 ring-primary-500' : 'border-neutral-200 dark:border-neutral-700'}`}>
                   <CityCard
                     name={city.name}
                     country={city.location.country}
@@ -211,7 +211,7 @@ export default function HomePage() {
                   <Link
                     to={`/city/${city.id}`}
                     data-testid={`detail-link-${city.id}`}
-                    className="block px-4 pb-3 -mt-2 text-sm font-semibold text-primary-700 dark:text-primary-300 hover:underline"
+                    className="block mx-4 mb-4 rounded-sm text-sm font-semibold text-primary-700 dark:text-primary-300 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
                   >
                     Open {city.name} case study
                   </Link>
@@ -224,7 +224,7 @@ export default function HomePage() {
                   <div className="flex items-start justify-between gap-3 mt-2">
                     <div>
                       <h3 className="font-semibold text-neutral-900 dark:text-white">{selectedCity.name}</h3>
-                      <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{selectedCity.timeline.years ?? 'Timeline not provided'}</p>
+                      {selectedCity.timeline.years && <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">{selectedCity.timeline.years}</p>}
                     </div>
                     <Sun className="w-4 h-4 text-amber-500 shrink-0 mt-1" />
                   </div>

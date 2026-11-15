@@ -8,6 +8,7 @@ import DistributionChart from '../components/DistributionChart'
 import SolarEnergyTable from '../components/SolarEnergyTable'
 import AdminDataPanel from '../components/AdminDataPanel'
 import LocationNarrative from '../components/LocationNarrative'
+import { useAdminMode } from '../contexts/AdminModeContext'
 import { LoadingSpinner, ErrorMessage, NoData } from '../components/LoadingStates'
 import { useCity, useCities } from '../hooks/useCitiesData'
 import { hasData, getCityFolderName, findImageLink, formatBlockName, SITE_MODEL_CREDIT } from '../utils/helpers'
@@ -21,6 +22,7 @@ export default function CityPage() {
   const { cityId } = useParams<{ cityId: string }>()
   const { city, loading, error } = useCity(cityId || '')
   const { cities, notices } = useCities()
+  const { isAdminMode } = useAdminMode()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [showUrbanInsights, setShowUrbanInsights] = useState(false)
@@ -143,11 +145,6 @@ export default function CityPage() {
                   </a>
                 </p>
               )}
-              <div className="mt-3 md:mt-4 p-3 bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500 rounded transition-colors duration-500">
-                <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 transition-colors duration-500">
-                  <strong>Data note:</strong> Only reported measurements are shown. Missing values are not estimated.
-                </p>
-              </div>
               <AdminDataPanel title="Data notes" data={notices} />
               <AdminDataPanel
                 title={`${city.name} · source row ${city.source.row}`}
@@ -208,7 +205,7 @@ export default function CityPage() {
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {city.narrative && (
           <div className="card mb-8 sm:mb-12">
-            <LocationNarrative narrative={city.narrative} />
+            <LocationNarrative narrative={city.narrative} isAdminMode={isAdminMode} />
           </div>
         )}
         {city.urbanForm && (

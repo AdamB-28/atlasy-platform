@@ -1,18 +1,17 @@
 import type { LocationNarrative as NarrativeData } from '../types'
 
 /** Source text is rendered verbatim; references are a draft list, not inferred citations. */
-export default function LocationNarrative({ narrative }: { narrative: NarrativeData }) {
+export default function LocationNarrative({ narrative, isAdminMode = false }: { narrative: NarrativeData; isAdminMode?: boolean }) {
   return (
     <section aria-label="Location narrative" className="space-y-6">
-      {narrative.withholdingNotice && <p className="font-medium text-amber-800">{narrative.withholdingNotice}</p>}
-      <div>
+      {narrative.descriptions.length > 0 && <div>
         <h2 className="text-xl font-semibold">Location narrative</h2>
         {narrative.descriptions.map((entry) => (
           <div className="mt-3" key={entry.source.cell}>
             <p className="whitespace-pre-wrap">{entry.value}</p>
           </div>
         ))}
-      </div>
+      </div>}
       <div>
         <h2 className="text-xl font-semibold">Main planning principles</h2>
         <ul className="list-disc space-y-3 pl-5">
@@ -39,19 +38,17 @@ export default function LocationNarrative({ narrative }: { narrative: NarrativeD
           ))}
         </dl>
       </div>
-      <div>
+      {narrative.references.length > 0 && <div>
         <h2 className="text-xl font-semibold">References supplied in the case study</h2>
-        <p>{narrative.referenceNote}</p>
-        {narrative.references.length === 0 ? <p>Reference list unavailable.</p> : (
-          <ul className="list-disc space-y-2 pl-5">
-            {narrative.references.map((reference) => (
-              <li key={reference.source.paragraph}>
-                <span className="break-words">{reference.value}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+        {isAdminMode && <p>{narrative.referenceNote}</p>}
+        <ul className="list-disc space-y-2 pl-5">
+          {narrative.references.map((reference) => (
+            <li key={reference.source.paragraph}>
+              <span className="break-words">{reference.value}</span>
+            </li>
+          ))}
+        </ul>
+      </div>}
     </section>
   )
 }

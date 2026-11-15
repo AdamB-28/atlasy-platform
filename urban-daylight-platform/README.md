@@ -45,7 +45,7 @@ npm run preview      # podgląd buildu
 
 ## Podgląd administratora
 
-Publiczna strona nie wymaga hasła. Pozycja `Admin` w nagłówku włącza opcjonalny lokalny tryb inspekcji, pokazujący rekordy JSON i pochodzenie danych skoroszytu; `Admin on` wyłącza podgląd. Stan istnieje tylko w bieżącej karcie.
+Publiczna strona nie wymaga hasła ani nie pokazuje przycisku administratora. Aby włączyć lokalną inspekcję w bieżącej karcie, ustaw w konsoli przeglądarki `sessionStorage.setItem('adminMode', 'true')` i odśwież stronę. Aby ją wyłączyć, użyj `sessionStorage.removeItem('adminMode')` i ponownie odśwież stronę. Tryb pokazuje rekordy JSON i pochodzenie danych skoroszytu.
 
 To nie jest mechanizm bezpieczeństwa: aplikacja jest statyczna, a dane atlasu i przełącznik inspekcji są dostarczane do przeglądarki. Ukrycie etykiet nie chroni danych przed odczytem.
 

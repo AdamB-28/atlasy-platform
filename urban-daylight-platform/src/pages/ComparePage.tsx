@@ -209,10 +209,10 @@ export default function ComparePage() {
         <p className="text-xs md:text-sm font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-3 transition-colors duration-500">{label}</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
           <div className="relative p-3 md:p-4 rounded-lg border border-blue-200 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 transition-colors duration-500">
-            <p className="text-xl md:text-2xl font-bold text-blue-900 dark:text-blue-200">{hasA ? formatMetricValue(valueA ?? null) : 'Not reported'}{hasA && shouldShowUnitA && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}</p>
+            <p className="text-xl md:text-2xl font-bold text-blue-900 dark:text-blue-200">{hasA ? formatMetricValue(valueA ?? null) : '—'}{hasA && shouldShowUnitA && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}</p>
           </div>
           <div className="relative p-3 md:p-4 rounded-lg border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 transition-colors duration-500">
-            <p className="text-xl md:text-2xl font-bold text-amber-900 dark:text-amber-200">{hasB ? formatMetricValue(valueB ?? null) : 'Not reported'}{hasB && shouldShowUnitB && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}</p>
+            <p className="text-xl md:text-2xl font-bold text-amber-900 dark:text-amber-200">{hasB ? formatMetricValue(valueB ?? null) : '—'}{hasB && shouldShowUnitB && <span className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 ml-1">{unit}</span>}</p>
           </div>
         </div>
       </div>
@@ -448,7 +448,7 @@ export default function ComparePage() {
         {hasComparableSolarEnergy && (
           <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
             <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Solar Energy Analysis</h3>
-            <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">The maps are source-generated solar analyses. The specifications list reported area and energy figures; blank entries mean that value was not provided.</p>
+            <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">The maps are source-generated solar analyses. The specifications list reported area and energy figures.</p>
             <ComparisonImage
               imageA={quarterA.solarEnergy ?? null}
               imageB={quarterB.solarEnergy ?? null}

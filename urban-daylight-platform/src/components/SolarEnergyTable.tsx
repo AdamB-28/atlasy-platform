@@ -17,24 +17,21 @@ function formatNumber(val: number | null, unit: string, exact = false): string {
 export default function SolarEnergyTable({ specs }: SolarEnergyTableProps) {
   const { isAdminMode } = useAdminMode()
   const warning = specs.panelAreaWarning
-  const publicWarning = warning?.includes('missing decimal comma')
-    ? 'The panel area was corrected for a decimal-place error. It differs from exactly 60% of the reported roof area; the coverage calculation requires clarification.'
-    : 'The reported panel area exceeds the roof area and is omitted pending verification.'
   const rows = [
     { label: 'Total Roof Area', value: specs.area, unit: 'm²' },
     { label: 'Total Solar Energy', value: specs.totalSolarEnergy, unit: 'kWh' },
     { label: 'Avg Solar Energy Density', value: specs.avgSolarEnergy, unit: 'kWh/m²' },
-    { label: 'Panel Area (60% coverage)', value: specs.panelArea, unit: 'm²' },
+    { label: 'Panel Area', value: specs.panelArea, unit: 'm²' },
     { label: 'Annual Electricity (20% eff.)', value: specs.annualElectricity, unit: 'kWh' },
   ].filter(r => r.value !== null)
 
-  if (rows.length === 0 && !specs.panelAreaWarning) return null
+  if (rows.length === 0 && !(isAdminMode && warning)) return null
 
   return (
     <div className="space-y-3">
-      {specs.panelAreaWarning && (
+      {isAdminMode && warning && (
         <p role="status" className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
-          {isAdminMode ? warning : publicWarning}
+          {warning}
         </p>
       )}
       {rows.length > 0 && (
@@ -50,7 +47,7 @@ export default function SolarEnergyTable({ specs }: SolarEnergyTableProps) {
                     {row.label}
                   </td>
                   <td className="px-3 py-2 text-right font-semibold text-neutral-900 dark:text-white text-xs md:text-sm">
-                    {formatNumber(row.value, row.unit, row.label === 'Panel Area (60% coverage)')}
+                    {formatNumber(row.value, row.unit, row.label === 'Panel Area')}
                     <span className="text-neutral-400 dark:text-neutral-500 font-normal ml-1 text-[10px] md:text-xs"> {row.unit}</span>
                   </td>
                 </tr>
@@ -59,7 +56,7 @@ export default function SolarEnergyTable({ specs }: SolarEnergyTableProps) {
           </table>
         </div>
       )}
-      {specs.annualElectricity !== null && (
+      {isAdminMode && specs.annualElectricity !== null && (
         <p className="text-xs text-neutral-600 dark:text-neutral-400">
           The workbook reports annual electricity at 20% efficiency; calculation details are not specified in the imported data.
         </p>

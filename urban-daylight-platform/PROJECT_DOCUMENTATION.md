@@ -6,7 +6,7 @@ Atlas wspiera naukę interpretowania relacji między formą miejską, ekspozycj�
 
 ## Lokalny tryb administratora
 
-Publiczna strona nie ma bramki logowania. Pozycja `Admin` w nagłówku włącza opcjonalny tryb inspekcji. Panele pokazują JSON rekordów, w tym pochodzenie, surowe wyniki i brakujące wartości. Podpisy obrazów są metadanymi inspekcji, nie kontrolą dostępu. `Admin on` wyłącza tryb; stan jest przechowywany tylko w `sessionStorage` bieżącej karty.
+Publiczna strona nie ma bramki logowania ani przycisku administratora. Lokalną inspekcję można włączyć, ustawiając w konsoli przeglądarki `sessionStorage.setItem('adminMode', 'true')` i odświeżając stronę; `sessionStorage.removeItem('adminMode')` oraz ponowne odświeżenie wyłącza tryb. Panele pokazują JSON rekordów, w tym pochodzenie, surowe wyniki i brakujące wartości. Podpisy obrazów są metadanymi inspekcji, nie kontrolą dostępu.
 
 To wyłącznie przełącznik interfejsu, a nie kontrola dostępu: `atlas.json` jest wysyłany do każdej przeglądarki przez statyczną aplikację. Ukryte w zwykłym widoku pochodzenie pozostaje w publicznym pliku danych. Nie umieszczaj tu poufnych danych. Do rzeczywistej ochrony potrzebny byłby backend z autoryzacją serwerową.
 
