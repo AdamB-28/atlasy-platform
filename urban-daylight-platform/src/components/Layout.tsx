@@ -148,7 +148,9 @@ export default function Layout({ children }: LayoutProps) {
             <div>
               <h3 className="font-semibold mb-3 text-sm sm:text-base">Project credits</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed mb-3">
-                Author and institutional credits are awaiting confirmation.
+                Prof. Cláudia Naves David Amorim · University of Brasília, Brazil
+                {' '}(<a href="https://task70.iea-shc.org/participants" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">IEA Task 70 participant</a>).
+                Other author credits are awaiting confirmation.
               </p>
             </div>
             
