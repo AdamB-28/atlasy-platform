@@ -401,6 +401,36 @@ class ImportDataTests(unittest.TestCase):
         self.assertIn("BD8", " ".join(warnings))
         self.assertIn("No exact asset found", links["BD8"]["aliasNote"])
 
+    def test_image_extension_case_and_duplicate_matches_are_explicit(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            asset_root = root / "assets"
+            source = asset_root / "ELEPHANT_AND_CASTLE" / "GRAFIKI" / "overview_test.png"
+            source.parent.mkdir(parents=True)
+            source.write_bytes(b"approved image")
+            data, _ = build_data(fixture_workbook(), source_file="source.xlsx")
+            resolve_image_links(data, asset_root, root / "public")
+            link = next(item for item in data["imageCatalog"] if item["cell"] == "BB8")
+            self.assertEqual(link["status"], "copied")
+            self.assertEqual(link["resolvedName"], "overview_test")
+            self.assertEqual(
+                (root / "public" / "ELEPHANT_AND_CASTLE" / "overview_test.PNG").read_bytes(),
+                b"approved image",
+            )
+            self.assertEqual(exact_asset_matches(asset_root, "Overview_test", "elephant-and-castle"), [])
+
+            duplicate = asset_root / "ELEPHANT_AND_CASTLE" / "FORMA" / "overview_test.PnG"
+            duplicate.parent.mkdir()
+            duplicate.write_bytes(b"another image")
+            ambiguous, _ = build_data(fixture_workbook(), source_file="source.xlsx")
+            warnings = resolve_image_links(ambiguous, asset_root, root / "other-public")
+            link = next(item for item in ambiguous["imageCatalog"] if item["cell"] == "BB8")
+            self.assertEqual(link["status"], "unresolved")
+            self.assertIsNone(link["publicUrl"])
+            self.assertIsNone(ambiguous["cities"][0]["siteAnalysis"]["urbanBlocksImage"])
+            self.assertIn("Multiple approved assets", link["aliasNote"])
+            self.assertTrue(any("BB8" in warning and "ambiguous" in warning for warning in warnings))
+
     def test_reimport_prunes_only_scoped_assets_after_success_and_is_idempotent(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
