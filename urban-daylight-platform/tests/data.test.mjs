@@ -118,6 +118,17 @@ test('source distributions retain plausible percentages, band counts and roundin
   }
 })
 
+test('every block has workbook cell provenance for the admin view', () => {
+  for (const city of atlas.cities) {
+    for (const block of city.analysisUnits) {
+      assert.equal(block.source.file, city.source.file)
+      assert.equal(block.source.sheet, 'DANE')
+      assert.equal(block.source.cell, `BC${block.source.row}`)
+      assert.equal(block.source.row, block.sourceRow)
+    }
+  }
+})
+
 test('reported solar panel areas follow the stated coverage or remain flagged', () => {
   for (const city of atlas.cities) {
     const records = [city.siteAnalysis.solarEnergySpecs, ...city.analysisUnits.map((unit) => unit.solarEnergySpecs)]

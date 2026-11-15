@@ -9,7 +9,7 @@ import SolarEnergyTable from '../components/SolarEnergyTable'
 import AdminDataPanel from '../components/AdminDataPanel'
 import { LoadingSpinner, ErrorMessage, NoData } from '../components/LoadingStates'
 import { useCity, useCities } from '../hooks/useCitiesData'
-import { hasData, getCityFolderName, findImageLink, formatBlockName, SITE_MODEL_CREDIT, tempSourcePath } from '../utils/helpers'
+import { hasData, getCityFolderName, findImageLink, formatBlockName, SITE_MODEL_CREDIT } from '../utils/helpers'
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import { DensityGauge, PercentRing } from '../components/MetricVisuals'
 import type { City } from '../types'
@@ -156,7 +156,7 @@ export default function CityPage() {
               <AdminDataPanel
                 title={`${city.name} · source row ${city.source.row}`}
                 data={city}
-                sourcePath={tempSourcePath(city.source.tempPath)}
+                sourcePath={city.source.file}
                 sourceCell={`${city.source.sheet} row ${city.source.row}`}
               />
               {city.imageLinks && city.imageLinks.length > 0 && (
@@ -512,7 +512,7 @@ export default function CityPage() {
 
             {selectedQuarter && (
               <div className="border-t border-neutral-200 dark:border-neutral-700 pt-12 first:border-t-0 first:pt-0 transition-colors duration-500">
-                <QuarterDetail quarter={selectedQuarter} cityName={city.name} sourcePath={city.source.tempPath} />
+                <QuarterDetail quarter={selectedQuarter} cityName={city.name} sourcePath={city.source.file} />
               </div>
             )}
 

@@ -146,30 +146,10 @@ export default function Layout({ children }: LayoutProps) {
             </div>
             
             <div>
-              <h3 className="font-semibold mb-3 text-sm sm:text-base">Research Team</h3>
+              <h3 className="font-semibold mb-3 text-sm sm:text-base">Project credits</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed mb-3">
-                <strong className="text-white">Gdańsk University of Technology</strong><br/>
-                Department of Architecture<br/>
-                <em>Katedra Transformacji Miasta</em>
+                Author and institutional credits are awaiting confirmation.
               </p>
-              <div className="text-xs sm:text-sm text-neutral-300 leading-relaxed space-y-2">
-                <p>
-                  <strong className="text-white">dr hab. inż. arch. Justyna Martyniuk-Pęczek</strong><br/>
-                  <span className="text-neutral-400 text-[10px] sm:text-xs">Head of Department</span>
-                </p>
-                <p>
-                  <strong className="text-white">prof. Cláudia Amorim</strong>
-                </p>
-                <p>
-                  <strong className="text-white">dr inż. Natalia Sokół</strong>
-                </p>
-                <p>
-                  <strong className="text-white">dr inż. arch. Adam Bladowski</strong>
-                </p>
-                <p>
-                  <strong className="text-white">mgr inż. Anna Zackiewicz</strong><br/>
-                </p>
-              </div>
             </div>
             
             <div className="sm:col-span-2 lg:col-span-1">
@@ -181,7 +161,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
           
           <div className="mt-8 pt-6 border-t border-neutral-800 text-center text-xs sm:text-sm text-neutral-500">
-            <p>© 2026 Gdańsk University of Technology • Educational Resource</p>
+            <p>IEA Task 70 • Educational Resource</p>
           </div>
         </div>
       </footer>

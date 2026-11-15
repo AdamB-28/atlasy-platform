@@ -113,6 +113,7 @@ export interface UsefulDaylightIlluminance {
 export interface UrbanBlock {
   id: number | string;
   name: string;
+  source: DataSource;
   analysisLevel?: 'urban-block';
   comparisonKey?: string;
   sourceRow?: number;
@@ -151,6 +152,7 @@ export interface DataSource {
   file: string;
   sheet: string;
   row: number;
+  cell?: string;
   status: 'source' | 'partial' | 'example';
   tempPath?: string;
 }

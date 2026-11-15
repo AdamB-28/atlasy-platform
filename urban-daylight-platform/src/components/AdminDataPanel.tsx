@@ -30,7 +30,7 @@ export default function AdminDataPanel({ title, data, className = '', sourcePath
         <div className="border-t border-amber-300/70 dark:border-amber-800 p-3">
           {(sourcePath || sourceCell) && (
             <p className="mb-2 text-xs font-medium text-amber-950 dark:text-amber-100 break-all">
-              TEMP source: {sourcePath || 'CSV path not recorded'}{sourceCell ? ` · ${sourceCell}` : ''}
+              Source: {sourcePath || 'Source file not recorded'}{sourceCell ? ` · ${sourceCell}` : ''}
             </p>
           )}
           <p className="mb-2 text-xs text-amber-900/80 dark:text-amber-200/80">

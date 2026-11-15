@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { hasData, getCityFolderName, extractPercentage, findImageLink, formatBlockName, MODEL_CREDIT, tempSourcePath } from '../utils/helpers'
+import { hasData, getCityFolderName, extractPercentage, findImageLink, formatBlockName, MODEL_CREDIT } from '../utils/helpers'
 import type { UrbanBlock } from '../types'
 import SafeImage from './SafeImage'
 import DistributionChart from './DistributionChart'
@@ -41,8 +41,8 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
         <AdminDataPanel
           title={`${blockName} Â· source row ${quarter.sourceRow ?? 'see parent record'}`}
           data={quarter}
-          sourcePath={tempSourcePath(sourcePath ?? quarter.imageLinks?.[0]?.sourceTempPath)}
-          sourceCell={quarter.sourceRow ? `Arkusz1 row ${quarter.sourceRow}` : null}
+          sourcePath={sourcePath ?? quarter.source.file}
+          sourceCell={`${quarter.source.sheet} ${quarter.source.cell ?? `row ${quarter.source.row}`}`}
         />
       </div>
       

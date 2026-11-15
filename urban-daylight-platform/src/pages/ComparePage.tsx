@@ -10,7 +10,7 @@ import SolarEnergyTable from '../components/SolarEnergyTable'
 import UrbanSectionDiagram from '../components/UrbanSectionDiagram'
 import StreetSunSimulator from '../components/StreetSunSimulator'
 import { useCities, useCity } from '../hooks/useCitiesData'
-import { findImageLink, formatBlockName, formatMetricValue, getCityFolderName, hasData, MODEL_CREDIT, tempSourcePath, valueContainsUnit } from '../utils/helpers'
+import { findImageLink, formatBlockName, formatMetricValue, getCityFolderName, hasData, MODEL_CREDIT, valueContainsUnit } from '../utils/helpers'
 import AdminDataPanel from '../components/AdminDataPanel'
 import type { ImageLink } from '../types'
 import { generateDaylightInsights, generateUrbanFormInsights, generateUrbanMorphologyInsights } from '../utils/insights'
@@ -354,12 +354,12 @@ export default function ComparePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
-              <AdminDataPanel title={`${cityA.name} Â· source row ${cityA.source.row}`} data={cityA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={`${cityA.source.sheet} row ${cityA.source.row}`} />
-              <AdminDataPanel title={`${panelNameA} Â· source row ${quarterA.sourceRow ?? 'see parent record'}`} data={quarterA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={quarterA.sourceRow ? `Arkusz1 row ${quarterA.sourceRow}` : null} />
+              <AdminDataPanel title={`${cityA.name} Â· source row ${cityA.source.row}`} data={cityA} sourcePath={cityA.source.file} sourceCell={`${cityA.source.sheet} row ${cityA.source.row}`} />
+              <AdminDataPanel title={`${panelNameA} Â· source row ${quarterA.source.row}`} data={quarterA} sourcePath={quarterA.source.file} sourceCell={`${quarterA.source.sheet} ${quarterA.source.cell ?? `row ${quarterA.source.row}`}`} />
             </div>
             <div>
-              <AdminDataPanel title={`${cityB.name} Â· source row ${cityB.source.row}`} data={cityB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={`${cityB.source.sheet} row ${cityB.source.row}`} />
-              <AdminDataPanel title={`${panelNameB} Â· source row ${quarterB.sourceRow ?? 'see parent record'}`} data={quarterB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={quarterB.sourceRow ? `Arkusz1 row ${quarterB.sourceRow}` : null} />
+              <AdminDataPanel title={`${cityB.name} Â· source row ${cityB.source.row}`} data={cityB} sourcePath={cityB.source.file} sourceCell={`${cityB.source.sheet} row ${cityB.source.row}`} />
+              <AdminDataPanel title={`${panelNameB} Â· source row ${quarterB.source.row}`} data={quarterB} sourcePath={quarterB.source.file} sourceCell={`${quarterB.source.sheet} ${quarterB.source.cell ?? `row ${quarterB.source.row}`}`} />
             </div>
           </div>
         </div>
