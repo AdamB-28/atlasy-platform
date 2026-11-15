@@ -14,6 +14,7 @@ export interface StreetSimulationInput {
   widthLabel: string
   widthM: number
   estimatedHeightM: number
+  illustrative: boolean
 }
 
 export function parseRatios(raw: string): HeightWidthRatio[] {
@@ -56,14 +57,19 @@ export function parseWidths(raw: string): StreetWidthBand[] {
   return results
 }
 
-export function getFirstStreetSimulationInput(heightToWidthRatio: string | null, streetWidth: string | null): StreetSimulationInput | null {
-  if (!heightToWidthRatio || !streetWidth) return null
-  const ratios = parseRatios(heightToWidthRatio).map((ratio) => ratio.h / (ratio.w || 1))
+export function getStreetSimulationInputs(heightToWidthRatio: string | null, streetWidth: string | null, buildingHeight: string | null): (StreetSimulationInput | null)[] {
+  if (!streetWidth) return []
+  const ratios = heightToWidthRatio ? parseRatios(heightToWidthRatio).map((ratio) => ratio.h / (ratio.w || 1)) : []
   const widths = parseWidths(streetWidth)
-  if (!widths.length) return null
-  const ratio = ratios.length === 1 ? ratios[0] : ratios.length === widths.length ? ratios[0] : null
-  if (ratio === null) return null
-  const firstWidth = widths[0]
-  const widthM = (firstWidth.min + firstWidth.max) / 2
-  return { widthLabel: firstWidth.label, widthM, estimatedHeightM: widthM * ratio }
+  const example = buildingHeight ? parseWidths(buildingHeight)[0] : undefined
+  return widths.map((width, index) => {
+    const widthM = (width.min + width.max) / 2
+    const ratio = ratios.length === 1 ? ratios[0] : ratios.length === widths.length ? ratios[index] : null
+    const height = ratio === null ? (example ? (example.min + example.max) / 2 : null) : widthM * ratio
+    return height === null ? null : { widthLabel: width.label, widthM, estimatedHeightM: height, illustrative: ratio === null }
+  })
+}
+
+export function getFirstStreetSimulationInput(heightToWidthRatio: string | null, streetWidth: string | null, buildingHeight: string | null): StreetSimulationInput | null {
+  return getStreetSimulationInputs(heightToWidthRatio, streetWidth, buildingHeight)[0] ?? null
 }

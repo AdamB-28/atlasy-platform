@@ -253,7 +253,7 @@ export default function ComparePage() {
     return (
       <div className="card mb-12">
         <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Street Geometry & Cross-Sections</h3>
-        <p className="mb-5 max-w-5xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">Blue W shows the source street width. Red H is calculated from a paired ratio or shown as an illustrative source height; surrounding details are schematic. Shadows are shown only for paired ratios.</p>
+        <p className="mb-5 max-w-5xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">Blue W shows the source street width. Red H is calculated from a paired ratio or shown as an illustrative source height; surrounding details and shadows are schematic.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="p-3 md:p-4 rounded-lg border-2 border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 transition-colors duration-500">
             <div className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-3">{panelNameA}</div>
@@ -285,8 +285,8 @@ export default function ComparePage() {
           onAngleChange={setStreetSunAngle}
           sunFrom={streetSunFrom}
           onSunFromChange={setStreetSunFrom}
-          dataA={getFirstStreetSimulationInput(quarterA.indicators.heightToWidthRatio, quarterA.indicators.streetWidth)}
-          dataB={getFirstStreetSimulationInput(quarterB.indicators.heightToWidthRatio, quarterB.indicators.streetWidth)}
+          dataA={getFirstStreetSimulationInput(quarterA.indicators.heightToWidthRatio, quarterA.indicators.streetWidth, quarterA.indicators.buildingHeight)}
+          dataB={getFirstStreetSimulationInput(quarterB.indicators.heightToWidthRatio, quarterB.indicators.streetWidth, quarterB.indicators.buildingHeight)}
           labelA={panelNameA}
           labelB={panelNameB}
         />

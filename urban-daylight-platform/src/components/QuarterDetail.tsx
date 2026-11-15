@@ -157,7 +157,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
               onAngleChange={setStreetSunAngle}
               sunFrom={streetSunFrom}
               onSunFromChange={setStreetSunFrom}
-              dataA={getFirstStreetSimulationInput(quarter.indicators.heightToWidthRatio, quarter.indicators.streetWidth)}
+              dataA={getFirstStreetSimulationInput(quarter.indicators.heightToWidthRatio, quarter.indicators.streetWidth, quarter.indicators.buildingHeight)}
               labelA={blockName}
             />
           </>

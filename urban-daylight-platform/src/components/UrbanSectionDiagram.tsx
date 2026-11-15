@@ -1,7 +1,7 @@
 import { useState, type ReactElement, type SVGProps } from 'react'
 import { Maximize2 } from 'lucide-react'
 import DiagramLightbox from './DiagramLightbox'
-import { parseRatios, parseWidths } from '../utils/streetGeometry'
+import { getStreetSimulationInputs, parseRatios, parseWidths } from '../utils/streetGeometry'
 
 type EnlargeDiagram = (title: string, diagram: ReactElement<SVGProps<SVGSVGElement>>) => void
 
@@ -82,7 +82,8 @@ function StreetPlan({ width, label, geometry, onEnlarge, sunAngle, sunFrom }: { 
   const sunLeft = sunFrom === 'left'
   const shadowStart = sunLeft ? leftBuildingX + buildingWidth : rightBuildingX
   const receivingFacade = sunLeft ? rightBuildingX : leftBuildingX + buildingWidth
-  const shadowEnd = sunLeft ? shadowStart + shadowLength : shadowStart - shadowLength
+  const groundShadowLength = Math.min(shadowLength, Math.abs(receivingFacade - shadowStart))
+  const shadowEnd = sunLeft ? shadowStart + groundShadowLength : shadowStart - groundShadowLength
   const shadowX = Math.min(shadowStart, shadowEnd)
   const shadowWidth = Math.abs(shadowEnd - shadowStart)
   const shadowPastFacade = Math.max(0, shadowLength - Math.abs(receivingFacade - shadowStart))
@@ -113,7 +114,7 @@ function StreetPlan({ width, label, geometry, onEnlarge, sunAngle, sunFrom }: { 
             <rect x={rightBuildingX} y={y} width={buildingWidth} height={blockHeight} rx="2" className="fill-neutral-300 dark:fill-neutral-600" />
           </g>
         ))}
-        {showSun && shadowWidth > 0 && <rect x={shadowX} y="8" width={shadowWidth} height={viewHeight - 28} className="fill-slate-800/30 dark:fill-black/50" />}
+        {showSun && shadowWidth > 0 && <rect data-testid="plan-shadow" x={shadowX} y="8" width={shadowWidth} height={viewHeight - 28} className="fill-slate-800/30 dark:fill-black/50" />}
         {showSun && facadeShadeWidth > 0 && blockYs.map((y) => (
           <rect key={`facade-shadow-${y}`} x={sunLeft ? receivingBuildingX : receivingBuildingX + buildingWidth - facadeShadeWidth} y={y} width={facadeShadeWidth} height={blockHeight} className="fill-slate-800/60 dark:fill-black/70" />
         ))}
@@ -143,7 +144,7 @@ function StreetPlan({ width, label, geometry, onEnlarge, sunAngle, sunFrom }: { 
         <circle cx={leftSidewalkX + sidewalkWidth / 2} cy="72" r={personRadius} className="fill-neutral-950 dark:fill-white" />
         <line x1={leftSidewalkX + sidewalkWidth / 2} y1={72 + personRadius} x2={leftSidewalkX + sidewalkWidth / 2} y2={72 + personRadius * 2.6} strokeWidth={Math.max(1, personRadius * 0.7)} className="stroke-neutral-950 dark:stroke-white" />
         {showSun && (
-          <g aria-hidden="true">
+          <g aria-hidden="true" data-testid="plan-sun">
             <circle cx={sunX} cy="18" r="4" className="fill-amber-400 stroke-amber-600" strokeWidth="1" />
             <text x={sunX} y="29" textAnchor="middle" fontSize="6" fontWeight="700" className="fill-amber-800 dark:fill-amber-200">{sunAngle}°</text>
             <line x1={sunFrom === 'left' ? leftSidewalkX : rightBuildingX} y1="18" x2={sunFrom === 'left' ? rightBuildingX : leftSidewalkX} y2="18" className="stroke-amber-500" strokeWidth="1" strokeDasharray="3 3" />
@@ -234,7 +235,8 @@ function StreetSection({
   const roofY = groundY - bldgH
    const shadowStart = sunFromLeft ? leftBldgX + bldgW : rightBldgX
   const receivingFacade = sunFromLeft ? rightBldgX : leftBldgX + bldgW
-  const shadowEnd = sunFromLeft ? shadowStart + shadowLength : shadowStart - shadowLength
+  const groundShadowLength = Math.min(shadowLength, Math.abs(receivingFacade - shadowStart))
+  const shadowEnd = sunFromLeft ? shadowStart + groundShadowLength : shadowStart - groundShadowLength
   const facadeShadeHeight = Math.max(
     0,
     Math.min(bldgH, (shadowLength - Math.abs(receivingFacade - shadowStart)) * Math.tan(angleRadians)),
@@ -310,7 +312,7 @@ function StreetSection({
           className="fill-amber-200 dark:fill-amber-800" rx="0.5" />
 
         {showSun && (
-          <g aria-hidden="true">
+          <g aria-hidden="true" data-testid="section-sun">
             <line x1={sunX} y1={sunY} x2={rayTargetX} y2={roofY} className="stroke-amber-500" strokeWidth="1.5" strokeDasharray="4 3" />
             <circle cx={sunX} cy={sunY} r="4" className="fill-amber-400 stroke-amber-600" strokeWidth="1" />
           </g>
@@ -337,7 +339,7 @@ function StreetSection({
         })}
 
         {showSun && shadowEnd !== shadowStart && (
-          <polygon points={`${shadowStart},${groundY} ${shadowStart},${roofY} ${shadowEnd},${groundY}`} className="fill-slate-800/35 dark:fill-black/50" />
+          <polygon data-testid="section-shadow" points={`${shadowStart},${groundY} ${shadowStart},${roofY} ${shadowEnd},${groundY - facadeShadeHeight} ${shadowEnd},${groundY}`} className="fill-slate-800/35 dark:fill-black/50" />
         )}
         {showSun && facadeShadeHeight > 0 && (
           <rect x={receivingBuildingX} y={groundY - facadeShadeHeight} width={bldgW} height={facadeShadeHeight} className="fill-slate-800/60 dark:fill-black/70" />
@@ -451,13 +453,7 @@ export default function UrbanSectionDiagram({ heightToWidthRatio, streetWidth, b
   const ratios = heightToWidthRatio ? parseRatios(heightToWidthRatio) : []
   const widths = streetWidth ? parseWidths(streetWidth) : []
   const exampleHeight = buildingHeight ? parseWidths(buildingHeight)[0] : undefined
-  const exampleHeightM = exampleHeight ? (exampleHeight.min + exampleHeight.max) / 2 : null
-  const ratioValues = ratios.map((ratio) => ratio.h / (ratio.w || 1))
-  const streetRatios = widths.map((_, index) => {
-    if (ratioValues.length === 1) return ratioValues[0]
-    if (ratioValues.length === widths.length) return ratioValues[index]
-    return null
-  })
+  const streetInputs = getStreetSimulationInputs(heightToWidthRatio, streetWidth, buildingHeight)
 
   if (ratios.length === 0 && widths.length === 0) return null
 
@@ -542,27 +538,26 @@ export default function UrbanSectionDiagram({ heightToWidthRatio, streetWidth, b
           <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-3 transition-colors duration-500">
             Street Cross-Sections
           </p>
-          {streetRatios.some((ratio) => ratio === null) && exampleHeight && (
+          {streetInputs.some((input) => input?.illustrative) && exampleHeight && (
             <p className="mb-3 text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-              Illustrative sections use {exampleHeight.label}, the first reported building height{exampleHeight.min !== exampleHeight.max ? ' range (shown at its midpoint)' : ''}, for both sides. The source does not identify which heights face each street. H:W range for the block: {heightToWidthRatio || 'not reported'}.
+              Illustrative sections and shadows use {exampleHeight.label}, the first reported building height{exampleHeight.min !== exampleHeight.max ? ' range (shown at its midpoint)' : ''}, for both sides. The source does not identify which heights face each street. H:W range for the block: {heightToWidthRatio || 'not reported'}.
             </p>
           )}
           <div className={`grid gap-4 ${widths.length === 1 ? 'grid-cols-1 max-w-xs mx-auto' : widths.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3'}`}>
             {widths.map((w, i) => {
               const label = `Street ${i + 1}`
-              const ratio = streetRatios[i]
-              const illustrative = ratio === null
-              const height = ratio === null ? exampleHeightM : ((w.min + w.max) / 2) * ratio
+              const input = streetInputs[i]
+              const illustrative = input?.illustrative ?? false
+              const height = input?.estimatedHeightM ?? null
               const geometry = getStreetGeometry(w, height)
-              const supportedSunAngle = illustrative ? undefined : sunAngle
               return (
                 <div key={i} className="min-w-0 space-y-3">
                   {height !== null ? (
-                    <StreetSection widthLabel={w.label} label={illustrative ? `${label} · illustrative` : label} index={i} geometry={geometry} onEnlarge={onEnlarge} sunAngle={supportedSunAngle} sunFrom={sunFrom} />
+                    <StreetSection widthLabel={w.label} label={illustrative ? `${label} · illustrative` : label} index={i} geometry={geometry} onEnlarge={onEnlarge} sunAngle={sunAngle} sunFrom={sunFrom} />
                   ) : (
                     <p className="text-[10px] text-neutral-500 dark:text-neutral-400">{label} · Cross-section unavailable: no unambiguous source H:W ratio.</p>
                   )}
-                  <StreetPlan width={w} label={illustrative && height !== null ? `${label} · illustrative` : label} geometry={geometry} onEnlarge={onEnlarge} sunAngle={supportedSunAngle} sunFrom={sunFrom} />
+                  <StreetPlan width={w} label={illustrative && height !== null ? `${label} · illustrative` : label} geometry={geometry} onEnlarge={onEnlarge} sunAngle={sunAngle} sunFrom={sunFrom} />
                 </div>
               )
             })}
