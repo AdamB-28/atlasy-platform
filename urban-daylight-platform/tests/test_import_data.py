@@ -318,6 +318,33 @@ class ImportDataTests(unittest.TestCase):
         self.assertTrue(any("TASK-17" in notice for notice in data["notices"]))
         self.assertFalse(any(row["row"] == 11 for row in data["sourceWorkbook"]["sheets"]["DANE"]))
 
+    def test_elephant_site_analysis_matches_workbook_cells_when_available(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        workbook = load_workbook(WORKBOOK_PATH, data_only=True, read_only=True)
+        try:
+            data, _ = build_data(WORKBOOK_PATH)
+            city = data["cities"][0]
+            site = city["siteAnalysis"]
+            distributions = [
+                site["sunHoursDistribution"]["ground"],
+                site["sunHoursDistribution"]["buildings"],
+                site["daylightPotentialDistribution"],
+            ]
+            for distribution in distributions:
+                for item in distribution["bins"]:
+                    self.assertEqual(item["source"]["row"], 8)
+                    self.assertEqual(item["value"], workbook["DANE"][item["source"]["cell"]].value)
+            for item in site["solarEnergySpecsSource"]:
+                self.assertEqual(item["source"]["row"], 8)
+                self.assertEqual(item["value"], workbook["DANE"][item["source"]["cell"]].value)
+            self.assertEqual(site["sunHoursDistribution"]["ground"]["bins"][0]["source"]["cell"], "R8")
+            self.assertEqual(site["sunHoursDistribution"]["buildings"]["bins"][0]["source"]["cell"], "AB8")
+            self.assertEqual(site["daylightPotentialDistribution"]["bins"][0]["source"]["cell"], "AM8")
+            self.assertEqual(site["solarEnergySpecsSource"][0]["source"]["cell"], "AW8")
+        finally:
+            workbook.close()
+
     def test_exact_approved_assets_resolve_but_known_conflicts_stay_unresolved(self):
         if not WORKBOOK_PATH.exists():
             self.skipTest("Approved source workbook is not available")

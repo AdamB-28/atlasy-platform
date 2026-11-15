@@ -416,6 +416,7 @@ export default function CityPage() {
                     <Sun className="w-4 h-4 md:w-5 md:h-5 text-amber-500" />
                     <h3 className="section-title mb-0 text-base md:text-lg">Sun Hours</h3>
                   </div>
+                  <p className="mb-3 text-xs text-neutral-600 dark:text-neutral-400">Distribution of daily sunlight hours on 21 March.</p>
                   <SafeImage
                     src={getImagePath(city.siteAnalysis.sunHoursImage)}
                     imageLink={findImageLink(city.imageLinks, 'siteAnalysis.sunHoursImage')}
