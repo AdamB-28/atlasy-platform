@@ -3,15 +3,17 @@ import { MapPin, ChevronRight } from 'lucide-react'
 interface CityCardProps {
   name: string
   country: string | null
+  hasCoordinates?: boolean
   isSelected?: boolean
   onClick: () => void
 }
 
-export default function CityCard({ name, country, isSelected = false, onClick }: CityCardProps) {
+export default function CityCard({ name, country, hasCoordinates = true, isSelected = false, onClick }: CityCardProps) {
   return (
     <button
       onClick={onClick}
       aria-pressed={isSelected}
+      aria-label={hasCoordinates ? `Select ${name} on map` : `Select ${name}; no verified map point`}
       className="w-full p-4 text-left card hover:border-primary-400 dark:hover:border-primary-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 transition-colors duration-200 cursor-pointer group relative"
     >
       <div className="flex items-start gap-3">
@@ -27,7 +29,7 @@ export default function CityCard({ name, country, isSelected = false, onClick }:
             <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 transition-colors duration-500">{country}</p>
           )}
           <p className="text-xs text-primary-600 dark:text-primary-400 mt-2 font-medium group-hover:translate-x-1 transition-transform">
-            {isSelected ? 'Selected on map' : 'Select location'}
+            {!hasCoordinates ? 'No verified map point' : isSelected ? 'Selected on map' : 'Select location'}
           </p>
         </div>
         

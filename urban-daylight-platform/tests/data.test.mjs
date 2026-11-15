@@ -184,12 +184,38 @@ test('exact approved image references resolve to public assets', async () => {
   }
 })
 
-test('missing data remains null and coordinates are not inferred', () => {
-  for (const city of atlas.cities) {
-    assert.equal(city.location.coordinates, null)
+test('four verified map points have matching public feature provenance and other coordinates stay unset', () => {
+  const expectedFeatures = {
+    'elephant-and-castle': ['way', '366979812', 'Elephant Park'],
+    garnizon: ['relation', '17995285', 'Garnizon'],
+    kronsberg: ['node', '163156634', 'Kronsberg'],
+    'aspern-seestadt': ['way', '28100015', 'Seestadt Aspern'],
+  }
+  for (const city of atlas.cities.filter((item) => item.id !== 'orestad-syd')) {
+    assert.deepEqual(
+      [city.location.coordinates.lat, city.location.coordinates.lng],
+      {
+        'elephant-and-castle': [51.4928183, -0.0962976],
+        garnizon: [54.3845063, 18.5928283],
+        kronsberg: [52.3381288, 9.834295],
+        'aspern-seestadt': [48.2271676, 16.5058256],
+      }[city.id],
+    )
+    assert.equal(city.location.coordinateSource.provider, 'OpenStreetMap')
+    assert.match(city.location.coordinateSource.queryUrl, /^https:\/\/nominatim\.openstreetmap\.org\//)
+    assert.match(city.location.coordinateSource.featureUrl, /^https:\/\/www\.openstreetmap\.org\//)
+    assert.deepEqual(
+      [city.location.coordinateSource.osmType, city.location.coordinateSource.osmId, city.location.coordinateSource.matchedName],
+      expectedFeatures[city.id],
+    )
+    assert.match(city.location.coordinateSource.license, /OpenStreetMap contributors, ODbL 1\.0/)
     assert.ok(city.source.row > 0)
   }
+  const orestad = atlas.cities.find((city) => city.id === 'orestad-syd')
+  assert.equal(orestad.location.coordinates, null)
+  assert.equal(orestad.location.coordinateSource, null)
   const dane = atlas.sourceWorkbook.sheets.DANE
   assert.equal(dane.find((row) => row.row === 9).cells.C9, undefined)
-  assert.ok(atlas.notices.some((notice) => notice.includes('Coordinates are not supplied')))
+  assert.ok(atlas.notices.some((notice) => notice.includes('workbook contains no coordinates')))
+  assert.ok(atlas.notices.some((notice) => notice.includes('restaurant, not a district feature')))
 })

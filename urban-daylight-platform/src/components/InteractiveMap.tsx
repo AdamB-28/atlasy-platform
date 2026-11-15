@@ -1,5 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
 import L from 'leaflet'
 import type { City } from '../types'
 import 'leaflet/dist/leaflet.css'
@@ -20,17 +21,26 @@ interface InteractiveMapProps {
   onCitySelect?: (city: City) => void
 }
 
-function MapController({ selectedCity }: { selectedCity?: City | null }) {
+function MapController({ cities, selectedCity }: { cities: City[]; selectedCity?: City | null }) {
   const map = useMap()
-  const coordinates = selectedCity?.location.coordinates
+  useEffect(() => {
+    const coordinates = selectedCity?.location.coordinates
+    if (coordinates) {
+      map.setView([coordinates.lat, coordinates.lng], coordinates.zoom)
+      return
+    }
 
-  if (coordinates) {
-    map.setView(
-      [coordinates.lat, coordinates.lng],
-      coordinates.zoom
-    )
-  }
-  
+    const locations = cities
+      .map((city) => city.location.coordinates)
+      .filter((location): location is NonNullable<typeof location> => location !== null)
+    if (locations.length) {
+      map.fitBounds(
+        locations.map((location) => [location.lat, location.lng]),
+        { padding: [30, 30], maxZoom: 6 },
+      )
+    }
+  }, [cities, map, selectedCity])
+
   return null
 }
 
@@ -62,6 +72,8 @@ export default function InteractiveMap({ cities, selectedCity, onCitySelect }: I
             <Marker
               key={city.id}
               position={[coordinates.lat, coordinates.lng]}
+              title={city.name}
+              alt={`Map marker: ${city.name}`}
               eventHandlers={{
                 click: () => {
                   if (onCitySelect) {
@@ -78,6 +90,16 @@ export default function InteractiveMap({ cities, selectedCity, onCitySelect }: I
                   {city.location.country && (
                     <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 transition-colors duration-500">{city.location.country}</p>
                   )}
+                  {city.location.coordinateSource && (
+                    <a
+                      href={city.location.coordinateSource.featureUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-2 inline-block text-xs text-neutral-600 underline"
+                    >
+                      Coordinate source: OpenStreetMap
+                    </a>
+                  )}
                   <button
                     onClick={() => navigate(`/city/${city.id}`)}
                     className="mt-3 text-sm text-primary-600 hover:text-primary-700 font-medium"
@@ -90,7 +112,7 @@ export default function InteractiveMap({ cities, selectedCity, onCitySelect }: I
           )
         })}
         
-        <MapController selectedCity={selectedCity?.location.coordinates ? selectedCity : null} />
+        <MapController cities={locatedCities} selectedCity={selectedCity?.location.coordinates ? selectedCity : null} />
       </MapContainer>
       {unlocatedCount > 0 && (
         <div
@@ -99,7 +121,7 @@ export default function InteractiveMap({ cities, selectedCity, onCitySelect }: I
         >
           {locatedCities.length === 0
             ? 'No verified map locations are available. Choose a case study from the list to view its details.'
-            : `${unlocatedCount} case studies have no verified coordinates and are not shown on the map.`}
+            : `${unlocatedCount} ${unlocatedCount === 1 ? 'case study has' : 'case studies have'} no verified coordinates; ${unlocatedCount === 1 ? 'it is' : 'they are'} not shown on the map.`}
         </div>
       )}
     </div>

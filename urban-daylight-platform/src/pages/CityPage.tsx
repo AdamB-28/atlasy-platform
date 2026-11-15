@@ -124,6 +124,23 @@ export default function CityPage() {
                   <span>{city.location.country}</span>
                 </div>
               )}
+              {city.location.coordinateSource && city.location.coordinates && (
+                <p className="mt-2 text-xs text-neutral-600 dark:text-neutral-400" data-testid="coordinate-provenance">
+                  Map point ({city.location.coordinates.lat}, {city.location.coordinates.lng}) verified against{' '}
+                  <a
+                    href={city.location.coordinateSource.featureUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-medium text-primary-700 dark:text-primary-300 underline"
+                  >
+                    {city.location.coordinateSource.provider}
+                  </a>
+                  {' '}({city.location.coordinateSource.matchedName}; {city.location.coordinateSource.method}).{' '}
+                  <a href={city.location.coordinateSource.queryUrl} target="_blank" rel="noreferrer" className="underline">
+                    Geocoding result and provenance
+                  </a>
+                </p>
+              )}
               <div className="mt-3 md:mt-4 p-3 bg-primary-50 dark:bg-primary-900/20 border-l-4 border-primary-500 rounded transition-colors duration-500">
                 <p className="text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 transition-colors duration-500">
                   <strong>Data note:</strong> Only reported measurements are shown. Missing values are not estimated.

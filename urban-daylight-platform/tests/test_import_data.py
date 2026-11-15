@@ -166,7 +166,18 @@ class ImportDataTests(unittest.TestCase):
             "status": "source",
         })
         self.assertEqual(elephant["location"]["country"], "Source location text")
-        self.assertIsNone(elephant["location"]["coordinates"])
+        self.assertEqual(
+            elephant["location"]["coordinates"],
+            {"lat": 51.4928183, "lng": -0.0962976, "zoom": 14},
+        )
+        self.assertEqual(
+            elephant["location"]["coordinateSource"]["osmId"],
+            "366979812",
+        )
+        orestad = next(city for city in data["cities"] if city["id"] == "orestad-syd")
+        self.assertIsNone(orestad["location"]["coordinates"])
+        self.assertIsNone(orestad["location"]["coordinateSource"])
+        self.assertTrue(any("restaurant, not a district feature" in notice for notice in data["notices"]))
         self.assertNotIn("shadingAnalysis", elephant)
         self.assertEqual(elephant["sourceData"]["cells"]["D8"], " exact location ref ")
         self.assertNotIn("descriptions", elephant)

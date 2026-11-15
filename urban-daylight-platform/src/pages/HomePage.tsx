@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ArrowUpRight, ChevronDown, ChevronUp, MapPin, Sun } from 'lucide-react'
 import Layout from '../components/Layout'
 import InteractiveMap from '../components/InteractiveMap'
@@ -33,7 +33,7 @@ function BenchmarkExplorer({ benchmarks, unassignedProfiles, sourceFolder }: { b
             <p className="text-xs font-semibold uppercase tracking-wide text-amber-800 dark:text-amber-300">Reference set · 01</p>
             <h2 className="mt-2 text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white">Facade daylight potential</h2>
             <p className="mt-3 text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">
-              Five European references show how facade area is distributed across daylight-potential bands. This set is separate from the mapped case studies.
+              Source-provided reference profiles show how facade area is distributed across daylight-potential bands. This set is separate from the mapped case studies.
             </p>
             <label htmlFor="benchmark-place" className="block mt-6 mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-600 dark:text-neutral-300">Reference place</label>
             <select
@@ -167,7 +167,7 @@ export default function HomePage() {
             <div className="flex items-center gap-4 text-xs text-neutral-500 dark:text-neutral-400">
               <span><strong className="text-neutral-900 dark:text-white">{cities.length}</strong> case studies</span>
               <span className="h-4 border-l border-neutral-300 dark:border-neutral-600" />
-              <span><strong className="text-neutral-900 dark:text-white">{cities.filter((city) => city.location.coordinates != null).length}</strong> verified map locations</span>
+              <span><strong className="text-neutral-900 dark:text-white">{cities.filter((city) => city.location.coordinates != null).length}</strong> of {cities.length} locations mapped</span>
             </div>
           </div>
         </div>
@@ -188,19 +188,27 @@ export default function HomePage() {
               <MapPin className="w-4 h-4 text-primary-600 dark:text-primary-400" />
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Case studies</h2>
             </div>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">Unverified locations are omitted from the map.</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">Select a case study to center its map point when a verified coordinate is available.</p>
           </div>
 
           <div className="grid lg:grid-cols-[300px_minmax(0,1fr)] gap-5 lg:gap-7 items-start">
             <aside className="space-y-3">
               {cities.map((city) => (
-                <div key={city.id} className={selectedCity?.id === city.id ? 'ring-2 ring-primary-500 rounded-lg' : ''}>
+                <div key={city.id} data-testid={`case-study-${city.id}`} className={selectedCity?.id === city.id ? 'ring-2 ring-primary-500 rounded-lg' : ''}>
                   <CityCard
                     name={city.name}
                     country={city.location.country}
+                    hasCoordinates={city.location.coordinates !== null}
                     isSelected={selectedCity?.id === city.id}
                     onClick={() => setSelectedCity(city)}
                   />
+                  <Link
+                    to={`/city/${city.id}`}
+                    data-testid={`detail-link-${city.id}`}
+                    className="block px-4 pb-3 -mt-2 text-sm font-semibold text-primary-700 dark:text-primary-300 hover:underline"
+                  >
+                    Open {city.name} case study
+                  </Link>
                 </div>
               ))}
 

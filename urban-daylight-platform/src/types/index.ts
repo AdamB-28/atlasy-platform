@@ -7,6 +7,16 @@ export interface Coordinates {
 export interface Location {
   country: string | null;
   coordinates: Coordinates | null;
+  coordinateSource?: {
+    provider: string;
+    matchedName: string;
+    method: string;
+    queryUrl: string;
+    featureUrl: string;
+    osmType: string;
+    osmId: string;
+    license: string;
+  } | null;
   imageUrl: string | null;
 }
 

@@ -35,6 +35,60 @@ CITY_ID_OVERRIDES = {
     "aspern seestadt": "aspern-seestadt",
     "ørestad syd": "orestad-syd",
 }
+VERIFIED_COORDINATES = {
+    "elephant-and-castle": {
+        "coordinates": {"lat": 51.4928183, "lng": -0.0962976, "zoom": 14},
+        "coordinateSource": {
+            "provider": "OpenStreetMap",
+            "matchedName": "Elephant Park",
+            "method": "Nominatim representative point for the named locality",
+            "queryUrl": "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=Elephant%20Park%2C%20Elephant%20and%20Castle%2C%20London%2C%20UK",
+            "featureUrl": "https://www.openstreetmap.org/way/366979812",
+            "osmType": "way",
+            "osmId": "366979812",
+            "license": "Data © OpenStreetMap contributors, ODbL 1.0",
+        },
+    },
+    "garnizon": {
+        "coordinates": {"lat": 54.3845063, "lng": 18.5928283, "zoom": 15},
+        "coordinateSource": {
+            "provider": "OpenStreetMap",
+            "matchedName": "Garnizon",
+            "method": "Nominatim representative point for the named commercial area",
+            "queryUrl": "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=Garnizon%2C%20Wrzeszcz%2C%20Gdansk%2C%20Poland",
+            "featureUrl": "https://www.openstreetmap.org/relation/17995285",
+            "osmType": "relation",
+            "osmId": "17995285",
+            "license": "Data © OpenStreetMap contributors, ODbL 1.0",
+        },
+    },
+    "kronsberg": {
+        "coordinates": {"lat": 52.3381288, "lng": 9.834295, "zoom": 13},
+        "coordinateSource": {
+            "provider": "OpenStreetMap",
+            "matchedName": "Kronsberg",
+            "method": "Nominatim point for the named Hannover suburb",
+            "queryUrl": "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=Kronsberg%2C%20Hannover%2C%20Germany",
+            "featureUrl": "https://www.openstreetmap.org/node/163156634",
+            "osmType": "node",
+            "osmId": "163156634",
+            "license": "Data © OpenStreetMap contributors, ODbL 1.0",
+        },
+    },
+    "aspern-seestadt": {
+        "coordinates": {"lat": 48.2271676, "lng": 16.5058256, "zoom": 14},
+        "coordinateSource": {
+            "provider": "OpenStreetMap",
+            "matchedName": "Seestadt Aspern",
+            "method": "Nominatim representative point for the named Vienna suburb",
+            "queryUrl": "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=Aspern%20Seestadt%2C%20Vienna%2C%20Austria",
+            "featureUrl": "https://www.openstreetmap.org/way/28100015",
+            "osmType": "way",
+            "osmId": "28100015",
+            "license": "Data © OpenStreetMap contributors, ODbL 1.0",
+        },
+    },
+}
 APPROVED_CITY_NAMES = {
     "Elephant & Castle – Elephant Park",
     "Garnizon",
@@ -326,7 +380,14 @@ def build_city(
         "name": site["name"],
         "location": {
             "country": cells.get(f"E{row_number}"),
-            "coordinates": None,
+            "coordinates": VERIFIED_COORDINATES.get(
+                CITY_ID_OVERRIDES.get(site["name"].casefold(), slug(site["name"])),
+                {},
+            ).get("coordinates"),
+            "coordinateSource": VERIFIED_COORDINATES.get(
+                CITY_ID_OVERRIDES.get(site["name"].casefold(), slug(site["name"])),
+                {},
+            ).get("coordinateSource"),
             "imageUrl": None,
         },
         "timeline": {"years": None, "description": None},
@@ -662,7 +723,7 @@ def build_data(
                 })
 
     notices = [
-        "Coordinates are not supplied in the website workbook; no coordinates were imported or inferred.",
+        "The website workbook contains no coordinates. Four map points are independently verified against matching OpenStreetMap locality or development features. Ørestad Syd remains unmapped: its exact-name OpenStreetMap result is a restaurant, not a district feature, and no coordinate is assigned pending a reliable source for the case-study area.",
         "Unapproved descriptions, planning principles, and key characteristics are stored locally pending TASK-12 and TASK-25/30/35/40/48 approval.",
     ]
     for city in cities:
