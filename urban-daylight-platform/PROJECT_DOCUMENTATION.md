@@ -6,9 +6,9 @@ Atlas wspiera naukę interpretowania relacji między formą miejską, ekspozycj�
 
 ## Lokalny tryb administratora
 
-Administrator może użyć `KTMadmin!` na bramce logowania albo włączyć tryb przez pozycję `Admin` w nagłówku. Panele pokazują JSON rekordów, w tym pochodzenie, surowe wyniki i brakujące wartości. Odwołania do grafik bez weryfikacji pozostają bez publicznego URL. Podpisy obrazów są metadanymi inspekcji, nie kontrolą dostępu. `Admin on` wyłącza tryb; stan jest przechowywany tylko w `sessionStorage` bieżącej karty.
+Publiczna strona nie ma bramki logowania. Pozycja `Admin` w nagłówku włącza opcjonalny tryb inspekcji. Panele pokazują JSON rekordów, w tym pochodzenie, surowe wyniki i brakujące wartości. Podpisy obrazów są metadanymi inspekcji, nie kontrolą dostępu. `Admin on` wyłącza tryb; stan jest przechowywany tylko w `sessionStorage` bieżącej karty.
 
-To wyłącznie przełącznik interfejsu, a nie kontrola dostępu: hasło oraz `atlas.json` są wysyłane do każdej przeglądarki przez statyczną aplikację. Nie umieszczaj tu poufnych danych. Do rzeczywistej ochrony potrzebny byłby backend z autoryzacją serwerową.
+To wyłącznie przełącznik interfejsu, a nie kontrola dostępu: `atlas.json` jest wysyłany do każdej przeglądarki przez statyczną aplikację. Ukryte w zwykłym widoku pochodzenie pozostaje w publicznym pliku danych. Nie umieszczaj tu poufnych danych. Do rzeczywistej ochrony potrzebny byłby backend z autoryzacją serwerową.
 
 ## Przepływ danych
 
@@ -27,11 +27,11 @@ Importer korzysta wyłącznie z zatwierdzonego skoroszytu i jego aktualnego fold
 - `cities[]`: pięć lokalizacji nazwanych w `DANE`; nazwy źródłowe i wiersze pochodzenia są zachowane.
 - `analysisUnits[]`: bloki urbanistyczne przypisane przez identyfikator z `DANE!BC`; każde pole źródłowe ma adres komórki w `sourceData`.
 - `sourceWorkbook.sheets`: publiczne, bezpieczne wartości arkusza `DANE` i indeks wierszy pozostałych arkuszy bez ich treści. Proza źródłowa z `DANE` nie trafia do publicznego raw data. Garnizon UB_2 jest pominięty w wyjściu, a dokładne źródło decyzji zapisano w `exclusions[]`.
-- `imageCatalog[]`: odwołania do grafik z surową nazwą i komórką źródłową. Dopasowanie jest dokładne i ograniczone do folderu właściwej lokalizacji w `RYSUNKI` (lub `GRAFIKI_LOCATION` dla map lokalizacyjnych); katalogi `stare` i pozostałe lokalizacje są ignorowane. Brak pliku jest raportowany, a znane konflikty pozostają `unresolved`, bez zgadywania aliasów.
+- `imageCatalog[]`: odwołania do grafik z surową nazwą i komórką źródłową. Dopasowanie jest ograniczone do folderu właściwej lokalizacji w `RYSUNKI` lub `GRAFIKI_LOCATION`, z udokumentowanymi wyjątkami dla potwierdzonego modelu Elephant Park UB_1 oraz uzgodnionych obrazów Aspern. Brak pliku jest raportowany.
 - `notices[]`: ograniczenia źródła i nierozstrzygnięte kwestie wymagające weryfikacji.
 - `source`: plik, arkusz, wiersz i komórka źródłowa rekordu.
 
-Pełne komórki wszystkich arkuszy są zapisywane lokalnie w `.venv/atlas-private-content.json`, z oryginalnymi wartościami i pochodzeniem arkusz/wiersz/komórka; obejmuje to opisowe kolumny `DANE`, funkcje bloków i wykluczony publicznie wiersz Garnizonu UB_2. Ten plik nie może być kopiowany do `public/`; w nim także pozostają wszystkie dane osobowe/kontaktowe znalezione w arkuszach do czasu oceny ich publikacji. Puste komórki nie są zamieniane na zera. Wartości źródłowe zachowują oryginalny typ i zapis. Jeżeli obszar paneli przekracza podany obszar dachu, dokładne wartości i komórki źródłowe są zachowane, lecz wartość panel area jest pominięta w tabeli i opatrzona ostrzeżeniem do weryfikacji.
+Pełne komórki wszystkich arkuszy są zapisywane lokalnie w `.venv/atlas-private-content.json`, z oryginalnymi wartościami i pochodzeniem arkusz/wiersz/komórka; obejmuje to również wykluczony publicznie wiersz Garnizonu UB_2. Ten plik nie może być kopiowany do `public/`; w nim także pozostają wszystkie dane osobowe/kontaktowe znalezione w arkuszach do czasu oceny ich publikacji. Puste komórki nie są zamieniane na zera. Przy przekroczeniu obszaru dachu powierzchnia paneli jest pomijana i oznaczana ostrzeżeniem, poza określonym wyjątkiem opisanym niżej.
 
 ## Aktualizacja źródeł
 
@@ -51,7 +51,7 @@ Importer nie modyfikuje skoroszytu ani katalogu `TEMP__TRUTH`. Starsze CSV i arc
 
 ## Ograniczenia i utrzymanie
 
-- Współrzędne nie są podane w skoroszycie i pozostają puste; wymagają niezależnej weryfikacji przed użyciem na mapie.
-- DANE!BE8 ma nierozstrzygniętą nazwę modelu 3D UB_1; Q15, AL15 i AV15 przypisują wierszowi Aspern Seestadt nazwy plików Kronsberg. Żadne z tych odwołań nie jest automatycznie rozwiązywane.
-- DANE!DD8 i DG8 pozostają w źródłowych wartościach mimo niespójności obszaru paneli; importer nie wprowadza korekty.
+- Współrzędne zweryfikowano niezależnie w OpenStreetMap; punkt Ørestad Syd oznacza 8tallet w obszarze studium, a nie centrum dzielnicy.
+- Model UB_1 Elephant Park potwierdził właściciel; trzy obrazy Aspern uzgodniono z modelem i oryginalnymi danymi Forma. Alias zachowuje opis decyzji i oryginalne odwołanie.
+- Wartości DANE!DD8 i DG8 są zachowane. Dla dokładnie określonej wartości DG8 importer pokazuje interpretację poprawki przecinka zgłoszonej przez właściciela, z ostrzeżeniem o różnicy względem 60% dachu.
 - Stare obrazy w `public/` nie są dowodem poprawnego mapowania nowego workbooka i nie są używane jako fallback.
