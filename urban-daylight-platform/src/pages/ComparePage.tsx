@@ -9,7 +9,7 @@ import SolarEnergyTable from '../components/SolarEnergyTable'
 import UrbanSectionDiagram from '../components/UrbanSectionDiagram'
 import StreetSunSimulator from '../components/StreetSunSimulator'
 import { useCities, useCity } from '../hooks/useCitiesData'
-import { findImageLink, formatMetricValue, getCityFolderName, hasData, tempSourcePath, valueContainsUnit } from '../utils/helpers'
+import { findImageLink, formatBlockName, formatMetricValue, getCityFolderName, hasData, tempSourcePath, valueContainsUnit } from '../utils/helpers'
 import AdminDataPanel from '../components/AdminDataPanel'
 import type { ImageLink } from '../types'
 import { generateDaylightInsights, generateUrbanFormInsights, generateUrbanMorphologyInsights } from '../utils/insights'
@@ -101,8 +101,8 @@ export default function ComparePage() {
   const getImagePathA = (imageName: string | null) => (imageName ? `${import.meta.env.BASE_URL}${cityFolderA}/${imageName}.PNG` : '')
   const getImagePathB = (imageName: string | null) => (imageName ? `${import.meta.env.BASE_URL}${cityFolderB}/${imageName}.PNG` : '')
 
-  const panelNameA = mode === 'same' ? `${cityA.name} - ${quarterA?.name ?? 'Analysis unit'}` : cityA.name
-  const panelNameB = mode === 'same' ? `${cityB.name} - ${quarterB?.name ?? 'Analysis unit'}` : cityB.name
+  const panelNameA = formatBlockName(cityA.name, quarterA.name)
+  const panelNameB = formatBlockName(cityB.name, quarterB.name)
   const sameAnalysisScale = (quarterA.comparisonKey ?? quarterA.analysisLevel) === (quarterB.comparisonKey ?? quarterB.analysisLevel)
 
   const urbanFormInsights = mode === 'same' ? [] : generateUrbanFormInsights(cityA, cityB)
@@ -344,21 +344,21 @@ export default function ComparePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div className="rounded-md border-l-4 border-blue-600 bg-blue-50/50 p-3 md:p-4 dark:bg-blue-950/20">
               <label className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-2 block transition-colors duration-500">Analysis unit A</label>
-              <select value={quarterA?.id ?? ''} onChange={(event) => onQuarterAChange(event.target.value)} className="w-full p-2 border border-blue-300 dark:border-blue-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-500">{cityA.analysisUnits.map((quarter) => <option key={quarter.id} value={quarter.id}>{quarter.name}</option>)}</select>
+              <select value={quarterA?.id ?? ''} onChange={(event) => onQuarterAChange(event.target.value)} className="w-full p-2 border border-blue-300 dark:border-blue-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-500">{cityA.analysisUnits.map((quarter) => <option key={quarter.id} value={quarter.id}>{formatBlockName(cityA.name, quarter.name)}</option>)}</select>
             </div>
             <div className="rounded-md border-l-4 border-amber-500 bg-amber-50/50 p-3 md:p-4 dark:bg-amber-950/20">
               <label className="text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide mb-2 block transition-colors duration-500">Analysis unit B</label>
-              <select value={quarterB?.id ?? ''} onChange={(event) => onQuarterBChange(event.target.value)} className="w-full p-2 border border-amber-300 dark:border-amber-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors duration-500">{cityB.analysisUnits.map((quarter) => <option key={quarter.id} value={quarter.id} disabled={mode === 'same' && quarterA?.id === quarter.id && cityB.analysisUnits.length > 1}>{quarter.name}</option>)}</select>
+              <select value={quarterB?.id ?? ''} onChange={(event) => onQuarterBChange(event.target.value)} className="w-full p-2 border border-amber-300 dark:border-amber-700 rounded-lg font-semibold text-sm md:text-base text-neutral-900 dark:text-white bg-white dark:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 transition-colors duration-500">{cityB.analysisUnits.map((quarter) => <option key={quarter.id} value={quarter.id} disabled={mode === 'same' && quarterA?.id === quarter.id && cityB.analysisUnits.length > 1}>{formatBlockName(cityB.name, quarter.name)}</option>)}</select>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div>
               <AdminDataPanel title={`${cityA.name} Â· source row ${cityA.source.row}`} data={cityA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={`${cityA.source.sheet} row ${cityA.source.row}`} />
-              <AdminDataPanel title={`${quarterA.name} Â· source row ${quarterA.sourceRow ?? 'see parent record'}`} data={quarterA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={quarterA.sourceRow ? `Arkusz1 row ${quarterA.sourceRow}` : null} />
+              <AdminDataPanel title={`${panelNameA} Â· source row ${quarterA.sourceRow ?? 'see parent record'}`} data={quarterA} sourcePath={tempSourcePath(cityA.source.tempPath)} sourceCell={quarterA.sourceRow ? `Arkusz1 row ${quarterA.sourceRow}` : null} />
             </div>
             <div>
               <AdminDataPanel title={`${cityB.name} Â· source row ${cityB.source.row}`} data={cityB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={`${cityB.source.sheet} row ${cityB.source.row}`} />
-              <AdminDataPanel title={`${quarterB.name} Â· source row ${quarterB.sourceRow ?? 'see parent record'}`} data={quarterB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={quarterB.sourceRow ? `Arkusz1 row ${quarterB.sourceRow}` : null} />
+              <AdminDataPanel title={`${panelNameB} Â· source row ${quarterB.sourceRow ?? 'see parent record'}`} data={quarterB} sourcePath={tempSourcePath(cityB.source.tempPath)} sourceCell={quarterB.sourceRow ? `Arkusz1 row ${quarterB.sourceRow}` : null} />
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { hasData, getCityFolderName, extractPercentage, findImageLink, tempSourcePath } from '../utils/helpers'
+import { hasData, getCityFolderName, extractPercentage, findImageLink, formatBlockName, tempSourcePath } from '../utils/helpers'
 import type { UrbanBlock } from '../types'
 import SafeImage from './SafeImage'
 import DistributionChart from './DistributionChart'
@@ -21,6 +21,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
   const [streetSunEnabled, setStreetSunEnabled] = useState(true)
   const [streetSunFrom, setStreetSunFrom] = useState<'left' | 'right'>('left')
   const cityFolder = getCityFolderName(cityName)
+  const blockName = formatBlockName(cityName, quarter.name)
   const getImagePath = (imageName: string | null) => {
     if (!imageName) return ''
     return `${import.meta.env.BASE_URL}${cityFolder}/${imageName}.PNG`
@@ -30,7 +31,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
     <div className="space-y-6 md:space-y-8">
       {/* Quarter Header */}
       <div>
-        <h3 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors duration-500">{quarter.name}</h3>
+        <h3 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors duration-500">{blockName}</h3>
         <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
           Urban-block analysis
         </p>
@@ -38,7 +39,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
           <p className="text-sm md:text-base text-neutral-600 dark:text-neutral-400 transition-colors duration-500">{quarter.function}</p>
         )}
         <AdminDataPanel
-          title={`${quarter.name} Â· source row ${quarter.sourceRow ?? 'see parent record'}`}
+          title={`${blockName} Â· source row ${quarter.sourceRow ?? 'see parent record'}`}
           data={quarter}
           sourcePath={tempSourcePath(sourcePath ?? quarter.imageLinks?.[0]?.sourceTempPath)}
           sourceCell={quarter.sourceRow ? `Arkusz1 row ${quarter.sourceRow}` : null}
@@ -53,7 +54,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
               <h4 className="section-title text-base md:text-lg">Site Plan</h4>
               <SafeImage
                 src={getImagePath(quarter.plan)}
-                alt={`${quarter.name} plan`}
+                alt={`${blockName} plan`}
                 className="w-full rounded-lg"
                 imageLink={findImageLink(quarter.imageLinks, 'plan')}
               />
@@ -65,7 +66,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
               <h4 className="section-title text-base md:text-lg">3D Form</h4>
               <SafeImage
                 src={getImagePath(quarter.form3d)}
-                alt={`${quarter.name} 3D`}
+                alt={`${blockName} 3D`}
                 imageLink={findImageLink(quarter.imageLinks, 'form3d')}
                 className="w-full rounded-lg"
               />
@@ -152,7 +153,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
               sunFrom={streetSunFrom}
               onSunFromChange={setStreetSunFrom}
               dataA={getFirstStreetSimulationInput(quarter.indicators.heightToWidthRatio, quarter.indicators.streetWidth)}
-              labelA={quarter.name}
+              labelA={blockName}
             />
           </>
         )}

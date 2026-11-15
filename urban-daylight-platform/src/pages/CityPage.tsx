@@ -8,7 +8,7 @@ import SolarEnergyTable from '../components/SolarEnergyTable'
 import AdminDataPanel from '../components/AdminDataPanel'
 import { LoadingSpinner, ErrorMessage, NoData } from '../components/LoadingStates'
 import { useCity, useCities } from '../hooks/useCitiesData'
-import { hasData, getCityFolderName, findImageLink, tempSourcePath } from '../utils/helpers'
+import { hasData, getCityFolderName, findImageLink, formatBlockName, tempSourcePath } from '../utils/helpers'
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react'
 import { DensityGauge, PercentRing } from '../components/MetricVisuals'
 import type { City } from '../types'
@@ -480,7 +480,7 @@ export default function CityPage() {
                   >
                     {city.analysisUnits.map((quarter) => (
                       <option key={quarter.id} value={quarter.id}>
-                        {quarter.name}
+                        {formatBlockName(city.name, quarter.name)}
                       </option>
                     ))}
                   </select>

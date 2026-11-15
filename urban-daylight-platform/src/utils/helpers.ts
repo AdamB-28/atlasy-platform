@@ -4,6 +4,10 @@ export function cn(...inputs: ClassValue[]) {
   return clsx(inputs)
 }
 
+export function formatBlockName(cityName: string, blockName: string): string {
+  return `${cityName} - ${blockName}`
+}
+
 export function getImagePath(imageName: string | null, cityFolder: string): string {
   if (!imageName) return ''
   // Files are already clean ASCII, no encoding needed
