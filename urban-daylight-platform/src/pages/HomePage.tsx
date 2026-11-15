@@ -92,8 +92,9 @@ function BenchmarkExplorer({ benchmarks, unassignedProfiles, sourceFolder }: { b
                 {benchmark.context.greenBlueInfrastructure && <p className="mt-3 text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">{benchmark.context.greenBlueInfrastructure}</p>}
                 {benchmark.context.sunHoursDistribution && (
                   <div className="mt-5 grid sm:grid-cols-2 gap-5">
-                    {benchmark.context.sunHoursDistribution.ground && <DistributionChart data={benchmark.context.sunHoursDistribution.ground} title="Site sun hours · ground" color="amber" />}
-                    {benchmark.context.sunHoursDistribution.facades && <DistributionChart data={benchmark.context.sunHoursDistribution.facades} title="Site sun hours · facades and roofs" color="amber" />}
+                    {benchmark.context.sunHoursDistribution.ground && <DistributionChart data={benchmark.context.sunHoursDistribution.ground} title="Site sun hours · ground" color="amber" palette="sunHours" />}
+                    {benchmark.context.sunHoursDistribution.buildings && <DistributionChart data={benchmark.context.sunHoursDistribution.buildings} title="Site sun hours · buildings" color="amber" palette="sunHours" />}
+                    {benchmark.context.sunHoursDistribution.facades && <DistributionChart data={benchmark.context.sunHoursDistribution.facades} title="Site sun hours · facades and roofs" color="amber" palette="sunHours" />}
                   </div>
                 )}
                 {benchmark.context.daylightPotentialDistribution && (
@@ -110,9 +111,9 @@ function BenchmarkExplorer({ benchmarks, unassignedProfiles, sourceFolder }: { b
                 <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">{profile.name} · source row {profile.sourceRow}</h3>
                 <p className="mt-1 text-xs text-amber-800 dark:text-amber-200">{profile.attributionNote}</p>
                 <div className="mt-4 grid sm:grid-cols-2 gap-5">
-                  {profile.sunHoursDistribution?.ground && <DistributionChart data={profile.sunHoursDistribution.ground} title="Ground" color="amber" />}
-                  {profile.sunHoursDistribution?.facades && <DistributionChart data={profile.sunHoursDistribution.facades} title="Facades" color="amber" />}
-                  {profile.sunHoursDistribution?.roofs && <DistributionChart data={profile.sunHoursDistribution.roofs} title="Roofs" color="amber" />}
+                  {profile.sunHoursDistribution?.ground && <DistributionChart data={profile.sunHoursDistribution.ground} title="Ground" color="amber" palette="sunHours" />}
+                  {profile.sunHoursDistribution?.facades && <DistributionChart data={profile.sunHoursDistribution.facades} title="Facades" color="amber" palette="sunHours" />}
+                  {profile.sunHoursDistribution?.roofs && <DistributionChart data={profile.sunHoursDistribution.roofs} title="Roofs" color="amber" palette="sunHours" />}
                   {profile.daylightPotentialDistribution && <DistributionChart data={profile.daylightPotentialDistribution} title="Daylight potential" color="green" palette="daylight" />}
                 </div>
                 <AdminDataPanel title={`Unassigned profile · source row ${profile.sourceRow}`} data={profile} sourcePath={tempSourcePath(profile.source?.tempPath)} sourceCell={`${profile.source?.sheet ?? 'Arkusz1'} row ${profile.sourceRow}`} />
@@ -130,9 +131,9 @@ function BenchmarkExplorer({ benchmarks, unassignedProfiles, sourceFolder }: { b
               <div key={profile.sourceRow} className="mt-4 grid sm:grid-cols-[180px_1fr] gap-4 items-start">
                 <p className="text-sm font-medium text-neutral-900 dark:text-white">Row {profile.sourceRow}</p>
                 <div className="grid sm:grid-cols-2 gap-5">
-                  {profile.sunHoursDistribution?.ground && <DistributionChart data={profile.sunHoursDistribution.ground} title="Ground" color="amber" />}
-                  {profile.sunHoursDistribution?.facades && <DistributionChart data={profile.sunHoursDistribution.facades} title="Facades" color="amber" />}
-                  {profile.sunHoursDistribution?.roofs && <DistributionChart data={profile.sunHoursDistribution.roofs} title="Roofs" color="amber" />}
+                  {profile.sunHoursDistribution?.ground && <DistributionChart data={profile.sunHoursDistribution.ground} title="Ground" color="amber" palette="sunHours" />}
+                  {profile.sunHoursDistribution?.facades && <DistributionChart data={profile.sunHoursDistribution.facades} title="Facades" color="amber" palette="sunHours" />}
+                  {profile.sunHoursDistribution?.roofs && <DistributionChart data={profile.sunHoursDistribution.roofs} title="Roofs" color="amber" palette="sunHours" />}
                   {profile.daylightPotentialDistribution && <DistributionChart data={profile.daylightPotentialDistribution} title="Daylight potential" color="green" palette="daylight" />}
                 </div>
                 <AdminDataPanel title={`Unassigned profile · source row ${profile.sourceRow}`} data={profile} className="sm:col-span-2" sourcePath={tempSourcePath(profile.source?.tempPath)} sourceCell={`${profile.source?.sheet ?? 'Arkusz1'} row ${profile.sourceRow}`} />

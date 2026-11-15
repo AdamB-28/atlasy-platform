@@ -4,12 +4,13 @@ interface DistributionChartProps {
   data: DistributionData
   title?: string
   color?: 'amber' | 'blue' | 'green'
-  palette?: 'daylight'
+  palette?: 'daylight' | 'sunHours'
   height?: number
   unitLabel?: string
 }
 
 const DAYLIGHT_PALETTE = ['#013A6F', '#185389', '#2A6EAD', '#23BED3', '#3FD2E6', '#5DE3F5', '#B2F8DA', '#CCFEE8', '#E5FFF4']
+const SUN_HOURS_PALETTE = ['#40608F', '#80629C', '#B876A4', '#CC8394', '#DB9786', '#E0A979', '#EBC275', '#F0D573', '#FAE76E', '#FFF86B']
 
 const COLOR_MAP = {
   amber: {
@@ -110,7 +111,8 @@ export function ComparisonDistributionChart({ dataA, dataB, labelA, labelB, titl
 
 export default function DistributionChart({ data, title, color = 'amber', palette, height = 120, unitLabel }: DistributionChartProps) {
   const colors = COLOR_MAP[color]
-  const bandColors = palette === 'daylight' && data.bins.length === DAYLIGHT_PALETTE.length ? DAYLIGHT_PALETTE : null
+  const selectedPalette = palette === 'daylight' ? DAYLIGHT_PALETTE : palette === 'sunHours' ? SUN_HOURS_PALETTE : null
+  const bandColors = selectedPalette?.length === data.bins.length ? selectedPalette : null
   const values = data.bins.map(b => b.value ?? 0)
   const maxVal = Math.max(...values, 1)
 

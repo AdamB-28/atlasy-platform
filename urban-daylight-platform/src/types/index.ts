@@ -61,6 +61,7 @@ export interface DistributionData {
 
 export interface SunHoursDistribution {
   ground?: DistributionData;
+  buildings?: DistributionData;
   facades?: DistributionData;
   roofs?: DistributionData;
 }

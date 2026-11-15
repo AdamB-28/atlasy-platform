@@ -423,10 +423,13 @@ export default function CityPage() {
                     className="w-full rounded-lg"
                   />
                   {city.siteAnalysis.sunHoursDistribution?.ground && (
-                    <div className="mt-5"><DistributionChart data={city.siteAnalysis.sunHoursDistribution.ground} title="Ground-level exposure" color="amber" /></div>
+                    <div className="mt-5"><DistributionChart data={city.siteAnalysis.sunHoursDistribution.ground} title="Ground-level exposure" color="amber" palette="sunHours" /></div>
+                  )}
+                  {city.siteAnalysis.sunHoursDistribution?.buildings && (
+                    <div className="mt-5"><DistributionChart data={city.siteAnalysis.sunHoursDistribution.buildings} title="Buildings" color="amber" palette="sunHours" /></div>
                   )}
                   {city.siteAnalysis.sunHoursDistribution?.facades && (
-                    <div className="mt-5"><DistributionChart data={city.siteAnalysis.sunHoursDistribution.facades} title="Facades and roofs" color="amber" /></div>
+                    <div className="mt-5"><DistributionChart data={city.siteAnalysis.sunHoursDistribution.facades} title="Facades and roofs" color="amber" palette="sunHours" /></div>
                   )}
                 </div>
               )}

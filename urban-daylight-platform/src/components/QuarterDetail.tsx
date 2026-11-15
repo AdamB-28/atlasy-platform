@@ -181,6 +181,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
                 {quarter.sunHoursDistribution.ground && (
                   <DistributionChart
                     data={quarter.sunHoursDistribution.ground}
+                    palette="sunHours"
                     title="Ground Level"
                     color="amber"
                   />
@@ -188,6 +189,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
                 {quarter.sunHoursDistribution.facades && (
                   <DistributionChart
                     data={quarter.sunHoursDistribution.facades}
+                    palette="sunHours"
                     title="Facades, Roofs & Other"
                     color="amber"
                   />
@@ -195,6 +197,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
                 {quarter.sunHoursDistribution.roofs && (
                   <DistributionChart
                     data={quarter.sunHoursDistribution.roofs}
+                    palette="sunHours"
                     title="Roofs"
                     color="amber"
                   />
