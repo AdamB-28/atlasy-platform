@@ -36,7 +36,11 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
           Urban-block analysis
         </p>
         {hasData(quarter.function) && (
-          <p className="text-sm md:text-base text-neutral-600 dark:text-neutral-400 transition-colors duration-500">{quarter.function}</p>
+          <div className="mt-2 text-sm md:text-base text-neutral-600 dark:text-neutral-400 transition-colors duration-500">
+            <p className="text-xs font-semibold uppercase tracking-wide">Building function</p>
+            <p>{quarter.function}</p>
+            {quarter.sourceRow && <p className="text-xs">Source: DANE BM{quarter.sourceRow}</p>}
+          </div>
         )}
         <AdminDataPanel
           title={`${blockName} Â· source row ${quarter.sourceRow ?? 'see parent record'}`}

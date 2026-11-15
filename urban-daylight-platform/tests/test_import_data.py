@@ -258,6 +258,9 @@ class ImportDataTests(unittest.TestCase):
         self.assertEqual(opis_row["cells"]["D3"], "First exact description.")
         self.assertEqual(opis_row["source"], {"sheet": "OPISY", "row": 3})
         self.assertNotIn("descriptions", data["cities"][0])
+        block = data["cities"][0]["analysisUnits"][0]
+        self.assertEqual(block["function"], "Residential")
+        self.assertEqual(block["sourceData"]["cells"]["BM8"], "Residential")
         dane_rows = {row["row"]: row for row in private["sourceSheets"]["DANE"]}
         self.assertEqual(dane_rows[8]["cells"]["F8"], "Unapproved site description.")
         self.assertEqual(dane_rows[8]["cells"]["BM8"], "Residential")
@@ -387,6 +390,8 @@ class ImportDataTests(unittest.TestCase):
                     for item in block["solarEnergySpecsSource"]:
                         self.assertEqual(item["source"]["row"], row)
                         self.assertEqual(item["value"], workbook["DANE"][item["source"]["cell"]].value)
+                    self.assertEqual(block["function"], workbook["DANE"][f"BM{row}"].value)
+                    self.assertEqual(block["sourceData"]["cells"].get(f"BM{row}"), block["function"])
         finally:
             workbook.close()
 

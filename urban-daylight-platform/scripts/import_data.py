@@ -124,7 +124,7 @@ KNOWN_CONFLICT_CELLS = {
     "AL15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
     "AV15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
 }
-PRIVATE_DANE_COLUMNS = {"F", "G", "H", "I", "J", "K", "L", "M", "P", "BM"}
+PRIVATE_DANE_COLUMNS = {"F", "G", "H", "I", "J", "K", "L", "M", "P"}
 SITE_DISTRIBUTIONS = (
     ("Sun hours", "GROUND", range(18, 28), 7, "R5"),
     ("Sun hours", "BUILDINGS (FACADES, ROFFS, OTHER)", range(28, 38), 7, "R5"),
@@ -473,7 +473,7 @@ def build_block(
             "streetWidth": cells.get(f"BK{row_number}"),
             "buildingHeight": cells.get(f"BJ{row_number}"),
         },
-        "function": None,
+        "function": cells.get(f"BM{row_number}"),
         "sunHours": None,
         "daylightPotential": None,
         "solarEnergy": None,
