@@ -404,13 +404,16 @@ export default function CityPage() {
         </div>
 
         {/* Site-Level Analysis */}
-        {city.siteAnalysis && (hasData(city.siteAnalysis.sunHoursImage) || 
-          hasData(city.siteAnalysis.daylightPotentialImage) || 
-          hasData(city.siteAnalysis.solarEnergyImage)) && (
+        {city.siteAnalysis && (hasData(city.siteAnalysis.sunHoursImage) ||
+          city.siteAnalysis.sunHoursDistribution ||
+          hasData(city.siteAnalysis.daylightPotentialImage) ||
+          city.siteAnalysis.daylightPotentialDistribution ||
+          hasData(city.siteAnalysis.solarEnergyImage) ||
+          city.siteAnalysis.solarEnergySpecs) && (
           <div className="mb-8 md:mb-12">
             <h2 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-4 md:mb-6 transition-colors duration-500">Site-Level Analysis</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {hasData(city.siteAnalysis.sunHoursImage) && (
+              {(hasData(city.siteAnalysis.sunHoursImage) || city.siteAnalysis.sunHoursDistribution) && (
                 <div className="card">
                   <div className="flex items-center gap-3 mb-3">
                     <Sun className="w-4 h-4 md:w-5 md:h-5 text-amber-500" />
@@ -434,7 +437,7 @@ export default function CityPage() {
                   )}
                 </div>
               )}
-              {hasData(city.siteAnalysis.daylightPotentialImage) && (
+              {(hasData(city.siteAnalysis.daylightPotentialImage) || city.siteAnalysis.daylightPotentialDistribution) && (
                 <div className="card">
                   <div className="flex items-center gap-3 mb-3">
                     <Lightbulb className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
@@ -451,7 +454,7 @@ export default function CityPage() {
                   )}
                 </div>
               )}
-              {hasData(city.siteAnalysis.solarEnergyImage) && (
+              {(hasData(city.siteAnalysis.solarEnergyImage) || city.siteAnalysis.solarEnergySpecs) && (
                 <div className="card">
                   <div className="flex items-center gap-3 mb-3">
                     <Sun className="w-4 h-4 md:w-5 md:h-5 text-orange-500" />
