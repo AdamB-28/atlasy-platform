@@ -443,7 +443,7 @@ export default function CityPage() {
                     className="w-full rounded-lg"
                   />
                   {city.siteAnalysis.daylightPotentialDistribution && (
-                    <div className="mt-5"><DistributionChart data={city.siteAnalysis.daylightPotentialDistribution} title="Facade daylight-potential scores" color="green" /></div>
+                    <div className="mt-5"><DistributionChart data={city.siteAnalysis.daylightPotentialDistribution} title="Facade daylight-potential scores" color="green" palette="daylight" /></div>
                   )}
                 </div>
               )}

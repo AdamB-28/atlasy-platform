@@ -242,6 +242,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
                 <DistributionChart
                   data={quarter.daylightPotentialDistribution}
                   color="blue"
+                  palette="daylight"
                   unitLabel="Daylight potential (scores)"
                 />
               </div>

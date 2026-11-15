@@ -4,9 +4,12 @@ interface DistributionChartProps {
   data: DistributionData
   title?: string
   color?: 'amber' | 'blue' | 'green'
+  palette?: 'daylight'
   height?: number
   unitLabel?: string
 }
+
+const DAYLIGHT_PALETTE = ['#013A6F', '#185389', '#2A6EAD', '#23BED3', '#3FD2E6', '#5DE3F5', '#B2F8DA', '#CCFEE8', '#E5FFF4']
 
 const COLOR_MAP = {
   amber: {
@@ -105,8 +108,9 @@ export function ComparisonDistributionChart({ dataA, dataB, labelA, labelB, titl
   )
 }
 
-export default function DistributionChart({ data, title, color = 'amber', height = 120, unitLabel }: DistributionChartProps) {
+export default function DistributionChart({ data, title, color = 'amber', palette, height = 120, unitLabel }: DistributionChartProps) {
   const colors = COLOR_MAP[color]
+  const bandColors = palette === 'daylight' && data.bins.length === DAYLIGHT_PALETTE.length ? DAYLIGHT_PALETTE : null
   const values = data.bins.map(b => b.value ?? 0)
   const maxVal = Math.max(...values, 1)
 
@@ -117,6 +121,7 @@ export default function DistributionChart({ data, title, color = 'amber', height
           {title}
         </h6>
       )}
+      {palette && !bandColors && <p role="note" className="text-xs text-amber-700 dark:text-amber-300">The source bands do not match the specified chart palette.</p>}
       <div className="flex items-end gap-1" style={{ height }}>
         {data.bins.map((bin, i) => {
           const val = bin.value ?? 0
@@ -135,8 +140,8 @@ export default function DistributionChart({ data, title, color = 'amber', height
               </div>
               {/* Bar */}
               <div
-                className={`w-full rounded-t-sm transition-all duration-300 ${colors.bar} ${colors.barHover} min-h-[2px]`}
-                style={{ height: val === 0 ? '0%' : `${Math.max(pct, 2)}%` }}
+                className={`w-full rounded-t-sm transition-all duration-300 ${bandColors ? '' : `${colors.bar} ${colors.barHover}`} min-h-[2px]`}
+                style={{ height: val === 0 ? '0%' : `${Math.max(pct, 2)}%`, backgroundColor: bandColors?.[i] }}
               />
             </div>
           )
