@@ -9216,9 +9216,9 @@
         "greenBlueInfrastructure": null
       },
       "siteAnalysis": {
-        "sunHoursImage": null,
-        "daylightPotentialImage": null,
-        "solarEnergyImage": null,
+        "sunHoursImage": "Kronsberg_sun_hours_261107",
+        "daylightPotentialImage": "Kronsberg_daylight_potential_261107",
+        "solarEnergyImage": "Kronsberg_solar_energy_261107",
         "urbanBlocksImage": "Seestadt_261114",
         "sunHours": [
           {
@@ -15297,15 +15297,15 @@
           "cell": "Q15",
           "rawCell": "Kronsberg_sun_hours_261107",
           "referencedName": "Kronsberg_sun_hours_261107",
-          "resolvedName": null,
-          "aliasNote": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+          "resolvedName": "Kronsberg_sun_hours_261107",
+          "aliasNote": "TASK-17: the Kronsberg-named image matches the supplied Aspern site model; the original Forma workbook identifies the site as Seestadt.",
           "sourceFile": "ATLASY_DANE_261107.xlsx",
-          "sourceTempPath": null,
+          "sourceTempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261107.PNG",
           "sheet": "DANE",
           "row": 15,
-          "tempPath": null,
-          "publicUrl": null,
-          "status": "unresolved"
+          "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261107.PNG",
+          "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_sun_hours_261107.PNG",
+          "status": "copied"
         },
         {
           "field": "siteAnalysis.daylightPotentialImage",
@@ -15315,15 +15315,15 @@
           "cell": "AL15",
           "rawCell": "Kronsberg_daylight_potential_261107",
           "referencedName": "Kronsberg_daylight_potential_261107",
-          "resolvedName": null,
-          "aliasNote": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+          "resolvedName": "Kronsberg_daylight_potential_261107",
+          "aliasNote": "TASK-17: the Kronsberg-named image matches the supplied Aspern site model; the original Forma workbook identifies the site as Seestadt.",
           "sourceFile": "ATLASY_DANE_261107.xlsx",
-          "sourceTempPath": null,
+          "sourceTempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261107.PNG",
           "sheet": "DANE",
           "row": 15,
-          "tempPath": null,
-          "publicUrl": null,
-          "status": "unresolved"
+          "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261107.PNG",
+          "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_daylight_potential_261107.PNG",
+          "status": "copied"
         },
         {
           "field": "siteAnalysis.solarEnergyImage",
@@ -15333,15 +15333,15 @@
           "cell": "AV15",
           "rawCell": "Kronsberg_solar_energy_261107",
           "referencedName": "Kronsberg_solar_energy_261107",
-          "resolvedName": null,
-          "aliasNote": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+          "resolvedName": "Kronsberg_solar_energy_261107",
+          "aliasNote": "TASK-17: the Kronsberg-named image matches the supplied Aspern site model; the original Forma workbook identifies the site as Seestadt.",
           "sourceFile": "ATLASY_DANE_261107.xlsx",
-          "sourceTempPath": null,
+          "sourceTempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_solar_energy_261107.PNG",
           "sheet": "DANE",
           "row": 15,
-          "tempPath": null,
-          "publicUrl": null,
-          "status": "unresolved"
+          "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_solar_energy_261107.PNG",
+          "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_solar_energy_261107.PNG",
+          "status": "copied"
         }
       ]
     },
@@ -23595,15 +23595,15 @@
       "cell": "Q15",
       "rawCell": "Kronsberg_sun_hours_261107",
       "referencedName": "Kronsberg_sun_hours_261107",
-      "resolvedName": null,
-      "aliasNote": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+      "resolvedName": "Kronsberg_sun_hours_261107",
+      "aliasNote": "TASK-17: the Kronsberg-named image matches the supplied Aspern site model; the original Forma workbook identifies the site as Seestadt.",
       "sourceFile": "ATLASY_DANE_261107.xlsx",
-      "sourceTempPath": null,
+      "sourceTempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261107.PNG",
       "sheet": "DANE",
       "row": 15,
-      "tempPath": null,
-      "publicUrl": null,
-      "status": "unresolved"
+      "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261107.PNG",
+      "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_sun_hours_261107.PNG",
+      "status": "copied"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23614,15 +23614,15 @@
       "cell": "AL15",
       "rawCell": "Kronsberg_daylight_potential_261107",
       "referencedName": "Kronsberg_daylight_potential_261107",
-      "resolvedName": null,
-      "aliasNote": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+      "resolvedName": "Kronsberg_daylight_potential_261107",
+      "aliasNote": "TASK-17: the Kronsberg-named image matches the supplied Aspern site model; the original Forma workbook identifies the site as Seestadt.",
       "sourceFile": "ATLASY_DANE_261107.xlsx",
-      "sourceTempPath": null,
+      "sourceTempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261107.PNG",
       "sheet": "DANE",
       "row": 15,
-      "tempPath": null,
-      "publicUrl": null,
-      "status": "unresolved"
+      "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261107.PNG",
+      "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_daylight_potential_261107.PNG",
+      "status": "copied"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23633,15 +23633,15 @@
       "cell": "AV15",
       "rawCell": "Kronsberg_solar_energy_261107",
       "referencedName": "Kronsberg_solar_energy_261107",
-      "resolvedName": null,
-      "aliasNote": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+      "resolvedName": "Kronsberg_solar_energy_261107",
+      "aliasNote": "TASK-17: the Kronsberg-named image matches the supplied Aspern site model; the original Forma workbook identifies the site as Seestadt.",
       "sourceFile": "ATLASY_DANE_261107.xlsx",
-      "sourceTempPath": null,
+      "sourceTempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_solar_energy_261107.PNG",
       "sheet": "DANE",
       "row": 15,
-      "tempPath": null,
-      "publicUrl": null,
-      "status": "unresolved"
+      "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_solar_energy_261107.PNG",
+      "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_solar_energy_261107.PNG",
+      "status": "copied"
     },
     {
       "cityId": "aspern-seestadt",
@@ -24825,9 +24825,6 @@
   "notices": [
     "The website workbook contains no coordinates. Four map points are independently verified against matching OpenStreetMap locality or development features. Ørestad Syd remains unmapped: its exact-name OpenStreetMap result is a restaurant, not a district feature, and no coordinate is assigned pending a reliable source for the case-study area.",
     "Unapproved descriptions, planning principles, and key characteristics are stored locally pending TASK-12 and TASK-25/30/35/40/48 approval.",
-    "Q15 is a Kronsberg-named image reference on the Aspern Seestadt row; it remains unresolved pending TASK-17.",
-    "AL15 is a Kronsberg-named image reference on the Aspern Seestadt row; it remains unresolved pending TASK-17.",
-    "AV15 is a Kronsberg-named image reference on the Aspern Seestadt row; it remains unresolved pending TASK-17.",
     "Elephant Park DANE!DD8 and DANE!DG8 are preserved exactly despite the solar-area inconsistency; no correction is inferred pending TASK-16."
   ],
   "exclusions": [

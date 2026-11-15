@@ -119,10 +119,10 @@ CITY_FOLDERS = {
     "aspern-seestadt": "SEESTADT",
     "orestad-syd": "ORESTADT",
 }
-KNOWN_CONFLICT_CELLS = {
-    "Q15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
-    "AL15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
-    "AV15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+ASPERN_SITE_ASSETS = {
+    "Q15": "Kronsberg_sun_hours_261107",
+    "AL15": "Kronsberg_daylight_potential_261107",
+    "AV15": "Kronsberg_solar_energy_261107",
 }
 PRIVATE_DANE_COLUMNS = {"F", "G", "H", "I", "J", "K", "L", "M", "P"}
 SITE_DISTRIBUTIONS = (
@@ -576,9 +576,6 @@ def resolve_image_links(
                 if link["status"] == "empty":
                     continue
                 cell = link["cell"]
-                if cell in KNOWN_CONFLICT_CELLS:
-                    link["aliasNote"] = KNOWN_CONFLICT_CELLS[cell]
-                    continue
                 if not asset_root:
                     continue
                 referenced = link["referencedName"]
@@ -591,10 +588,19 @@ def resolve_image_links(
                 resolved = "Elephant_and_Case_UB_1_model_3D" if approved_alias else referenced
                 if approved_alias:
                     link["aliasNote"] = "TASK-15: owner confirmed this UB_1 model filename on 2026-11-15."
+                aspern_site_asset = (
+                    city["id"] == "aspern-seestadt"
+                    and record is city
+                    and ASPERN_SITE_ASSETS.get(cell) == referenced
+                )
+                if aspern_site_asset:
+                    link["aliasNote"] = (
+                        "TASK-17: the Kronsberg-named image matches the supplied Aspern "
+                        "site model; the original Forma workbook identifies the site as Seestadt."
+                    )
                 matches = exact_asset_matches(
-                    asset_root,
-                    resolved,
-                    city["id"],
+                    asset_root, resolved,
+                    "kronsberg" if aspern_site_asset else city["id"],
                     is_location_image=link["field"] == "location.imageUrl",
                 )
                 if len(matches) != 1:
@@ -734,13 +740,6 @@ def build_data(
         "The website workbook contains no coordinates. Four map points are independently verified against matching OpenStreetMap locality or development features. Ørestad Syd remains unmapped: its exact-name OpenStreetMap result is a restaurant, not a district feature, and no coordinate is assigned pending a reliable source for the case-study area.",
         "Unapproved descriptions, planning principles, and key characteristics are stored locally pending TASK-12 and TASK-25/30/35/40/48 approval.",
     ]
-    for city in cities:
-        for link in city["imageLinks"]:
-            if city["name"] == "Aspern Seestadt" and link["cell"] in {"Q15", "AL15", "AV15"}:
-                notices.append(
-                    f"{link['cell']} is a Kronsberg-named image reference on the Aspern Seestadt row; "
-                    "it remains unresolved pending TASK-17."
-                )
     elephant = cities_by_name.get("elephant & castle – elephant park")
     if elephant:
         block = next((item for item in elephant["analysisUnits"] if item["name"] == "UB_1"), None)

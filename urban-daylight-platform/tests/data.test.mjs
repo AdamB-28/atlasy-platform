@@ -143,7 +143,7 @@ test('reported solar panel areas follow the stated coverage or remain flagged', 
   }
 })
 
-test('confirmed model alias and unresolved solar and Aspern image ambiguities retain provenance', () => {
+test('confirmed model and reconciled Aspern images retain provenance; solar ambiguity remains flagged', () => {
   const elephant = atlas.cities[0]
   const block = elephant.analysisUnits.find((item) => item.name === 'UB_1')
   const model = block.imageLinks.find((link) => link.cell === 'BE8')
@@ -168,13 +168,13 @@ test('confirmed model alias and unresolved solar and Aspern image ambiguities re
   for (const cell of ['Q15', 'AL15', 'AV15']) {
     const link = aspern.imageLinks.find((item) => item.cell === cell)
     assert.ok(link)
-    assert.equal(link.resolvedName, null)
-    assert.equal(link.publicUrl, null)
+    assert.ok(link.publicUrl.includes('/SEESTADT/'))
+    assert.match(link.sourceTempPath, /KRONSBERG\/FORMA\//)
+    assert.match(link.aliasNote, /matches the supplied Aspern/)
   }
-  assert.ok(atlas.notices.some((notice) => notice.includes('TASK-17')))
   assert.deepEqual(
     atlas.imageCatalog.filter((link) => link.status === 'unresolved').map((link) => link.cell).sort(),
-    ['AL15', 'AV15', 'Q15'],
+    [],
   )
 })
 

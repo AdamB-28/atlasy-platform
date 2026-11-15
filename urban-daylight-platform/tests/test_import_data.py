@@ -317,7 +317,6 @@ class ImportDataTests(unittest.TestCase):
         self.assertIn("DG8", block["solarEnergySpecs"]["panelAreaWarning"])
         self.assertIn("DD8", block["solarEnergySpecs"]["panelAreaWarning"])
         self.assertTrue(any("TASK-16" in notice for notice in data["notices"]))
-        self.assertTrue(any("TASK-17" in notice for notice in data["notices"]))
         self.assertFalse(any(row["row"] == 11 for row in data["sourceWorkbook"]["sheets"]["DANE"]))
 
     def test_site_analysis_matches_workbook_cells_when_available(self):
@@ -395,7 +394,29 @@ class ImportDataTests(unittest.TestCase):
         finally:
             workbook.close()
 
-    def test_exact_approved_assets_resolve_but_known_conflicts_stay_unresolved(self):
+    def test_aspern_site_values_match_original_forma_workbook_when_available(self):
+        source = WORKBOOK_PATH.parents[2] / "DANE" / "DATA_FORMA_261016.xlsx"
+        if not WORKBOOK_PATH.exists() or not source.exists():
+            self.skipTest("Approved source workbooks are not available")
+        website = load_workbook(WORKBOOK_PATH, data_only=True, read_only=True)
+        forma = load_workbook(source, data_only=True, read_only=True)
+        try:
+            dane = website["DANE"]
+            sun = forma["osiedle_sun_hours"]
+            daylight = forma["osiedle_daylight_potential"]
+            solar = forma["osiedle_Solar_energy_potential"]
+            for offset in range(10):
+                self.assertEqual(dane.cell(15, 18 + offset).value, sun.cell(49, 4 + offset).value)
+                self.assertEqual(dane.cell(15, 28 + offset).value, sun.cell(49, 15 + offset).value)
+            for offset in range(9):
+                self.assertEqual(dane.cell(15, 39 + offset).value, round(daylight.cell(20, 11 + offset).value))
+            for offset in range(5):
+                self.assertEqual(dane.cell(15, 49 + offset).value, solar.cell(11, 5 + offset).value)
+        finally:
+            website.close()
+            forma.close()
+
+    def test_exact_and_reconciled_assets_resolve_with_provenance(self):
         if not WORKBOOK_PATH.exists():
             self.skipTest("Approved source workbook is not available")
         with tempfile.TemporaryDirectory() as directory:
@@ -439,10 +460,12 @@ class ImportDataTests(unittest.TestCase):
                 for link in data["imageCatalog"]
                 if link["status"] == "unresolved"
             }
-            self.assertEqual(set(unresolved), {"Q15", "AL15", "AV15"})
-            for cell, link in unresolved.items():
-                self.assertIsNone(link["publicUrl"], cell)
-                self.assertIsNone(link["tempPath"], cell)
+            self.assertEqual(set(unresolved), set())
+            for cell in ("Q15", "AL15", "AV15"):
+                link = next(item for item in data["imageCatalog"] if item["cell"] == cell)
+                self.assertEqual(link["cityId"], "aspern-seestadt")
+                self.assertIn("KRONSBERG/FORMA/", link["sourceTempPath"])
+                self.assertIn("matches the supplied Aspern", link["aliasNote"])
 
             public_text = output_path.read_text(encoding="utf-8")
             private = json.loads(private_path.read_text(encoding="utf-8"))
