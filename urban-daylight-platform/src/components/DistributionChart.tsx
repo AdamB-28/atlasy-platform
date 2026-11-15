@@ -49,6 +49,13 @@ function formatShare(value: number | null | undefined, unit: string | undefined)
 
 export function ComparisonDistributionChart({ dataA, dataB, labelA, labelB, title, height = 160, unitLabel, measureAxisLabel, categoryAxisLabel }: ComparisonDistributionChartProps) {
   if (!dataA && !dataB) return null
+  if (dataA && dataB && (
+    dataA.unit !== dataB.unit ||
+    dataA.bins.length !== dataB.bins.length ||
+    dataA.bins.some((bin, index) => bin.label !== dataB.bins[index].label)
+  )) {
+    return <p role="note" className="text-sm text-amber-700 dark:text-amber-300">{title}: source units or distribution bands differ, so these results cannot be compared.</p>
+  }
   const bins = dataA?.bins ?? dataB?.bins ?? []
   const unit = dataA?.unit ?? dataB?.unit
   const values = bins.flatMap((_, index) => [dataA?.bins[index]?.value ?? 0, dataB?.bins[index]?.value ?? 0])
