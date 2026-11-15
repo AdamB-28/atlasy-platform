@@ -236,14 +236,15 @@ test('exact approved image references resolve to public assets', async () => {
   }
 })
 
-test('four verified map points have matching public feature provenance and other coordinates stay unset', () => {
+test('all map points have matching public feature provenance', () => {
   const expectedFeatures = {
     'elephant-and-castle': ['way', '366979812', 'Elephant Park'],
     garnizon: ['relation', '17995285', 'Garnizon'],
     kronsberg: ['node', '163156634', 'Kronsberg'],
     'aspern-seestadt': ['way', '28100015', 'Seestadt Aspern'],
+    'orestad-syd': ['relation', '910959', '8tallet'],
   }
-  for (const city of atlas.cities.filter((item) => item.id !== 'orestad-syd')) {
+  for (const city of atlas.cities) {
     assert.deepEqual(
       [city.location.coordinates.lat, city.location.coordinates.lng],
       {
@@ -251,6 +252,7 @@ test('four verified map points have matching public feature provenance and other
         garnizon: [54.3845063, 18.5928283],
         kronsberg: [52.3381288, 9.834295],
         'aspern-seestadt': [48.2271676, 16.5058256],
+        'orestad-syd': [55.6174713, 12.5717197],
       }[city.id],
     )
     assert.equal(city.location.coordinateSource.provider, 'OpenStreetMap')
@@ -264,10 +266,9 @@ test('four verified map points have matching public feature provenance and other
     assert.ok(city.source.row > 0)
   }
   const orestad = atlas.cities.find((city) => city.id === 'orestad-syd')
-  assert.equal(orestad.location.coordinates, null)
-  assert.equal(orestad.location.coordinateSource, null)
+  assert.match(orestad.location.coordinateSource.method, /not the district centre/)
   const dane = atlas.sourceWorkbook.sheets.DANE
   assert.equal(dane.find((row) => row.row === 9).cells.C9, undefined)
   assert.ok(atlas.notices.some((notice) => notice.includes('workbook contains no coordinates')))
-  assert.ok(atlas.notices.some((notice) => notice.includes('restaurant, not a district feature')))
+  assert.ok(atlas.notices.some((notice) => notice.includes('8tallet building')))
 })

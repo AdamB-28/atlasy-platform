@@ -175,9 +175,9 @@ class ImportDataTests(unittest.TestCase):
             "366979812",
         )
         orestad = next(city for city in data["cities"] if city["id"] == "orestad-syd")
-        self.assertIsNone(orestad["location"]["coordinates"])
-        self.assertIsNone(orestad["location"]["coordinateSource"])
-        self.assertTrue(any("restaurant, not a district feature" in notice for notice in data["notices"]))
+        self.assertEqual(orestad["location"]["coordinates"], {"lat": 55.6174713, "lng": 12.5717197, "zoom": 14})
+        self.assertEqual(orestad["location"]["coordinateSource"]["osmId"], "910959")
+        self.assertIn("not the district centre", orestad["location"]["coordinateSource"]["method"])
         self.assertNotIn("shadingAnalysis", elephant)
         self.assertEqual(elephant["sourceData"]["cells"]["D8"], " exact location ref ")
         self.assertNotIn("descriptions", elephant)

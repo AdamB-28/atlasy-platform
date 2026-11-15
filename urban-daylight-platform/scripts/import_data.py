@@ -88,6 +88,19 @@ VERIFIED_COORDINATES = {
             "license": "Data © OpenStreetMap contributors, ODbL 1.0",
         },
     },
+    "orestad-syd": {
+        "coordinates": {"lat": 55.6174713, "lng": 12.5717197, "zoom": 14},
+        "coordinateSource": {
+            "provider": "OpenStreetMap",
+            "matchedName": "8tallet",
+            "method": "Representative point for the 8tallet building within the source study-area outline; not the district centre",
+            "queryUrl": "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=8%20House%2C%20Copenhagen",
+            "featureUrl": "https://www.openstreetmap.org/relation/910959",
+            "osmType": "relation",
+            "osmId": "910959",
+            "license": "Data © OpenStreetMap contributors, ODbL 1.0",
+        },
+    },
 }
 APPROVED_CITY_NAMES = {
     "Elephant & Castle – Elephant Park",
@@ -737,7 +750,7 @@ def build_data(
                 })
 
     notices = [
-        "The website workbook contains no coordinates. Four map points are independently verified against matching OpenStreetMap locality or development features. Ørestad Syd remains unmapped: its exact-name OpenStreetMap result is a restaurant, not a district feature, and no coordinate is assigned pending a reliable source for the case-study area.",
+        "The website workbook contains no coordinates. Map points are independently verified against OpenStreetMap features; Ørestad Syd uses the 8tallet building within the study area, not the district centre.",
         "Unapproved descriptions, planning principles, and key characteristics are stored locally pending TASK-12 and TASK-25/30/35/40/48 approval.",
     ]
     elephant = cities_by_name.get("elephant & castle – elephant park")

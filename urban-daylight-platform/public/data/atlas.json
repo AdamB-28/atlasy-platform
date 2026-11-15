@@ -15305,7 +15305,7 @@
           "row": 15,
           "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261107.PNG",
           "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_sun_hours_261107.PNG",
-          "status": "copied"
+          "status": "present"
         },
         {
           "field": "siteAnalysis.daylightPotentialImage",
@@ -15323,7 +15323,7 @@
           "row": 15,
           "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261107.PNG",
           "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_daylight_potential_261107.PNG",
-          "status": "copied"
+          "status": "present"
         },
         {
           "field": "siteAnalysis.solarEnergyImage",
@@ -15341,7 +15341,7 @@
           "row": 15,
           "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_solar_energy_261107.PNG",
           "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_solar_energy_261107.PNG",
-          "status": "copied"
+          "status": "present"
         }
       ]
     },
@@ -15350,8 +15350,21 @@
       "name": "Ørestad Syd",
       "location": {
         "country": "Southern Copenhagen, Amager, Denmark",
-        "coordinates": null,
-        "coordinateSource": null,
+        "coordinates": {
+          "lat": 55.6174713,
+          "lng": 12.5717197,
+          "zoom": 14
+        },
+        "coordinateSource": {
+          "provider": "OpenStreetMap",
+          "matchedName": "8tallet",
+          "method": "Representative point for the 8tallet building within the source study-area outline; not the district centre",
+          "queryUrl": "https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=8%20House%2C%20Copenhagen",
+          "featureUrl": "https://www.openstreetmap.org/relation/910959",
+          "osmType": "relation",
+          "osmId": "910959",
+          "license": "Data © OpenStreetMap contributors, ODbL 1.0"
+        },
         "imageUrl": "Oresadt_location_261107"
       },
       "timeline": {
@@ -23603,7 +23616,7 @@
       "row": 15,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261107.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_sun_hours_261107.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23622,7 +23635,7 @@
       "row": 15,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261107.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_daylight_potential_261107.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23641,7 +23654,7 @@
       "row": 15,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_solar_energy_261107.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_solar_energy_261107.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -24823,7 +24836,7 @@
     }
   ],
   "notices": [
-    "The website workbook contains no coordinates. Four map points are independently verified against matching OpenStreetMap locality or development features. Ørestad Syd remains unmapped: its exact-name OpenStreetMap result is a restaurant, not a district feature, and no coordinate is assigned pending a reliable source for the case-study area.",
+    "The website workbook contains no coordinates. Map points are independently verified against OpenStreetMap features; Ørestad Syd uses the 8tallet building within the study area, not the district centre.",
     "Unapproved descriptions, planning principles, and key characteristics are stored locally pending TASK-12 and TASK-25/30/35/40/48 approval.",
     "Elephant Park DANE!DD8 and DANE!DG8 are preserved exactly despite the solar-area inconsistency; no correction is inferred pending TASK-16."
   ],
