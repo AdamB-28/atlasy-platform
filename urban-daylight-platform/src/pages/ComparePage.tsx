@@ -10,7 +10,7 @@ import SolarEnergyTable from '../components/SolarEnergyTable'
 import UrbanSectionDiagram from '../components/UrbanSectionDiagram'
 import StreetSunSimulator from '../components/StreetSunSimulator'
 import { useCities, useCity } from '../hooks/useCitiesData'
-import { findImageLink, formatBlockName, formatMetricValue, getCityFolderName, hasData, MODEL_CREDIT, valueContainsUnit } from '../utils/helpers'
+import { blockRatioPercentage, findImageLink, formatBlockName, formatMetricValue, getCityFolderName, hasData, MODEL_CREDIT, valueContainsUnit } from '../utils/helpers'
 import AdminDataPanel from '../components/AdminDataPanel'
 import type { ImageLink } from '../types'
 import { generateDaylightInsights, generateUrbanFormInsights, generateUrbanMorphologyInsights } from '../utils/insights'
@@ -370,9 +370,9 @@ export default function ComparePage() {
         <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
           <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Urban Indicators</h3>
           <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">FAR is total floor area relative to site area; green-space ratio is the reported share of green space. Average floors, building coverage, and tree count describe the selected analysis unit. Values are shown only where reported.</p>
-          {mode === 'same' ? <><ComparisonMetric label="Building Intensity (FAR)" valueA={quarterA?.indicators.buildingIntensity} valueB={quarterB?.indicators.buildingIntensity} /><ComparisonMetric label="Green Space Ratio" valueA={quarterA?.indicators.greenSpaceRatio} valueB={quarterB?.indicators.greenSpaceRatio} unit="%" /></> : <><ComparisonMetric label="Building Intensity (FAR)" valueA={cityA.urbanIndicators.buildingIntensity} valueB={cityB.urbanIndicators.buildingIntensity} /><ComparisonMetric label="Green Space Ratio" valueA={cityA.urbanIndicators.greenSpacePercentage} valueB={cityB.urbanIndicators.greenSpacePercentage} unit="%" /></>}
+          {mode === 'same' ? <><ComparisonMetric label="Building Intensity (FAR)" valueA={quarterA?.indicators.buildingIntensity} valueB={quarterB?.indicators.buildingIntensity} /><ComparisonMetric label="Green Space Ratio" valueA={blockRatioPercentage(quarterA.indicators.greenSpaceRatio)} valueB={blockRatioPercentage(quarterB.indicators.greenSpaceRatio)} unit="%" /></> : <><ComparisonMetric label="Building Intensity (FAR)" valueA={cityA.urbanIndicators.buildingIntensity} valueB={cityB.urbanIndicators.buildingIntensity} /><ComparisonMetric label="Green Space Ratio" valueA={cityA.urbanIndicators.greenSpacePercentage} valueB={cityB.urbanIndicators.greenSpacePercentage} unit="%" /></>}
           <ComparisonMetric label="Average Floors" valueA={quarterA?.indicators.avgFloors} valueB={quarterB?.indicators.avgFloors} />
-          <ComparisonMetric label="Building Coverage" valueA={quarterA?.indicators.buildingCoverage} valueB={quarterB?.indicators.buildingCoverage} unit="%" />
+          <ComparisonMetric label="Building Coverage" valueA={blockRatioPercentage(quarterA.indicators.buildingCoverage)} valueB={blockRatioPercentage(quarterB.indicators.buildingCoverage)} unit="%" />
           <ComparisonMetric label="Tree Count" valueA={quarterA?.indicators.treeCount} valueB={quarterB?.indicators.treeCount} />
           <InsightsSection insights={morphologyInsights} isOpen={showMorphologyInsights} onToggle={() => setShowMorphologyInsights(!showMorphologyInsights)} />
         </div>

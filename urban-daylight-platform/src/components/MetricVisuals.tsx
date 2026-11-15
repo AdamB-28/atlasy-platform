@@ -93,6 +93,8 @@ export function PercentRing({
         width={size}
         height={size}
         viewBox="0 0 72 72"
+        role="img"
+        aria-label={`${displayValue}%`}
         className="shrink-0 -rotate-90"
       >
         {/* Background ring */}
@@ -129,10 +131,10 @@ export function PercentRing({
           dominantBaseline="central"
           className="fill-neutral-900 dark:fill-white transition-colors duration-500 rotate-90"
           style={{ transformOrigin: '36px 36px' }}
-          fontSize="14"
+          fontSize="12"
           fontWeight="700"
         >
-          {displayValue}
+          {displayValue}%
         </text>
       </svg>
       {threshold !== undefined && thresholdLabel && (

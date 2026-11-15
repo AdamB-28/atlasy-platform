@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { hasData, getCityFolderName, extractPercentage, findImageLink, formatBlockName, MODEL_CREDIT } from '../utils/helpers'
+import { blockRatioPercentage, hasData, getCityFolderName, extractPercentage, findImageLink, formatBlockName, MODEL_CREDIT } from '../utils/helpers'
 import type { UrbanBlock } from '../types'
 import SafeImage from './SafeImage'
 import DistributionChart from './DistributionChart'
@@ -98,7 +98,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
                 Green Space
               </p>
               <PercentRing
-                value={quarter.indicators.greenSpaceRatio}
+                value={blockRatioPercentage(quarter.indicators.greenSpaceRatio)}
                 color="stroke-emerald-500 dark:stroke-emerald-400"
               />
             </div>
@@ -109,7 +109,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
                 Building Coverage
               </p>
               <PercentRing
-                value={quarter.indicators.buildingCoverage}
+                value={blockRatioPercentage(quarter.indicators.buildingCoverage)}
                 color="stroke-slate-500 dark:stroke-slate-400"
               />
             </div>

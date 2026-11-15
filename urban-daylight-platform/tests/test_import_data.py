@@ -345,6 +345,25 @@ class ImportDataTests(unittest.TestCase):
         finally:
             workbook.close()
 
+    def test_block_ratio_source_cells_are_percentage_formatted_when_available(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        workbook = load_workbook(WORKBOOK_PATH, data_only=True, read_only=True)
+        try:
+            data, _ = build_data(WORKBOOK_PATH)
+            for city in data["cities"]:
+                for block in city["analysisUnits"]:
+                    row = block["source"]["row"]
+                    for column, field in (("BG", "greenSpaceRatio"), ("BH", "buildingCoverage")):
+                        cell = workbook["DANE"][f"{column}{row}"]
+                        self.assertIn("%", cell.number_format)
+                        self.assertEqual(block["indicators"][field], cell.value)
+                        self.assertIsInstance(cell.value, (int, float))
+                        self.assertGreaterEqual(cell.value, 0)
+                        self.assertLessEqual(cell.value, 1)
+        finally:
+            workbook.close()
+
     def test_exact_approved_assets_resolve_but_known_conflicts_stay_unresolved(self):
         if not WORKBOOK_PATH.exists():
             self.skipTest("Approved source workbook is not available")
