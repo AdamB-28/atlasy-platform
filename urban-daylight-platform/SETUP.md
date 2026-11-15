@@ -3,7 +3,7 @@
 ## Wymagania
 
 - Node.js 18 lub nowszy i npm
-- Python 3.8 lub nowszy (bez dodatkowych pakietów)
+- Python 3.8 lub nowszy; testy nowego czytnika skoroszytu wymagają `openpyxl` z `requirements.txt`
 - Dostęp do internetu dla kafli OpenStreetMap
 
 ## Praca lokalna
@@ -11,6 +11,7 @@
 ```powershell
 cd urban-daylight-platform
 npm install
+node scripts/run-python.mjs -m pip install -r requirements.txt
 npm run dev
 ```
 
@@ -26,6 +27,8 @@ npm run build
 ```
 
 Importer tworzy `public/data/atlas.json`, kopiuje potrzebne obrazy i zgłasza brakujące zasoby. Dla każdego rekordu i obrazu zapisuje względną ścieżkę pliku CSV w `.venv/TEMP`, komórkę, ścieżkę obrazu w TEMP i publiczny URL. Brak obrazu pozostaje `tempPath: null`; importer nie zgaduje ścieżki. Nie usuwa ani nie modyfikuje plików w TEMP. Jeżeli Python nie jest wykrywany, launcher próbuje kolejno lokalnego `.venv`, zmiennej `PYTHON`, `python` i `py -3`.
+
+Trwa przygotowanie przejścia na skoroszyt `TEMP__TRUTH`. Czytnik `scripts/workbook_source.py` i jego testy sprawdzają układ arkuszy oraz zachowują współrzędne komórek, ale `npm run data:import` nadal korzysta z poprzednich plików CSV; nie należy uważać obecnego atlasu za zaktualizowany na podstawie nowego źródła.
 
 ## Gdzie szukać kodu
 
