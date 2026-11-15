@@ -9,9 +9,10 @@ interface SafeImageProps {
   alt: string
   className?: string
   imageLink?: ImageLink | null
+  credit?: string
 }
 
-export default function SafeImage({ src, alt, className = '', imageLink }: SafeImageProps) {
+export default function SafeImage({ src, alt, className = '', imageLink, credit }: SafeImageProps) {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -54,8 +55,9 @@ export default function SafeImage({ src, alt, className = '', imageLink }: SafeI
         </div>
       </div>
       {lightboxOpen && (
-        <ImageLightbox src={src} alt={alt} onClose={() => setLightboxOpen(false)} />
+        <ImageLightbox src={src} alt={alt} credit={credit} onClose={() => setLightboxOpen(false)} />
       )}
+      {credit && <p className="mt-2 text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">{credit}</p>}
       <AdminImageCaption link={imageLink} />
     </>
   )

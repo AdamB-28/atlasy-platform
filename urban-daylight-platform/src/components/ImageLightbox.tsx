@@ -4,10 +4,11 @@ import { X } from 'lucide-react'
 interface ImageLightboxProps {
   src: string
   alt: string
+  credit?: string
   onClose: () => void
 }
 
-export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps) {
+export default function ImageLightbox({ src, alt, credit, onClose }: ImageLightboxProps) {
   const [loaded, setLoaded] = useState(false)
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -37,7 +38,7 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
       </button>
 
       <div
-        className="relative max-w-[95vw] max-h-[95vh] flex items-center justify-center"
+        className="relative max-w-[95vw] max-h-[95vh] flex flex-col items-center justify-center"
         onClick={(e) => e.stopPropagation()}
       >
         {!loaded && (
@@ -46,9 +47,10 @@ export default function ImageLightbox({ src, alt, onClose }: ImageLightboxProps)
         <img
           src={src}
           alt={alt}
-          className={`max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0 absolute'}`}
+          className={`max-w-full ${credit ? 'max-h-[75vh]' : 'max-h-[90vh]'} object-contain rounded-lg shadow-2xl transition-opacity duration-300 ${loaded ? 'opacity-100' : 'opacity-0 absolute'}`}
           onLoad={() => setLoaded(true)}
         />
+        {credit && <p className="mt-3 max-w-3xl text-sm text-white text-center leading-relaxed">{credit}</p>}
       </div>
     </div>
   )

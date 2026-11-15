@@ -234,6 +234,7 @@ export default function CityPage() {
                   alt={`${city.name} location`}
                   className="w-full rounded-lg"
                   imageLink={findImageLink(city.imageLinks, 'location.imageUrl')}
+                  credit="Location map: original work prepared using QGIS."
                 />
               </div>
             )}
@@ -255,6 +256,7 @@ export default function CityPage() {
                     src={getImagePath(city.overview.schwarzplanImage)}
                     alt={`${city.name} Schwarzplan`}
                     imageLink={findImageLink(city.imageLinks, 'overview.schwarzplanImage')}
+                    credit="Schwarzplan: ESRI basemap accessed in QGIS via QuickMapServices; building data © OpenStreetMap contributors, with some building data modified."
                     className="w-full rounded-lg"
                   />
                 </div>
