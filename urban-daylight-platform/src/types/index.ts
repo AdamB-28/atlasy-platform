@@ -141,6 +141,7 @@ export interface City {
   location: Location;
   timeline: Timeline;
   overview: Overview;
+  urbanForm: string | null;
   urbanIndicators: UrbanIndicators;
   siteAnalysis?: SiteAnalysis;
   analysisUnits: UrbanBlock[];

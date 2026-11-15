@@ -404,6 +404,7 @@ def build_city(
         },
         "timeline": {"years": None, "description": None},
         "overview": {"schwarzplanImage": None, "model3dImage": None, "far": None},
+        "urbanForm": cells.get(f"P{row_number}"),
         "urbanIndicators": {
             "buildingIntensity": None,
             "greenSpacePercentage": None,
@@ -751,7 +752,7 @@ def build_data(
 
     notices = [
         "The website workbook contains no coordinates. Map points are independently verified against OpenStreetMap features; Ørestad Syd uses the 8tallet building within the study area, not the district centre.",
-        "Unapproved descriptions, planning principles, and key characteristics are stored locally pending TASK-12 and TASK-25/30/35/40/48 approval.",
+        "Longer site narratives, planning principles, and key characteristics are stored locally pending citation and content review.",
     ]
     elephant = cities_by_name.get("elephant & castle – elephant park")
     if elephant:

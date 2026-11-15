@@ -36,6 +36,7 @@
         "model3dImage": "Elephant_and_Castle_model_3D",
         "far": null
       },
+      "urbanForm": "The development is dominated by blocks of dense housing (rectangular or trapezoidal in plan); the areas within the blocks are raised by one storey and converted into semi-public green spaces; within the development comprising these blocks, there is at least one high-rise building that serves as a prominent landmark",
       "urbanIndicators": {
         "buildingIntensity": null,
         "greenSpacePercentage": null,
@@ -3094,6 +3095,7 @@
         "model3dImage": "Garnizon_model_3D_261107",
         "far": null
       },
+      "urbanForm": "Building blocks (mainly rectangular in plan); within some of these blocks there are tower blocks, green spaces and pedestrian routes; the areas within some of these blocks are raised by one storey and converted into semi-public green spaces",
       "urbanIndicators": {
         "buildingIntensity": null,
         "greenSpacePercentage": null,
@@ -6151,6 +6153,7 @@
         "model3dImage": "Kronsberg_model_3D_261113",
         "far": null
       },
+      "urbanForm": "Blocks of moderately dense development laid out in a rectangular grid, and terraced housing arranged in a comb-like pattern; the layout includes a significant proportion of detached and semi-detached houses",
       "urbanIndicators": {
         "buildingIntensity": null,
         "greenSpacePercentage": null,
@@ -9208,6 +9211,7 @@
         "model3dImage": "Seestadt_model_3D_261113",
         "far": null
       },
+      "urbanForm": "Blocks of dense development laid out in an irregular pattern; within each block, one can distinguish between buildings forming a compact frontage and isolated buildings; on the western side, there are rhythmically arranged isolated buildings; the plan also includes large-scale buildings",
       "urbanIndicators": {
         "buildingIntensity": null,
         "greenSpacePercentage": null,
@@ -15376,6 +15380,7 @@
         "model3dImage": "Orestadt_model_3D_261113",
         "far": null
       },
+      "urbanForm": " Blocks of buildings (sometimes enclosed), forming compact frontages along the streets, mainly laid out in a rectangular or cuboid plan, and occasionally trapezoidal; scattered and terraced housing – irregularly distributed in a rectangular plan or in a comb-like arrangement; the presence of large-scale buildings with an irregular or oval ground plan",
       "urbanIndicators": {
         "buildingIntensity": null,
         "greenSpacePercentage": null,
@@ -24837,7 +24842,7 @@
   ],
   "notices": [
     "The website workbook contains no coordinates. Map points are independently verified against OpenStreetMap features; Ørestad Syd uses the 8tallet building within the study area, not the district centre.",
-    "Unapproved descriptions, planning principles, and key characteristics are stored locally pending TASK-12 and TASK-25/30/35/40/48 approval.",
+    "Longer site narratives, planning principles, and key characteristics are stored locally pending citation and content review.",
     "Elephant Park DANE!DD8 and DANE!DG8 are preserved exactly despite the solar-area inconsistency; no correction is inferred pending TASK-16."
   ],
   "exclusions": [

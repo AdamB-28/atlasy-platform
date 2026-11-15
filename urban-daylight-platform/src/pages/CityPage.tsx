@@ -210,6 +210,15 @@ export default function CityPage() {
       </section>
       
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        {city.urbanForm && (
+          <section className="card mb-8 sm:mb-12" aria-labelledby="urban-form-heading">
+            <h2 id="urban-form-heading" className="section-title text-base md:text-lg">Urban form</h2>
+            <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">{city.urbanForm}</p>
+            <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
+              Source: {city.source.file}, {city.source.sheet} P{city.source.row}
+            </p>
+          </section>
+        )}
         {/* Timeline and Location */}
         {(hasData(city.timeline.years) || hasData(city.location.imageUrl)) && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 mb-8 sm:mb-12">

@@ -91,6 +91,7 @@ def fixture_workbook() -> BytesIO:
         if name:
             dane[f"C{row}"] = name
             dane[f"E{row}"] = "Source location text"
+            dane[f"P{row}"] = f"Development form for {name}"
         dane[f"BC{row}"] = block
         dane[f"BE{row}"] = "source_model_name"
         dane[f"BF{row}"] = 2.29
@@ -258,6 +259,7 @@ class ImportDataTests(unittest.TestCase):
         self.assertEqual(opis_row["cells"]["D3"], "First exact description.")
         self.assertEqual(opis_row["source"], {"sheet": "OPISY", "row": 3})
         self.assertNotIn("descriptions", data["cities"][0])
+        self.assertEqual(data["cities"][0]["urbanForm"], "Development form for Elephant & Castle – Elephant Park")
         block = data["cities"][0]["analysisUnits"][0]
         self.assertEqual(block["function"], "Residential")
         self.assertEqual(block["sourceData"]["cells"]["BM8"], "Residential")
@@ -354,6 +356,7 @@ class ImportDataTests(unittest.TestCase):
         try:
             data, _ = build_data(WORKBOOK_PATH)
             for city in data["cities"]:
+                self.assertEqual(city["urbanForm"], workbook["DANE"][f"P{city['source']['row']}"].value)
                 for block in city["analysisUnits"]:
                     row = block["source"]["row"]
                     for column, field in (("BG", "greenSpaceRatio"), ("BH", "buildingCoverage")):
