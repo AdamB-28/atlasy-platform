@@ -8,6 +8,7 @@ Wymagane: Node.js 18+ oraz Python 3.8+. Z katalogu aplikacji:
 
 ```powershell
 npm install
+node scripts/run-python.mjs -m pip install -r requirements.txt
 npm run dev
 ```
 
@@ -21,7 +22,7 @@ Vite wypisze adres lokalnego serwera. Przy pierwszym uruchomieniu aplikacja pobi
 4. Sprawdź komunikaty `WARNING`, zwłaszcza brakujące obrazy lub pliki źródłowe.
 5. Uruchom `npm test`, `npm run lint` i `npm run build`.
 
-Launcher Pythona najpierw szuka interpretera w lokalnym `.venv`, potem w zmiennej `PYTHON`, na `PATH` i w Windowsowym launcherze `py`. Nie trzeba instalować pakietów Python; importer korzysta ze standardowej biblioteki.
+Launcher Pythona szuka interpretera wskazanego przez `PYTHON`, następnie w lokalnym `.venv`, na `PATH` i w Windowsowym launcherze `py`. Obecny importer CSV korzysta ze standardowej biblioteki. Testy przygotowywanego czytnika skoroszytu wymagają `openpyxl` z `requirements.txt`; samo przełączenie importu na nowe źródło nie jest jeszcze ukończone.
 
 ## Dane i rzetelność
 

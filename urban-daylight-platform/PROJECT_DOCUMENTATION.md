@@ -57,6 +57,7 @@ Aplikacja nie czyta ani nie usuwa źródłowego folderu po imporcie. Arkusz 1 ws
 
 - `npm run test:data` kontroluje strukturę wygenerowanego atlasu i kompletność benchmarków.
 - `npm run test:import` uruchamia testy parsera, kolejności rekordów, braków, powtarzalności eksportu i walidatora.
+- Testy przygotowywanego czytnika skoroszytu wymagają `openpyxl` z `requirements.txt`; dotychczasowy importer nadal używa CSV.
 - `npm test` uruchamia oba zestawy.
 - `npm run lint` sprawdza kod źródłowy.
 - `npm run build` uruchamia TypeScript i kompilację produkcyjną.
