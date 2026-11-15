@@ -364,6 +364,32 @@ class ImportDataTests(unittest.TestCase):
         finally:
             workbook.close()
 
+    def test_block_analysis_values_match_each_workbook_row_when_available(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        workbook = load_workbook(WORKBOOK_PATH, data_only=True, read_only=True)
+        try:
+            data, _ = build_data(WORKBOOK_PATH)
+            for city in data["cities"]:
+                for block in city["analysisUnits"]:
+                    row = block["source"]["row"]
+                    self.assertEqual(block["name"], workbook["DANE"][f"BC{row}"].value)
+                    for column, field in (("BF", "buildingIntensity"), ("BG", "greenSpaceRatio"), ("BH", "buildingCoverage"), ("BI", "avgFloors")):
+                        self.assertEqual(block["indicators"][field], workbook["DANE"][f"{column}{row}"].value)
+                    distributions = [
+                        *block["sunHoursDistribution"].values(),
+                        block["daylightPotentialDistribution"],
+                    ]
+                    for distribution in distributions:
+                        for item in distribution["bins"]:
+                            self.assertEqual(item["source"]["row"], row)
+                            self.assertEqual(item["value"], workbook["DANE"][item["source"]["cell"]].value)
+                    for item in block["solarEnergySpecsSource"]:
+                        self.assertEqual(item["source"]["row"], row)
+                        self.assertEqual(item["value"], workbook["DANE"][item["source"]["cell"]].value)
+        finally:
+            workbook.close()
+
     def test_exact_approved_assets_resolve_but_known_conflicts_stay_unresolved(self):
         if not WORKBOOK_PATH.exists():
             self.skipTest("Approved source workbook is not available")
