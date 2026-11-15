@@ -1,6 +1,7 @@
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, MapPin, Calendar, Building, Leaf, Train, GitCompare, ChevronRight, Lightbulb, ChevronDown, ChevronUp, Sun } from 'lucide-react'
 import Layout from '../components/Layout'
+import FormaCredit from '../components/FormaCredit'
 import QuarterDetail from '../components/QuarterDetail'
 import SafeImage from '../components/SafeImage'
 import DistributionChart from '../components/DistributionChart'
@@ -395,6 +396,10 @@ export default function CityPage() {
           </div>
         </div>
         
+        <div className="mb-6">
+          <FormaCredit />
+        </div>
+
         {/* Site-Level Analysis */}
         {city.siteAnalysis && (hasData(city.siteAnalysis.sunHoursImage) || 
           hasData(city.siteAnalysis.daylightPotentialImage) || 

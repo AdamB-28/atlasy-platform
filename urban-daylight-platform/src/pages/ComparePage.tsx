@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { ArrowLeft, ArrowLeftRight, ChevronDown, ChevronUp, Lightbulb, Minus, TrendingDown, TrendingUp } from 'lucide-react'
 import Layout from '../components/Layout'
+import FormaCredit from '../components/FormaCredit'
 import SafeImage from '../components/SafeImage'
 import { LoadingSpinner, NoData } from '../components/LoadingStates'
 import { ComparisonDistributionChart } from '../components/DistributionChart'
@@ -365,6 +366,7 @@ export default function ComparePage() {
       </section>
 
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="mb-8"><FormaCredit /></div>
         <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
           <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Urban Indicators</h3>
           <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">FAR is total floor area relative to site area; green-space ratio is the reported share of green space. Average floors, building coverage, and tree count describe the selected analysis unit. Values are shown only where reported.</p>

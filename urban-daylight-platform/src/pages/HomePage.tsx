@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { ArrowUpRight, ChevronDown, ChevronUp, MapPin, Sun } from 'lucide-react'
 import Layout from '../components/Layout'
+import FormaCredit from '../components/FormaCredit'
 import InteractiveMap from '../components/InteractiveMap'
 import CityCard from '../components/CityCard'
 import DistributionChart from '../components/DistributionChart'
@@ -171,6 +172,11 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="container mx-auto px-4 sm:px-6 py-6" aria-labelledby="methodology-title">
+        <h2 id="methodology-title" className="mb-2 text-lg font-semibold text-neutral-900 dark:text-white">Analysis methodology</h2>
+        <FormaCredit />
       </section>
 
       {notices[0] && (
