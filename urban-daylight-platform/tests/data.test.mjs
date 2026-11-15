@@ -95,6 +95,43 @@ test('the excluded Garnizon UB_2 row is not exported, while its exclusion source
   }])
 })
 
+test('source distributions retain plausible percentages, band counts and rounding-aware totals', () => {
+  for (const city of atlas.cities) {
+    const records = [
+      ...Object.values(city.siteAnalysis.sunHoursDistribution).map((data) => [data, 10]),
+      [city.siteAnalysis.daylightPotentialDistribution, 9],
+      ...city.analysisUnits.flatMap((unit) => [
+        ...Object.values(unit.sunHoursDistribution).map((data) => [data, 10]),
+        [unit.daylightPotentialDistribution, 9],
+      ]),
+    ]
+    for (const [distribution, count] of records) {
+      assert.equal(distribution.unit, '%')
+      assert.equal(distribution.bins.length, count)
+      const values = distribution.bins.map((bin) => bin.value)
+      assert.ok(values.every((value) => value === null || (typeof value === 'number' && value >= 0 && value <= 100)))
+      if (values.every((value) => value !== null)) {
+        const total = values.reduce((sum, value) => sum + value, 0)
+        assert.ok(Math.abs(total - 100) <= count * 0.5 + 0.001, `${city.name}: distribution total ${total}`)
+      }
+    }
+  }
+})
+
+test('reported solar panel areas follow the stated coverage or remain flagged', () => {
+  for (const city of atlas.cities) {
+    const records = [city.siteAnalysis.solarEnergySpecs, ...city.analysisUnits.map((unit) => unit.solarEnergySpecs)]
+    for (const specs of records) {
+      if (!specs || specs.area === null) continue
+      if (specs.panelArea === null) {
+        assert.ok(specs.panelAreaWarning, `${city.name}: missing panel-area explanation`)
+      } else {
+        assert.ok(Math.abs(specs.panelArea - specs.area * 0.6) <= 1, `${city.name}: panel area differs from 60%`)
+      }
+    }
+  }
+})
+
 test('known asset and solar ambiguities remain unresolved without substitutions or corrections', () => {
   const elephant = atlas.cities[0]
   const block = elephant.analysisUnits.find((item) => item.name === 'UB_1')

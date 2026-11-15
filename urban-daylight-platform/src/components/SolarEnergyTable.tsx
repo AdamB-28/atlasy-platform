@@ -52,6 +52,11 @@ export default function SolarEnergyTable({ specs }: SolarEnergyTableProps) {
           </table>
         </div>
       )}
+      {specs.annualElectricity !== null && (
+        <p className="text-xs text-neutral-600 dark:text-neutral-400">
+          The workbook reports annual electricity at 20% efficiency; calculation details are not specified in the imported data.
+        </p>
+      )}
     </div>
   )
 }

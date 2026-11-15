@@ -149,7 +149,7 @@ export default function DistributionChart({ data, title, color = 'amber', palett
               </div>
               {/* Bar */}
               <div
-                className={`w-full rounded-t-sm transition-all duration-300 ${bandColors ? '' : `${colors.bar} ${colors.barHover}`} min-h-[2px]`}
+                className={`w-full rounded-t-sm transition-all duration-300 ${bandColors ? '' : `${colors.bar} ${colors.barHover}`}`}
                 style={{ height: val === 0 ? '0%' : `${Math.max(pct, 2)}%`, backgroundColor: bandColors?.[i] }}
               />
             </div>
