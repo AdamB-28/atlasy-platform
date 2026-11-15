@@ -143,14 +143,15 @@ test('reported solar panel areas follow the stated coverage or remain flagged', 
   }
 })
 
-test('known asset and solar ambiguities remain unresolved without substitutions or corrections', () => {
+test('confirmed model alias and unresolved solar and Aspern image ambiguities retain provenance', () => {
   const elephant = atlas.cities[0]
   const block = elephant.analysisUnits.find((item) => item.name === 'UB_1')
   const model = block.imageLinks.find((link) => link.cell === 'BE8')
   assert.equal(model.referencedName, 'Elephant_and_Castle_UB_model_3D')
-  assert.equal(model.resolvedName, null)
-  assert.equal(model.publicUrl, null)
-  assert.equal(model.status, 'unresolved')
+  assert.equal(model.resolvedName, 'Elephant_and_Case_UB_1_model_3D')
+  assert.ok(model.publicUrl.endsWith('/Elephant_and_Case_UB_1_model_3D.PNG'))
+  assert.ok(['present', 'copied'].includes(model.status))
+  assert.match(model.aliasNote, /owner confirmed/)
 
   const blockSolar = Object.fromEntries(block.solarEnergySpecsSource.map((item) => [item.label, item.value]))
   assert.equal(blockSolar['area (m²)'], 9971)
@@ -161,7 +162,6 @@ test('known asset and solar ambiguities remain unresolved without substitutions 
     block.solarEnergySpecsSource.find((item) => item.label === 'area to be covered by the panels (m²) - 60%').source.cell,
     'DG8',
   )
-  assert.ok(atlas.notices.some((notice) => notice.includes('TASK-15')))
   assert.ok(atlas.notices.some((notice) => notice.includes('TASK-16')))
 
   const aspern = atlas.cities.find((city) => city.name === 'Aspern Seestadt')
@@ -174,7 +174,7 @@ test('known asset and solar ambiguities remain unresolved without substitutions 
   assert.ok(atlas.notices.some((notice) => notice.includes('TASK-17')))
   assert.deepEqual(
     atlas.imageCatalog.filter((link) => link.status === 'unresolved').map((link) => link.cell).sort(),
-    ['AL15', 'AV15', 'BE8', 'Q15'],
+    ['AL15', 'AV15', 'Q15'],
   )
 })
 
@@ -192,7 +192,11 @@ test('exact approved image references resolve to public assets', async () => {
     Object.values(folders).map((folder) => [folder, []]),
   )
   for (const link of resolved) {
-    assert.equal(link.referencedName, link.resolvedName)
+    if (link.cityId === 'elephant-and-castle' && link.cell === 'BE8') {
+      assert.equal(link.resolvedName, 'Elephant_and_Case_UB_1_model_3D')
+    } else {
+      assert.equal(link.referencedName, link.resolvedName)
+    }
     assert.equal(link.sheet, 'DANE')
     assert.ok(link.cell)
     const assetPath = path.resolve('public', folders[link.cityId], `${link.resolvedName}.PNG`)

@@ -313,7 +313,6 @@ class ImportDataTests(unittest.TestCase):
         self.assertIsNone(block["solarEnergySpecs"]["panelArea"])
         self.assertIn("DG8", block["solarEnergySpecs"]["panelAreaWarning"])
         self.assertIn("DD8", block["solarEnergySpecs"]["panelAreaWarning"])
-        self.assertTrue(any("TASK-15" in notice for notice in data["notices"]))
         self.assertTrue(any("TASK-16" in notice for notice in data["notices"]))
         self.assertTrue(any("TASK-17" in notice for notice in data["notices"]))
         self.assertFalse(any(row["row"] == 11 for row in data["sourceWorkbook"]["sheets"]["DANE"]))
@@ -420,7 +419,12 @@ class ImportDataTests(unittest.TestCase):
                 self.assertTrue(
                     (root / "public" / public_folder / f"{link['resolvedName']}.PNG").exists()
                 )
-                self.assertEqual(link["referencedName"], link["resolvedName"])
+                if link["cell"] == "BE8":
+                    self.assertEqual(link["referencedName"], "Elephant_and_Castle_UB_model_3D")
+                    self.assertEqual(link["resolvedName"], "Elephant_and_Case_UB_1_model_3D")
+                    self.assertIn("owner confirmed", link["aliasNote"])
+                else:
+                    self.assertEqual(link["referencedName"], link["resolvedName"])
                 self.assertEqual(link["sourceFile"], WORKBOOK_PATH.name)
                 self.assertEqual(link["sheet"], "DANE")
                 self.assertTrue(link["cell"])
@@ -430,7 +434,7 @@ class ImportDataTests(unittest.TestCase):
                 for link in data["imageCatalog"]
                 if link["status"] == "unresolved"
             }
-            self.assertEqual(set(unresolved), {"BE8", "Q15", "AL15", "AV15"})
+            self.assertEqual(set(unresolved), {"Q15", "AL15", "AV15"})
             for cell, link in unresolved.items():
                 self.assertIsNone(link["publicUrl"], cell)
                 self.assertIsNone(link["tempPath"], cell)

@@ -820,7 +820,7 @@
             }
           },
           "plan": "Elephant_and_Castle_UB_1_v2",
-          "form3d": null,
+          "form3d": "Elephant_and_Case_UB_1_model_3D",
           "far": 5.29,
           "indicators": {
             "buildingIntensity": 5.29,
@@ -1712,15 +1712,15 @@
               "cell": "BE8",
               "rawCell": "Elephant_and_Castle_UB_model_3D",
               "referencedName": "Elephant_and_Castle_UB_model_3D",
-              "resolvedName": null,
-              "aliasNote": "TASK-15: the similar UB_1 model filename has not been confirmed.",
+              "resolvedName": "Elephant_and_Case_UB_1_model_3D",
+              "aliasNote": "TASK-15: owner confirmed this UB_1 model filename on 2026-11-15.",
               "sourceFile": "ATLASY_DANE_261107.xlsx",
-              "sourceTempPath": null,
+              "sourceTempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/MODEL_3D/Elephant_and_Case_UB_1_model_3D.PNG",
               "sheet": "DANE",
               "row": 8,
-              "tempPath": null,
-              "publicUrl": null,
-              "status": "unresolved"
+              "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/MODEL_3D/Elephant_and_Case_UB_1_model_3D.PNG",
+              "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/Elephant_and_Case_UB_1_model_3D.PNG",
+              "status": "copied"
             },
             {
               "field": "sunHours",
@@ -22680,15 +22680,15 @@
       "cell": "BE8",
       "rawCell": "Elephant_and_Castle_UB_model_3D",
       "referencedName": "Elephant_and_Castle_UB_model_3D",
-      "resolvedName": null,
-      "aliasNote": "TASK-15: the similar UB_1 model filename has not been confirmed.",
+      "resolvedName": "Elephant_and_Case_UB_1_model_3D",
+      "aliasNote": "TASK-15: owner confirmed this UB_1 model filename on 2026-11-15.",
       "sourceFile": "ATLASY_DANE_261107.xlsx",
-      "sourceTempPath": null,
+      "sourceTempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/MODEL_3D/Elephant_and_Case_UB_1_model_3D.PNG",
       "sheet": "DANE",
       "row": 8,
-      "tempPath": null,
-      "publicUrl": null,
-      "status": "unresolved"
+      "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/MODEL_3D/Elephant_and_Case_UB_1_model_3D.PNG",
+      "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/Elephant_and_Case_UB_1_model_3D.PNG",
+      "status": "copied"
     },
     {
       "cityId": "elephant-and-castle",
@@ -24806,7 +24806,6 @@
     "Q15 is a Kronsberg-named image reference on the Aspern Seestadt row; it remains unresolved pending TASK-17.",
     "AL15 is a Kronsberg-named image reference on the Aspern Seestadt row; it remains unresolved pending TASK-17.",
     "AV15 is a Kronsberg-named image reference on the Aspern Seestadt row; it remains unresolved pending TASK-17.",
-    "DANE!BE8 has an unresolved UB_1 3D-model filename mismatch (TASK-15); no similarly named image is substituted.",
     "Elephant Park DANE!DD8 and DANE!DG8 are preserved exactly despite the solar-area inconsistency; no correction is inferred pending TASK-16."
   ],
   "exclusions": [

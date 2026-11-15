@@ -120,7 +120,6 @@ CITY_FOLDERS = {
     "orestad-syd": "ORESTADT",
 }
 KNOWN_CONFLICT_CELLS = {
-    "BE8": "TASK-15: the similar UB_1 model filename has not been confirmed.",
     "Q15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
     "AL15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
     "AV15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
@@ -583,9 +582,18 @@ def resolve_image_links(
                 if not asset_root:
                     continue
                 referenced = link["referencedName"]
+                approved_alias = (
+                    city["id"] == "elephant-and-castle"
+                    and record.get("name") == "UB_1"
+                    and cell == "BE8"
+                    and referenced == "Elephant_and_Castle_UB_model_3D"
+                )
+                resolved = "Elephant_and_Case_UB_1_model_3D" if approved_alias else referenced
+                if approved_alias:
+                    link["aliasNote"] = "TASK-15: owner confirmed this UB_1 model filename on 2026-11-15."
                 matches = exact_asset_matches(
                     asset_root,
-                    referenced,
+                    resolved,
                     city["id"],
                     is_location_image=link["field"] == "location.imageUrl",
                 )
@@ -593,12 +601,12 @@ def resolve_image_links(
                     if len(matches) > 1:
                         link["aliasNote"] = "Multiple approved assets have this exact filename."
                         warnings.append(
-                            f"{city['name']} {cell}: ambiguous exact image {referenced}.PNG"
+                            f"{city['name']} {cell}: ambiguous exact image {resolved}.PNG"
                         )
                     else:
                         link["aliasNote"] = "No exact asset found in the approved source folders."
                         warnings.append(
-                            f"{city['name']} {cell}: {referenced}.PNG was not found in the approved "
+                            f"{city['name']} {cell}: {resolved}.PNG was not found in the approved "
                             "location-specific source folder."
                         )
                     continue
@@ -606,21 +614,21 @@ def resolve_image_links(
                 if not public_dir:
                     continue
                 source = matches[0]
-                target = public_dir / folder / f"{referenced}.PNG"
+                target = public_dir / folder / f"{resolved}.PNG"
                 target.parent.mkdir(parents=True, exist_ok=True)
                 if target.exists() and filecmp.cmp(source, target, shallow=False):
                     link["status"] = "present"
                 else:
                     shutil.copy2(source, target)
                     link["status"] = "copied"
-                link["resolvedName"] = referenced
+                link["resolvedName"] = resolved
                 try:
                     link["sourceTempPath"] = source.relative_to(ROOT).as_posix()
                 except ValueError:
                     link["sourceTempPath"] = None
                 link["tempPath"] = link["sourceTempPath"]
-                link["publicUrl"] = f"/atlasy-platform/{folder}/{referenced}.PNG"
-                set_image_field(record, link["field"], referenced)
+                link["publicUrl"] = f"/atlasy-platform/{folder}/{resolved}.PNG"
+                set_image_field(record, link["field"], resolved)
 
     data["imageCatalog"] = [
         {"cityId": city["id"], **link}
@@ -736,15 +744,6 @@ def build_data(
     elephant = cities_by_name.get("elephant & castle – elephant park")
     if elephant:
         block = next((item for item in elephant["analysisUnits"] if item["name"] == "UB_1"), None)
-        model = next(
-            (link for link in block.get("imageLinks", []) if link["cell"] == "BE8"),
-            None,
-        ) if block else None
-        if model:
-            notices.append(
-                "DANE!BE8 has an unresolved UB_1 3D-model filename mismatch (TASK-15); "
-                "no similarly named image is substituted."
-            )
         solar = {
             item["label"]: item["value"]
             for item in (block or {}).get("solarEnergySpecsSource", [])
