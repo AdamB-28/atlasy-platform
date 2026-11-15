@@ -46,22 +46,12 @@ export function parseRatios(raw: string): HeightWidthRatio[] {
 
 export function parseWidths(raw: string): StreetWidthBand[] {
   const results: StreetWidthBand[] = []
-  const segments = raw.split(',').map((segment) => segment.trim()).filter(Boolean)
-  for (const segment of segments) {
-    const rangeMatch = segment.match(/([\d,.]+)\s*-\s*([\d,.]+)\s*m?/)
-    if (rangeMatch) {
-      results.push({
-        min: parseFloat(rangeMatch[1].replace(',', '.')),
-        max: parseFloat(rangeMatch[2].replace(',', '.')),
-        label: `${rangeMatch[1]}–${rangeMatch[2]}m`,
-      })
-      continue
-    }
-    const singleMatch = segment.match(/([\d,.]+)\s*m?/)
-    if (singleMatch) {
-      const value = parseFloat(singleMatch[1].replace(',', '.'))
-      results.push({ min: value, max: value, label: `${singleMatch[1]}m` })
-    }
+  const pattern = /(\d+(?:[.,]\d+)?)\s*m?\s*(?:-\s*(\d+(?:[.,]\d+)?)\s*m?)?/gi
+  for (const match of raw.matchAll(pattern)) {
+    const min = Number(match[1].replace(',', '.'))
+    const max = match[2] ? Number(match[2].replace(',', '.')) : min
+    if (min <= 0 || max < min) continue
+    results.push({ min, max, label: match[2] ? `${match[1]}–${match[2]}m` : `${match[1]}m` })
   }
   return results
 }

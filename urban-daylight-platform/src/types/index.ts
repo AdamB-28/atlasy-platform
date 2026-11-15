@@ -83,6 +83,7 @@ export interface QuarterIndicators {
   treeCount: number | string | null;
   heightToWidthRatio: string | null;
   streetWidth: string | null;
+  buildingHeight: string | null;
 }
 
 export interface SimulationData {

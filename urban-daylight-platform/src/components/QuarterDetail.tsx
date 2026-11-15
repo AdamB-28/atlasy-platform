@@ -146,6 +146,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
             <UrbanSectionDiagram
               heightToWidthRatio={quarter.indicators.heightToWidthRatio}
               streetWidth={quarter.indicators.streetWidth}
+              buildingHeight={quarter.indicators.buildingHeight}
               sunAngle={streetSunEnabled ? streetSunAngle : undefined}
               sunFrom={streetSunFrom}
             />

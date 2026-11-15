@@ -8,6 +8,7 @@ type EnlargeDiagram = (title: string, diagram: ReactElement<SVGProps<SVGSVGEleme
 interface UrbanSectionDiagramProps {
   heightToWidthRatio: string | null
   streetWidth: string | null
+  buildingHeight: string | null
   showNotes?: boolean
   sunAngle?: number
   sunFrom?: 'left' | 'right'
@@ -32,9 +33,8 @@ interface StreetGeometry {
   groundY: number
 }
 
-function getStreetGeometry(width: { min: number; max: number }, heightToWidthRatio: number | null): StreetGeometry {
+function getStreetGeometry(width: { min: number; max: number }, estimatedHeightM: number | null): StreetGeometry {
   const averageWidthM = (width.min + width.max) / 2
-  const estimatedHeightM = heightToWidthRatio === null ? null : averageWidthM * heightToWidthRatio
   let scale = Math.max(2.6, Math.min(5.2, 110 / averageWidthM))
   if (estimatedHeightM !== null && estimatedHeightM * scale > 118) scale = 118 / estimatedHeightM
 
@@ -446,10 +446,12 @@ function StreetSection({
   )
 }
 
-export default function UrbanSectionDiagram({ heightToWidthRatio, streetWidth, showNotes = true, sunAngle, sunFrom = 'left' }: UrbanSectionDiagramProps) {
+export default function UrbanSectionDiagram({ heightToWidthRatio, streetWidth, buildingHeight, showNotes = true, sunAngle, sunFrom = 'left' }: UrbanSectionDiagramProps) {
   const [enlargedDiagram, setEnlargedDiagram] = useState<{ title: string; diagram: ReactElement<SVGProps<SVGSVGElement>> } | null>(null)
   const ratios = heightToWidthRatio ? parseRatios(heightToWidthRatio) : []
   const widths = streetWidth ? parseWidths(streetWidth) : []
+  const exampleHeight = buildingHeight ? parseWidths(buildingHeight)[0] : undefined
+  const exampleHeightM = exampleHeight ? (exampleHeight.min + exampleHeight.max) / 2 : null
   const ratioValues = ratios.map((ratio) => ratio.h / (ratio.w || 1))
   const streetRatios = widths.map((_, index) => {
     if (ratioValues.length === 1) return ratioValues[0]
@@ -469,7 +471,7 @@ export default function UrbanSectionDiagram({ heightToWidthRatio, streetWidth, s
     <div className="space-y-4">
       {showNotes && (
         <p className="max-w-4xl text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-          H:W compares building height (H) with road width (W). Blue W is measured; red H is estimated from the paired ratio and average width. Floor rows use about 3 m per storey; window bays scale with estimated facade width and are schematic.
+          Blue W shows the source street width. Red H is either calculated from a paired H:W ratio or an illustrative height from the block. Floor rows, windows, sidewalks and trees are schematic.
         </p>
       )}
       {/* H/W Ratio Diagram */}
@@ -540,19 +542,27 @@ export default function UrbanSectionDiagram({ heightToWidthRatio, streetWidth, s
           <p className="text-[10px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-3 transition-colors duration-500">
             Street Cross-Sections
           </p>
-          {showNotes && <p className="mb-3 text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">Ratios pair with widths in source order when counts match; one ratio applies to every listed street. When pairing is ambiguous, no height is inferred. Top-view footprints, sidewalks, and trees are schematic.</p>}
+          {streetRatios.some((ratio) => ratio === null) && exampleHeight && (
+            <p className="mb-3 text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
+              Illustrative sections use {exampleHeight.label}, the first reported building height{exampleHeight.min !== exampleHeight.max ? ' range (shown at its midpoint)' : ''}, for both sides. The source does not identify which heights face each street. H:W range for the block: {heightToWidthRatio || 'not reported'}.
+            </p>
+          )}
           <div className={`grid gap-4 ${widths.length === 1 ? 'grid-cols-1 max-w-xs mx-auto' : widths.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3'}`}>
             {widths.map((w, i) => {
               const label = `Street ${i + 1}`
-              const geometry = getStreetGeometry(w, streetRatios[i])
+              const ratio = streetRatios[i]
+              const illustrative = ratio === null
+              const height = ratio === null ? exampleHeightM : ((w.min + w.max) / 2) * ratio
+              const geometry = getStreetGeometry(w, height)
+              const supportedSunAngle = illustrative ? undefined : sunAngle
               return (
                 <div key={i} className="min-w-0 space-y-3">
-                  {streetRatios[i] !== null ? (
-                    <StreetSection widthLabel={w.label} label={label} index={i} geometry={geometry} onEnlarge={onEnlarge} sunAngle={sunAngle} sunFrom={sunFrom} />
+                  {height !== null ? (
+                    <StreetSection widthLabel={w.label} label={illustrative ? `${label} · illustrative` : label} index={i} geometry={geometry} onEnlarge={onEnlarge} sunAngle={supportedSunAngle} sunFrom={sunFrom} />
                   ) : (
                     <p className="text-[10px] text-neutral-500 dark:text-neutral-400">{label} · Cross-section unavailable: no unambiguous source H:W ratio.</p>
                   )}
-                  <StreetPlan width={w} label={label} geometry={geometry} onEnlarge={onEnlarge} sunAngle={sunAngle} sunFrom={sunFrom} />
+                  <StreetPlan width={w} label={illustrative && height !== null ? `${label} · illustrative` : label} geometry={geometry} onEnlarge={onEnlarge} sunAngle={supportedSunAngle} sunFrom={sunFrom} />
                 </div>
               )
             })}

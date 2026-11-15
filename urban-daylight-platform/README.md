@@ -31,6 +31,7 @@ Launcher Pythona szuka interpretera wskazanego przez `PYTHON`, następnie w loka
 - `benchmarks` oraz symulacje pomieszczeń nie są odtwarzane ze starszych CSV i pozostają puste.
 - Każdy rekord zachowuje pochodzenie: nazwę skoroszytu, arkusz, wiersz i — dla wartości komórkowych — adres komórki.
 - Puste pola pozostają puste. Aplikacja nie dopisuje fikcyjnych wartości i nie porównuje bezpośrednio wyników z różnych skal analizy.
+- Przekroje ulic korzystają z szerokości i wysokości budynków ze skoroszytu. Jeśli nie określono przypisania wysokości do poszczególnych ulic, przekrój jest ilustracyjny: używa pierwszej podanej wysokości (środka przedziału, jeśli jest zakresem), a symulacja cienia nie jest dla niego wyświetlana.
 - Niezweryfikowane odwołania graficzne i niespójne wartości słoneczne są oznaczone do sprawdzenia. Wyjątki zatwierdzone przez właściciela lub uzgodnione z materiałem źródłowym zachowują oryginalną wartość i opis decyzji.
 
 ## Polecenia

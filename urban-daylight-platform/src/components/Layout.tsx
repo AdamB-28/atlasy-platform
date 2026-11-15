@@ -93,10 +93,12 @@ export default function Layout({ children }: LayoutProps) {
                 <li>dr inż. arch. Adam Bladowski</li>
                 <li>mgr inż. Anna Zackiewicz</li>
               </ul>
-              <p className="mt-3 text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                Prof. Cláudia Naves David Amorim · University of Brasília, Brazil
-                {' '}(<a href="https://task70.iea-shc.org/participants" target="_blank" rel="noopener noreferrer" className="underline hover:text-white">IEA Task 70 participant</a>).
+              <p className="mt-4 mb-3 text-xs sm:text-sm text-neutral-400 leading-relaxed">
+                University of Brasília, Brazil
               </p>
+              <ul className="text-xs sm:text-sm text-neutral-300 leading-relaxed space-y-1">
+                <li>Prof. Cláudia Naves David Amorim</li>
+              </ul>
             </div>
             
             <div className="sm:col-span-2 lg:col-span-1">

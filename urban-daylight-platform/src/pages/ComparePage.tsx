@@ -253,13 +253,14 @@ export default function ComparePage() {
     return (
       <div className="card mb-12">
         <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-6 transition-colors duration-500">Street Geometry & Cross-Sections</h3>
-        <p className="mb-5 max-w-5xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">Blue W spans facade-to-facade using the source street width. Red H is estimated as H:W Ă— average W, not directly measured. Dark fill marks the receiving facade; a dashed arrow shows where the shadow would continue if that building were absent. Both views share scale; surroundings are schematic.</p>
+        <p className="mb-5 max-w-5xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">Blue W shows the source street width. Red H is calculated from a paired ratio or shown as an illustrative source height; surrounding details are schematic. Shadows are shown only for paired ratios.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="p-3 md:p-4 rounded-lg border-2 border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/20 transition-colors duration-500">
             <div className="text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide mb-3">{panelNameA}</div>
             <UrbanSectionDiagram
               heightToWidthRatio={quarterA.indicators.heightToWidthRatio}
               streetWidth={quarterA.indicators.streetWidth}
+              buildingHeight={quarterA.indicators.buildingHeight}
               showNotes={false}
               sunAngle={streetSunEnabled ? streetSunAngle : undefined}
               sunFrom={streetSunFrom}
@@ -270,6 +271,7 @@ export default function ComparePage() {
             <UrbanSectionDiagram
               heightToWidthRatio={quarterB.indicators.heightToWidthRatio}
               streetWidth={quarterB.indicators.streetWidth}
+              buildingHeight={quarterB.indicators.buildingHeight}
               showNotes={false}
               sunAngle={streetSunEnabled ? streetSunAngle : undefined}
               sunFrom={streetSunFrom}
