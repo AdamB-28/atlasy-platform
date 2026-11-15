@@ -45,7 +45,7 @@ function BenchmarkExplorer({ benchmarks, unassignedProfiles, sourceFolder }: { b
             >
               {benchmarks.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
             </select>
-            <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">Source: {benchmark.source.file}, row {benchmark.source.row}. Values are area shares.</p>
+            <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">Values are area shares.</p>
             <AdminDataPanel title={`${benchmark.name} · ${benchmark.source.file}`} data={benchmark} sourcePath={tempSourcePath(benchmark.source.tempPath) ?? (sourceFolder ? `${sourceFolder}/${benchmark.source.file}` : benchmark.source.file)} sourceCell={`${benchmark.source.sheet} row ${benchmark.source.row}`} />
           </div>
 
@@ -99,16 +99,15 @@ function BenchmarkExplorer({ benchmarks, unassignedProfiles, sourceFolder }: { b
                 )}
                 {benchmark.context.daylightPotentialDistribution && (
                   <div className="mt-5 max-w-2xl">
-                    <DistributionChart data={benchmark.context.daylightPotentialDistribution} title="Site daylight potential · Arkusz 1" color="green" palette="daylight" unitLabel="Area share within each score band (%)" />
+                    <DistributionChart data={benchmark.context.daylightPotentialDistribution} title="Site daylight potential" color="green" palette="daylight" unitLabel="Area share within each score band (%)" />
                   </div>
                 )}
                 {benchmark.context.sourceNote && <p className="mt-3 text-xs text-amber-800 dark:text-amber-200">{benchmark.context.sourceNote}</p>}
-                {benchmark.context.source && <p className="mt-3 text-[11px] text-neutral-500">Additional context: {benchmark.context.source.file}, Arkusz 1 row {benchmark.context.source.row}.</p>}
               </div>
             )}
             {benchmark.unassignedProfiles?.map((profile) => (
               <div key={profile.sourceRow} className="mt-5 border-t border-dashed border-amber-400 pt-4">
-                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">{profile.name} · source row {profile.sourceRow}</h3>
+                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">{profile.name}</h3>
                 <p className="mt-1 text-xs text-amber-800 dark:text-amber-200">{profile.attributionNote}</p>
                 <div className="mt-4 grid sm:grid-cols-2 gap-5">
                   {profile.sunHoursDistribution?.ground && <DistributionChart data={profile.sunHoursDistribution.ground} title="Ground" color="amber" palette="sunHours" />}
@@ -129,7 +128,7 @@ function BenchmarkExplorer({ benchmarks, unassignedProfiles, sourceFolder }: { b
             <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">Measurements without a place or block ID stay separate to avoid guessing their location.</p>
             {unassignedProfiles.map((profile) => (
               <div key={profile.sourceRow} className="mt-4 grid sm:grid-cols-[180px_1fr] gap-4 items-start">
-                <p className="text-sm font-medium text-neutral-900 dark:text-white">Row {profile.sourceRow}</p>
+                <p className="text-sm font-medium text-neutral-900 dark:text-white">{profile.name}</p>
                 <div className="grid sm:grid-cols-2 gap-5">
                   {profile.sunHoursDistribution?.ground && <DistributionChart data={profile.sunHoursDistribution.ground} title="Ground" color="amber" palette="sunHours" />}
                   {profile.sunHoursDistribution?.facades && <DistributionChart data={profile.sunHoursDistribution.facades} title="Facades" color="amber" palette="sunHours" />}
@@ -183,7 +182,7 @@ export default function HomePage() {
       {notices[0] && (
         <div className="border-b border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30">
           <div className="container mx-auto px-4 sm:px-6 py-3 text-xs sm:text-sm text-amber-900 dark:text-amber-100" role="note">
-            Data limitation: {notices[0]}
+            Map locations are independently verified against OpenStreetMap features; Ørestad Syd uses the 8tallet building within the study area, not the district centre.
           </div>
         </div>
       )}

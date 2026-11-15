@@ -1,4 +1,5 @@
 import type { SolarEnergySpecs } from '../types'
+import { useAdminMode } from '../contexts/AdminModeContext'
 
 interface SolarEnergyTableProps {
   specs: SolarEnergySpecs
@@ -14,6 +15,11 @@ function formatNumber(val: number | null, unit: string, exact = false): string {
 }
 
 export default function SolarEnergyTable({ specs }: SolarEnergyTableProps) {
+  const { isAdminMode } = useAdminMode()
+  const warning = specs.panelAreaWarning
+  const publicWarning = warning?.includes('missing decimal comma')
+    ? 'The panel area was corrected for a decimal-place error. It differs from exactly 60% of the reported roof area; the coverage calculation requires clarification.'
+    : 'The reported panel area exceeds the roof area and is omitted pending verification.'
   const rows = [
     { label: 'Total Roof Area', value: specs.area, unit: 'm²' },
     { label: 'Total Solar Energy', value: specs.totalSolarEnergy, unit: 'kWh' },
@@ -28,7 +34,7 @@ export default function SolarEnergyTable({ specs }: SolarEnergyTableProps) {
     <div className="space-y-3">
       {specs.panelAreaWarning && (
         <p role="status" className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
-          {specs.panelAreaWarning}
+          {isAdminMode ? warning : publicWarning}
         </p>
       )}
       {rows.length > 0 && (

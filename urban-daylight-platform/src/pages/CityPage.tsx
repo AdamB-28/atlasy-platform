@@ -147,12 +147,7 @@ export default function CityPage() {
                   <strong>Data note:</strong> Only reported measurements are shown. Missing values are not estimated.
                 </p>
               </div>
-              <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400" data-testid="data-provenance">
-                Source: {city.source.file}, {city.source.sheet}, row {city.source.row} · {city.source.status === 'partial' ? 'Partial dataset' : 'Source data'}
-              </p>
-              {notices.map((notice) => (
-                <p key={notice} className="mt-2 max-w-3xl text-xs text-amber-800 dark:text-amber-200" role="note">{notice}</p>
-              ))}
+              <AdminDataPanel title="Data notes" data={notices} />
               <AdminDataPanel
                 title={`${city.name} · source row ${city.source.row}`}
                 data={city}
@@ -214,9 +209,6 @@ export default function CityPage() {
           <section className="card mb-8 sm:mb-12" aria-labelledby="urban-form-heading">
             <h2 id="urban-form-heading" className="section-title text-base md:text-lg">Urban form</h2>
             <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">{city.urbanForm}</p>
-            <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400">
-              Source: {city.source.file}, {city.source.sheet} P{city.source.row}
-            </p>
           </section>
         )}
         {/* Timeline and Location */}
