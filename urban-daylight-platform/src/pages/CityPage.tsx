@@ -259,6 +259,21 @@ export default function CityPage() {
                     credit="Schwarzplan: ESRI basemap accessed in QGIS via QuickMapServices; building data © OpenStreetMap contributors, with some building data modified."
                     className="w-full rounded-lg"
                   />
+                  {city.id === 'elephant-and-castle' && city.overview.schwarzplanImage === 'Elephant_and_Castle_schwarzplan_261107' && (
+                    <figure className="mt-4">
+                      <svg
+                        viewBox="1020 750 370 350"
+                        role="img"
+                        aria-label="Elephant Park study-area detail, enlarged from the Schwarzplan"
+                        className="w-full rounded-lg border border-neutral-200 dark:border-neutral-700"
+                      >
+                        <image href={getImagePath(city.overview.schwarzplanImage)} width="2480" height="1748" />
+                      </svg>
+                      <figcaption className="mt-2 text-xs text-neutral-600 dark:text-neutral-400">
+                        Study-area detail, enlarged from the Schwarzplan above. The same source and credits apply.
+                      </figcaption>
+                    </figure>
+                  )}
                 </div>
               )}
               
