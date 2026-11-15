@@ -3062,7 +3062,677 @@
           "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/Elephant_and_Castle_solar_energy_260925.PNG",
           "status": "present"
         }
-      ]
+      ],
+      "narrative": {
+        "descriptions": [
+          {
+            "value": "Elephant Park is a large-scale, high-density mixed-use regeneration project located in Elephant & Castle, within the London Borough of Southwark. It forms a central component of the wider Elephant & Castle regeneration programme, which aims to transform a former post-war residential estate and car-oriented urban environment into a more accessible, environmentally sustainable and multifunctional urban district.",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 3,
+              "cell": "D3"
+            }
+          },
+          {
+            "value": "The site was previously occupied by the Heygate Estate, a public housing complex completed in 1974, comprising 1,212 dwellings and accommodating approximately 3,000 residents. The regeneration process was initiated in 1998, when Southwark Council began considering the redevelopment of the estate. A strategic planning framework was adopted in 2004, followed by the selection of Lendlease as the principal development partner in 2007. The regeneration agreement was signed in 2010, and planning permission for Elephant Park was granted in 2013. Demolition was completed in 2014, followed by phased construction and the first residential completions in 2015. Further development has continued into the 2020s (Southwark Council, n.d.; Lendlease, 2026).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 4,
+              "cell": "D4"
+            }
+          },
+          {
+            "value": "Covering approximately 9.7 hectares, Elephant Park is a residential-led mixed-use development planned to accommodate around 3,000 new dwellings, alongside retail, office, leisure and community facilities. The wider Elephant & Castle regeneration programme aims to deliver at least 5,000 new and replacement homes, improve transport infrastructure and establish a new metropolitan centre. Development is coordinated through a public–private partnership between Southwark Council and Lendlease, with architectural and landscape design undertaken by several practices, including Make Architects, AHMM, Maccreanor Lavington and Gillespies (Southwark Council, n.d.; Make Architects, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 3,
+              "cell": "E3"
+            }
+          },
+          {
+            "value": "The neighbourhood is characterised by compact, high-density urban morphology, combining perimeter blocks, courtyard housing, mid-rise apartment buildings, townhouses and residential towers. The original development framework included buildings ranging from approximately 3 to 31 storeys, creating a differentiated urban skyline. Higher buildings are concentrated around key urban nodes, while lower residential structures establish more intimate streets and landscaped courtyards. The development replaces the former estate's elevated pedestrian walkways and separated circulation system with a more permeable street network connected to the surrounding urban fabric (Make Architects, n.d.; Southwark Council, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 3,
+              "cell": "F3"
+            }
+          },
+          {
+            "value": "A defining feature of the masterplan is the integration of high-density residential development with accessible public spaces and green infrastructure. Approximately 11 acres (4.45 ha) of new and improved public spaces are planned across the development, including a central park of approximately 2 acres (0.8 ha). The landscape strategy incorporates preserved mature trees, new planting, landscaped courtyards, pedestrian streets, playgrounds and rain gardens. The central park also includes Elephant Springs, an interactive water feature, and the Tree House community pavilion (Gillespies, n.d.; Lendlease, 2026).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 4,
+              "cell": "F4"
+            }
+          },
+          {
+            "value": "Elephant Park follows the principles of transit-oriented development (TOD), benefiting from its central London location and direct access to the Underground, National Rail services and extensive bus connections. The redevelopment introduces new pedestrian and cycling routes, reconnecting previously fragmented neighbourhoods and improving accessibility to surrounding streets and public facilities. Ground-floor retail, cafés, restaurants and community uses contribute to active streets and short-distance accessibility (Southwark Council, n.d.; Make Architects, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 3,
+              "cell": "G3"
+            }
+          },
+          {
+            "value": "Environmental sustainability is addressed through energy-efficient buildings, low-carbon district energy supply and integrated green infrastructure. The Elephant Park Energy Hub provides heating and hot water through a combined heat and power (CHP) system using natural gas, with emissions offset through grid-injected biomethane. The development was designed to achieve operational net-zero carbon ambitions, with residential buildings targeting energy performance at least 35% better than the applicable UK Building Regulations. Selected residential buildings also demonstrate Passivhaus principles, while rain gardens and landscape-based drainage contribute to urban climate adaptation (Lendlease, 2026; Elephant Park, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 3,
+              "cell": "H3"
+            }
+          },
+          {
+            "value": "The regeneration also incorporates employment initiatives, local business opportunities and affordable housing. However, social sustainability remains a contested aspect of the project, particularly regarding the displacement of former Heygate residents and the replacement of social-rented housing. Although the development has improved public-space accessibility and environmental quality, research has questioned the distribution of its social and economic benefits (Flynn, 2016; Southwark Council, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 4,
+              "cell": "H4"
+            }
+          },
+          {
+            "value": "Elephant Park demonstrates how high-density urban regeneration can combine housing intensification, public transport accessibility, green infrastructure and low-carbon energy technologies within an existing metropolitan centre. At the same time, it illustrates the importance of evaluating sustainable neighbourhood development not only through environmental and spatial indicators but also through housing affordability, social continuity and equitable access to the benefits of regeneration.",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 3,
+              "cell": "I3"
+            }
+          }
+        ],
+        "planningPrinciples": [
+          {
+            "value": "Integrated urban regeneration and densification – Transforming a former post-war housing estate into a compact, multifunctional urban district, combining new housing, employment, commercial activities and public facilities (Southwark Council, n.d.; Make Architects, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 4,
+              "cell": "C4"
+            }
+          },
+          {
+            "value": "Mixed-use and short-distance neighbourhood – Combining residential, retail, office, cultural and community functions, with active ground-floor frontages supporting walkability and local economic activity (Make Architects, n.d.; Lendlease, 2026).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 6,
+              "cell": "C6"
+            }
+          },
+          {
+            "value": "Transit-oriented development and urban connectivity – Prioritising public transport, walking and cycling, while restoring pedestrian connections across the former Heygate Estate and integrating the district with the surrounding street network (Southwark Council, n.d.; Make Architects, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 7,
+              "cell": "C7"
+            }
+          },
+          {
+            "value": "Green infrastructure and public-space integration – Creating a central park, landscaped courtyards, tree-lined streets, playgrounds and publicly accessible open spaces, while preserving mature trees and introducing new vegetation (Gillespies, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 8,
+              "cell": "C8"
+            }
+          },
+          {
+            "value": "Climate adaptation and sustainable water management – Incorporating rain gardens, permeable landscaped areas and stormwater management solutions to improve urban resilience and environmental quality (Gillespies, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 9,
+              "cell": "C9"
+            }
+          },
+          {
+            "value": "Energy efficiency and low-carbon district heating – Implementing high-performance residential buildings, selected Passivhaus solutions and a centralised energy hub supplying heating and hot water through CHP and biomethane-based carbon accounting (Lendlease, 2026).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 10,
+              "cell": "C10"
+            }
+          },
+          {
+            "value": "Community facilities and local economic development – Providing local services, public amenities, business premises and employment and training opportunities as part of a comprehensive regeneration strategy (Southwark Council, n.d.; Lendlease, 2026).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 11,
+              "cell": "C11"
+            }
+          },
+          {
+            "value": "Public–private partnership and phased implementation – Coordinating urban regeneration through a long-term partnership between Southwark Council and Lendlease, supported by multiple architectural practices and staged project delivery (Southwark Council, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 12,
+              "cell": "C12"
+            }
+          },
+          {
+            "value": "Social inclusion and housing affordability – Introducing affordable housing commitments while highlighting challenges concerning resident displacement, the replacement of social housing and the equitable distribution of regeneration benefits (Flynn, 2016; Southwark Council, n.d.).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 13,
+              "cell": "C13"
+            }
+          }
+        ],
+        "characteristics": [
+          {
+            "label": {
+              "value": "Location",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 6,
+                "cell": "C6"
+              }
+            },
+            "value": {
+              "value": "Elephant & Castle, Southwark, London, UK",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 6,
+                "cell": "D6"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Previous land use",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 7,
+                "cell": "C7"
+              }
+            },
+            "value": {
+              "value": "Heygate Estate, completed 1974",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 7,
+                "cell": "D7"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Original estate",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 8,
+                "cell": "C8"
+              }
+            },
+            "value": {
+              "value": "1,212 dwellings",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 8,
+                "cell": "D8"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Regeneration initiated",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 9,
+                "cell": "C9"
+              }
+            },
+            "value": {
+              "value": 1998,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 9,
+                "cell": "D9"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Strategic planning framework",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 10,
+                "cell": "C10"
+              }
+            },
+            "value": {
+              "value": 2004,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 10,
+                "cell": "D10"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Development partner selected",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 11,
+                "cell": "C11"
+              }
+            },
+            "value": {
+              "value": 2007,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 11,
+                "cell": "D11"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Regeneration agreement",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 12,
+                "cell": "C12"
+              }
+            },
+            "value": {
+              "value": 2010,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 12,
+                "cell": "D12"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Masterplan planning permission",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 13,
+                "cell": "C13"
+              }
+            },
+            "value": {
+              "value": 2013,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 13,
+                "cell": "D13"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main construction period",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 14,
+                "cell": "C14"
+              }
+            },
+            "value": {
+              "value": "2014–2020s",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 14,
+                "cell": "D14"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Development area",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 15,
+                "cell": "C15"
+              }
+            },
+            "value": {
+              "value": "Approximately 9.7 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 15,
+                "cell": "D15"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Coordinating developer",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 16,
+                "cell": "C16"
+              }
+            },
+            "value": {
+              "value": "Lendlease / Southwark Council",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 16,
+                "cell": "D16"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Housing programme",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 17,
+                "cell": "C17"
+              }
+            },
+            "value": {
+              "value": "Approximately 3,000 dwellings",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 17,
+                "cell": "D17"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Housing delivered, developer report 2026",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 18,
+                "cell": "C18"
+              }
+            },
+            "value": {
+              "value": "2,303 dwellings, with further phases in development",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 18,
+                "cell": "D18"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Building heights",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 19,
+                "cell": "C19"
+              }
+            },
+            "value": {
+              "value": "3–31 storeys (original planning framework)",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 19,
+                "cell": "D19"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main functions",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 20,
+                "cell": "C20"
+              }
+            },
+            "value": {
+              "value": "Residential, retail, offices, community, recreation",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 20,
+                "cell": "D20"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "New and improved public spaces",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 21,
+                "cell": "C21"
+              }
+            },
+            "value": {
+              "value": "Approximately 4.45 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 21,
+                "cell": "D21"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Central park",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 22,
+                "cell": "C22"
+              }
+            },
+            "value": {
+              "value": "Approximately 0.8 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 22,
+                "cell": "D22"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Landscape strategy",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 23,
+                "cell": "C23"
+              }
+            },
+            "value": {
+              "value": "Mature tree preservation, new trees, rain gardens, green streets",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 23,
+                "cell": "D23"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Public transport",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 24,
+                "cell": "C24"
+              }
+            },
+            "value": {
+              "value": "Underground, National Rail, buses",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 24,
+                "cell": "D24"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Energy strategy",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 25,
+                "cell": "C25"
+              }
+            },
+            "value": {
+              "value": "CHP energy hub, biomethane offsetting, energy-efficient buildings",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 25,
+                "cell": "D25"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main sustainability approach",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 26,
+                "cell": "C26"
+              }
+            },
+            "value": {
+              "value": "Brownfield regeneration, compact urban form, green infrastructure, low-carbon heating",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Elephant Park - Key Character..",
+                "row": 26,
+                "cell": "D26"
+              }
+            }
+          }
+        ],
+        "notes": [
+          {
+            "value": "The indicators refer primarily to Elephant Park, not the entire Elephant & Castle regeneration area.",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "Elephant Park - Key Character..",
+              "row": 4,
+              "cell": "C4"
+            }
+          },
+          {
+            "value": "The approximately 4.45 ha of public spaces includes new and improved public realm; it should not be interpreted as exclusively vegetated green space. A site-wide FAR, building coverage ratio and residential density have not been included because comparable values require a consistent study boundary and measurement method.",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "Elephant Park - Key Character..",
+              "row": 27,
+              "cell": "C27"
+            }
+          }
+        ],
+        "references": [
+          {
+            "value": "Flynn, J. (2016). Complete control: Developers, financial viability and regeneration at the Elephant and Castle. City, 20(2), 278–286. https://doi.org/10.1080/13604813.2016.1143685",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 470
+            }
+          },
+          {
+            "value": "https://www.tandfonline.com/doi/full/10.1080/13604813.2016.1143685",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 471
+            }
+          },
+          {
+            "value": "https://www.lendlease.com/projects/elephant-park/",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 473
+            }
+          },
+          {
+            "value": "https://www.elephantpark.co.uk/?",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 474
+            }
+          },
+          {
+            "value": "https://www.southwark.gov.uk/planning-environment-and-building-control/current-and-future-development/elephant-and-castle",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 475
+            }
+          },
+          {
+            "value": "https://www.makearchitects.com/projects/elephant-castle-masterplan/",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 476
+            }
+          },
+          {
+            "value": "https://www.gillespies.co.uk/projects/the-park-within-elephant-park",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 477
+            }
+          },
+          {
+            "value": "https://moderngov.southwark.gov.uk/documents/s27293/Appendix%20A%20Elephant%20and%20Castle%20Supplementary%20Planning%20Document%20Opportunity%20Area%20Planning%20Framewor.pdf",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 479
+            }
+          }
+        ],
+        "referenceNote": "The case-study reference list is reproduced as supplied; its links and citation associations have not been independently verified.",
+        "withholdingNotice": "Some material is withheld pending citation or methodology review."
+      }
     },
     {
       "id": "garnizon",
@@ -6120,7 +6790,444 @@
           "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_solar_energy_260925.PNG",
           "status": "present"
         }
-      ]
+      ],
+      "narrative": {
+        "descriptions": [
+          {
+            "value": "Garnizon is a large-scale, mixed-use urban regeneration project located in Wrzeszcz, one of Gdańsk's main urban districts in northern Poland. Covering approximately 30 hectares, the development occupies a former military complex established in the late 19th century for Prussian cavalry regiments. Following more than a century of military use, the site was acquired by Grupa Inwestycyjna Hossa SA in 2005, initiating its transformation into a contemporary urban quarter. The masterplanning process took place during the following years, with the first construction works beginning in 2009 and subsequent development progressing in phases (Kwasek et al., 2018; Nowak et al., 2025).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 5,
+              "cell": "D5"
+            }
+          },
+          {
+            "value": "The masterplan integrates preserved and renovated military buildings with new residential, office, commercial and cultural developments. Its spatial concept builds upon the historical layout, maintaining key compositional axes, visual connections and architectural heritage. A central pedestrian-oriented promenade, known as the corso, connects public squares, historic buildings, landscaped areas and water features, including a restored section of the Strzyża stream. The redevelopment of former barracks into cultural facilities, particularly the Stary Maneż concert venue, has contributed to the district's identity as a multifunctional cultural and residential destination (Woyciechowski, 2018; Kwasek et al., 2018).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 5,
+              "cell": "E5"
+            }
+          },
+          {
+            "value": "Garnizon demonstrates the potential of brownfield regeneration and heritage-led urban development to transform formerly inaccessible military land into an active urban neighbourhood. Its implementation through a single coordinating developer enabled a coherent urban structure and the progressive delivery of mixed-use functions. However, the predominance of market-rate housing, limited green-space provision and privately owned publicly accessible spaces also highlight challenges related to social inclusion and long-term urban sustainability (Nowak et al., 2025).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 5,
+              "cell": "I5"
+            }
+          }
+        ],
+        "planningPrinciples": [
+          {
+            "value": "Heritage-led urban regeneration – Transforming former military land into a multifunctional urban quarter while preserving historic buildings, compositional axes and architectural identity (Kwasek et al., 2018; Woyciechowski, 2018).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 14,
+              "cell": "C14"
+            }
+          },
+          {
+            "value": "Mixed-use and short-distance neighbourhood – Integrating residential, office, commercial, cultural and recreational functions, with active ground floors supporting everyday accessibility and a vibrant urban environment (Woyciechowski, 2018).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 16,
+              "cell": "C16"
+            }
+          },
+          {
+            "value": "Pedestrian-oriented urban design – Establishing a central pedestrian promenade (corso), interconnected squares, traffic-calmed streets and convenient access to metropolitan public transport (Woyciechowski, 2018; Nowak et al., 2025).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 17,
+              "cell": "C17"
+            }
+          },
+          {
+            "value": "Integration of historic and contemporary architecture – Preserving selected former barracks and adapting them to new uses, while introducing contemporary buildings that maintain visual and spatial relationships with the historical urban fabric (Kwasek et al., 2018).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 18,
+              "cell": "C18"
+            }
+          },
+          {
+            "value": "Blue-green infrastructure and landscape preservation – Integrating existing mature trees, pocket parks, landscaped courtyards and the restored Strzyża watercourse into a compact urban structure (Woyciechowski, 2018; Kwasek et al., 2018).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 19,
+              "cell": "C19"
+            }
+          },
+          {
+            "value": "Adaptive reuse and resource efficiency – Prioritising the redevelopment of previously urbanised land and the reuse of existing buildings, reducing the need for urban expansion into undeveloped areas (Kwasek et al., 2018).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 20,
+              "cell": "C20"
+            }
+          },
+          {
+            "value": "Cultural identity and social activity – Creating cultural venues, restaurants and recreational spaces that support social interaction and extend neighbourhood activity beyond residential functions (Woyciechowski, 2018).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 21,
+              "cell": "C21"
+            }
+          },
+          {
+            "value": "Coordinated development and phased implementation – Delivering the masterplan through a single coordinating developer, integrating architectural diversity, functional mix and public-space management within a coherent development strategy (Nowak et al., 2025).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 22,
+              "cell": "C22"
+            }
+          }
+        ],
+        "characteristics": [
+          {
+            "label": {
+              "value": "Location",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 4,
+                "cell": "C4"
+              }
+            },
+            "value": {
+              "value": "Wrzeszcz, Gdańsk, Poland",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 4,
+                "cell": "D4"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Previous land use",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 5,
+                "cell": "C5"
+              }
+            },
+            "value": {
+              "value": "Military barracks, late 19th century",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 5,
+                "cell": "D5"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Site acquisition",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 6,
+                "cell": "C6"
+              }
+            },
+            "value": {
+              "value": 2005,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 6,
+                "cell": "D6"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Masterplanning",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 7,
+                "cell": "C7"
+              }
+            },
+            "value": {
+              "value": "Approximately 2006–2008",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 7,
+                "cell": "D7"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Construction start",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 8,
+                "cell": "C8"
+              }
+            },
+            "value": {
+              "value": 2009,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 8,
+                "cell": "D8"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Development model",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 9,
+                "cell": "C9"
+              }
+            },
+            "value": {
+              "value": "Phased brownfield regeneration",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 9,
+                "cell": "D9"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main developer",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 10,
+                "cell": "C10"
+              }
+            },
+            "value": {
+              "value": "Grupa Inwestycyjna Hossa SA",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 10,
+                "cell": "D10"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Development area",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 11,
+                "cell": "C11"
+              }
+            },
+            "value": {
+              "value": "Approximately 30 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 11,
+                "cell": "D11"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Housing delivered",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 12,
+                "cell": "C12"
+              }
+            },
+            "value": {
+              "value": "Approximately 2,000 units (reported in 2025)",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 12,
+                "cell": "D12"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Predominant building heights",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 16,
+                "cell": "C16"
+              }
+            },
+            "value": {
+              "value": "4–9 storeys",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 16,
+                "cell": "D16"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main urban feature",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 20,
+                "cell": "C20"
+              }
+            },
+            "value": {
+              "value": "Central pedestrian corso",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 20,
+                "cell": "D20"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Mobility",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 21,
+                "cell": "C21"
+              }
+            },
+            "value": {
+              "value": "Walking, cycling, SKM, tram, bus",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 21,
+                "cell": "D21"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Energy",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 22,
+                "cell": "C22"
+              }
+            },
+            "value": {
+              "value": "Municipal electricity and district heating",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 22,
+                "cell": "D22"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Key sustainability strategy",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 23,
+                "cell": "C23"
+              }
+            },
+            "value": {
+              "value": "Brownfield regeneration, adaptive reuse, compact mixed-use development",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Garnizon -Key Characteristics",
+                "row": 23,
+                "cell": "D23"
+              }
+            }
+          }
+        ],
+        "notes": [
+          {
+            "value": "*Values supplied in the comparative spatial analysis; their calculation boundaries should be specified consistently across the neighbourhood case studies.",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "Garnizon -Key Characteristics",
+              "row": 24,
+              "cell": "C24"
+            }
+          }
+        ],
+        "references": [
+          {
+            "value": "1. Kwasek, M., Grębowski, K., & Przewłócki, J. (2018). Garnizon w Gdańsku przykładem kształtowania atrakcyjnych przestrzeni miejskich na terenach powojskowych. Studia KPZK, 192, 325–338. Scientific publication (PDF). ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 262
+            }
+          },
+          {
+            "value": "2. Woyciechowski, M. (2018). Nowa dzielnica krótkich odległości – o koncepcji gdańskiego Garnizonu. Architektura-Murator, 26 April 2018. Article on urban design and masterplanning. ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 263
+            }
+          },
+          {
+            "value": "Architektura-Murator",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 264
+            }
+          },
+          {
+            "value": "3. Nowak, K., Pancewicz, Ł., Arczyńska, M., & Janas, K. (2025). Specjalne strefy mieszkaniowe. Rola miast w kształtowaniu kompleksowych obszarów mieszkaniowych. Instytut Rozwoju Miast i Regionów, pp. 84–86. Research report (DOI). ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 265
+            }
+          },
+          {
+            "value": "4.  Grupa Hossa SA. Garnizon –https://www.garnizon.pl/strona-glowna.html",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 266
+            }
+          }
+        ],
+        "referenceNote": "The case-study reference list is reproduced as supplied; its links and citation associations have not been independently verified.",
+        "withholdingNotice": "Some material is withheld pending citation or methodology review."
+      }
     },
     {
       "id": "kronsberg",
@@ -9178,7 +10285,526 @@
           "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_solar_energy_261021.PNG",
           "status": "present"
         }
-      ]
+      ],
+      "narrative": {
+        "descriptions": [],
+        "planningPrinciples": [
+          {
+            "value": "Integrated sustainable urban planning – Coordinating urban design, housing, mobility, energy, green infrastructure and social facilities within a comprehensive development framework (Rumming, 2004).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 23,
+              "cell": "C23"
+            }
+          },
+          {
+            "value": "Compact and differentiated urban morphology – Applying a grid-based structure with clearly defined urban blocks, building heights of 2–5 storeys and decreasing densities towards the surrounding landscape (Landeshauptstadt Hannover, 2013).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 24,
+              "cell": "C24"
+            }
+          },
+          {
+            "value": "Mixed-use and socially inclusive neighbourhood – Integrating diverse housing typologies, affordable housing, local services, educational and community facilities (Rumming, 2004; Landeshauptstadt Hannover, 2013).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 25,
+              "cell": "C25"
+            }
+          },
+          {
+            "value": "Sustainable mobility – Prioritising public transport, pedestrian accessibility, cycling infrastructure and traffic-calmed residential streets (Rumming, 2004).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 26,
+              "cell": "C26"
+            }
+          },
+          {
+            "value": "Green infrastructure and landscape integration – Providing interconnected green spaces, recreational areas and a gradual transition between urban development and surrounding agricultural land (Rumming, 2004).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 27,
+              "cell": "C27"
+            }
+          },
+          {
+            "value": "Energy-efficient buildings and renewable energy – Implementing mandatory low-energy standards, passive-house solutions, district heating, combined heat and power (CHP), wind energy and solar technologies (Landeshauptstadt Hannover, 2013).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 28,
+              "cell": "C28"
+            }
+          },
+          {
+            "value": "Integrated water and resource management – Applying decentralised rainwater retention and infiltration alongside environmentally responsible waste management (Rumming, 2004).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 29,
+              "cell": "C29"
+            }
+          },
+          {
+            "value": "Coordinated implementation and quality assurance – Establishing common environmental standards for multiple developers, supported by municipal planning, technical guidance and performance monitoring (Rumming, 2004; Landeshauptstadt Hannover, 2013)",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 30,
+              "cell": "C30"
+            }
+          }
+        ],
+        "characteristics": [
+          {
+            "label": {
+              "value": "Location",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 4,
+                "cell": "C4"
+              }
+            },
+            "value": {
+              "value": "South-eastern Hannover, Germany",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 4,
+                "cell": "D4"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Original planning",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 5,
+                "cell": "C5"
+              }
+            },
+            "value": {
+              "value": "1960s",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 5,
+                "cell": "D5"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main planning period",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 6,
+                "cell": "C6"
+              }
+            },
+            "value": {
+              "value": "1990–1996",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 6,
+                "cell": "D6"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main construction period",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 7,
+                "cell": "C7"
+              }
+            },
+            "value": {
+              "value": "1997–2000",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 7,
+                "cell": "D7"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main development driver",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 8,
+                "cell": "C8"
+              }
+            },
+            "value": {
+              "value": "EXPO 2000 and housing demand",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 8,
+                "cell": "D8"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Lead planning authority",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 9,
+                "cell": "C9"
+              }
+            },
+            "value": {
+              "value": "City of Hannover",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 9,
+                "cell": "D9"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Developers",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 10,
+                "cell": "C10"
+              }
+            },
+            "value": {
+              "value": "Approximately 30",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 10,
+                "cell": "D10"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Wider development area",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 11,
+                "cell": "C11"
+              }
+            },
+            "value": {
+              "value": "Approximately 160 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 11,
+                "cell": "D11"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Principal residential site",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 12,
+                "cell": "C12"
+              }
+            },
+            "value": {
+              "value": "Approximately 70 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 12,
+                "cell": "D12"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Original housing target",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 13,
+                "cell": "C13"
+              }
+            },
+            "value": {
+              "value": "6,000 dwellings",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 13,
+                "cell": "D13"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Dwellings completed by 2000",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 14,
+                "cell": "C14"
+              }
+            },
+            "value": {
+              "value": "Approximately 3,000",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 14,
+                "cell": "D14"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Dwellings reported in 2013",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 15,
+                "cell": "C15"
+              }
+            },
+            "value": {
+              "value": "More than 3,200",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 15,
+                "cell": "D15"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Population reported in 2013",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 16,
+                "cell": "C16"
+              }
+            },
+            "value": {
+              "value": "Approximately 7,150",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 16,
+                "cell": "D16"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Predominant building heights",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 17,
+                "cell": "C17"
+              }
+            },
+            "value": {
+              "value": "2–5 storeys",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 17,
+                "cell": "D17"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Floor space index (FSI)",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 18,
+                "cell": "C18"
+              }
+            },
+            "value": {
+              "value": "Approximately 0.7–1.2 in documented residential zones",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 18,
+                "cell": "D18"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main land uses",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 19,
+                "cell": "C19"
+              }
+            },
+            "value": {
+              "value": "Residential, retail, education, healthcare, community, recreation",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 19,
+                "cell": "D19"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Public transport",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 20,
+                "cell": "C20"
+              }
+            },
+            "value": {
+              "value": "Tram, approximately 20 minutes to city centre",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 20,
+                "cell": "D20"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Energy concept",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 21,
+                "cell": "C21"
+              }
+            },
+            "value": {
+              "value": "Low-energy buildings, CHP district heating, passive houses, wind, PV, solar thermal demonstrations",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 21,
+                "cell": "D21"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Water management",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 22,
+                "cell": "C22"
+              }
+            },
+            "value": {
+              "value": "Decentralised retention and infiltration",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 22,
+                "cell": "D22"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Residential satisfaction",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 23,
+                "cell": "C23"
+              }
+            },
+            "value": {
+              "value": "85% highly satisfied in a survey reported in 2012",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Kronsberg-Key characteristics",
+                "row": 23,
+                "cell": "D23"
+              }
+            }
+          }
+        ],
+        "notes": [],
+        "references": [
+          {
+            "value": "https://www.hannover.de/Leben-in-der-Region-Hannover/Umwelt-Nachhaltigkeit/Umweltinformation/%C3%96kologisches-Bauen/Modell-Kronsberg/Kronsberg-Model-Ecological-Building-for-the-Future",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 61
+            }
+          },
+          {
+            "value": "1. Rumming, K. (Ed.). (2004). Hannover Kronsberg Handbook: Planning and Realisation. Landeshauptstadt Hannover. ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 62
+            }
+          },
+          {
+            "value": "hannover.de",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 63
+            }
+          },
+          {
+            "value": "2. Landeshauptstadt Hannover. (2013). Hannover-Kronsberg: 15 Years Experience with a Sustainable Model Project. Landeshauptstadt Hannover. ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 64
+            }
+          },
+          {
+            "value": "https://enviropaul.wordpress.com/2018/01/03/kronsberg-a-model-neighborhood-in-germany/",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 65
+            }
+          }
+        ],
+        "referenceNote": "The case-study reference list is reproduced as supplied; its links and citation associations have not been independently verified.",
+        "withholdingNotice": "Some material is withheld pending citation or methodology review."
+      }
     },
     {
       "id": "aspern-seestadt",
@@ -15347,7 +16973,517 @@
           "publicUrl": "/atlasy-platform/SEESTADT/Kronsberg_solar_energy_261107.PNG",
           "status": "present"
         }
-      ]
+      ],
+      "narrative": {
+        "descriptions": [],
+        "planningPrinciples": [
+          {
+            "value": "Integrated and adaptive urban planning – Developing a multifunctional district through a flexible masterplan that integrates housing, employment, education, research and public services, with continuous evaluation and adaptation (Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 31,
+              "cell": "C31"
+            }
+          },
+          {
+            "value": "Compact and diverse urban morphology – Combining perimeter blocks, mixed-use developments, landscaped courtyards and high-rise landmarks, with predominantly mid-rise buildings and differentiated urban densities (Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 32,
+              "cell": "C32"
+            }
+          },
+          {
+            "value": "Public space first – Prioritising high-quality public spaces, pedestrian-oriented streets and a central lake, with approximately 50% of the development area dedicated to publicly accessible open spaces (Gehl Architects, 2009; Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 33,
+              "cell": "C33"
+            }
+          },
+          {
+            "value": "Mixed-use and socially inclusive neighbourhood – Integrating affordable and market-rate housing, workplaces, educational institutions, community facilities and active ground-floor uses to support diverse lifestyles and local accessibility (Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 34,
+              "cell": "C34"
+            }
+          },
+          {
+            "value": "Transit-oriented development and sustainable mobility – Providing metro infrastructure before residential occupation, prioritising walking and cycling, and concentrating car parking in shared neighbourhood garages (City of Vienna, 2026; Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 35,
+              "cell": "C35"
+            }
+          },
+          {
+            "value": "Green infrastructure and climate adaptation – Connecting parks, green corridors, landscaped courtyards, green roofs and water-sensitive public spaces to improve the urban microclimate and support recreational activities (Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 36,
+              "cell": "C36"
+            }
+          },
+          {
+            "value": "Energy efficiency and low-carbon development – Implementing energy-efficient buildings, district heating, renewable energy systems, mandatory sustainability assessments and the aspern klimafit building standard (Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 37,
+              "cell": "C37"
+            }
+          },
+          {
+            "value": "Innovation and smart energy management – Using the district as a living laboratory for smart buildings, energy grids, digital technologies and data-driven optimisation of energy performance (ASCR; Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 38,
+              "cell": "C38"
+            }
+          },
+          {
+            "value": "Coordinated development and quality assurance – Managing phased development through a dedicated development company, multiple developers, binding urban design principles, building sustainability standards and continuous performance monitoring (Wien 3420, 2024).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 39,
+              "cell": "C39"
+            }
+          }
+        ],
+        "characteristics": [
+          {
+            "label": {
+              "value": "Location",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 3,
+                "cell": "B3"
+              }
+            },
+            "value": {
+              "value": "Donaustadt, Vienna, Austria",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 3,
+                "cell": "C3"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Previous land use",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 4,
+                "cell": "B4"
+              }
+            },
+            "value": {
+              "value": "Aspern Airfield",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 4,
+                "cell": "C4"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Masterplan approval",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 5,
+                "cell": "B5"
+              }
+            },
+            "value": {
+              "value": 2007,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 5,
+                "cell": "C5"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Construction start",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 6,
+                "cell": "B6"
+              }
+            },
+            "value": {
+              "value": 2010,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 6,
+                "cell": "C6"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "First residential occupation",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 7,
+                "cell": "B7"
+              }
+            },
+            "value": {
+              "value": 2014,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 7,
+                "cell": "C7"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Expected development horizon",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 8,
+                "cell": "B8"
+              }
+            },
+            "value": {
+              "value": "2030s",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 8,
+                "cell": "C8"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Total development area",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 9,
+                "cell": "B9"
+              }
+            },
+            "value": {
+              "value": "240 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 9,
+                "cell": "C9"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Planned population",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 10,
+                "cell": "B10"
+              }
+            },
+            "value": {
+              "value": "Over 25,000",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 10,
+                "cell": "C10"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Planned housing",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 11,
+                "cell": "B11"
+              }
+            },
+            "value": {
+              "value": "Over 11,500 units",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 11,
+                "cell": "C11"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Planned employment and training",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 12,
+                "cell": "B12"
+              }
+            },
+            "value": {
+              "value": "Over 20,000 places",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 12,
+                "cell": "C12"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Population, June 2026",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 13,
+                "cell": "B13"
+              }
+            },
+            "value": {
+              "value": "Over 12,000",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 13,
+                "cell": "C13"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Predominant building heights",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 14,
+                "cell": "B14"
+              }
+            },
+            "value": {
+              "value": "12–21 m",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 14,
+                "cell": "C14"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Planned public open space",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 16,
+                "cell": "B16"
+              }
+            },
+            "value": {
+              "value": "Approximately 50%",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 16,
+                "cell": "C16"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Central lake",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 17,
+                "cell": "B17"
+              }
+            },
+            "value": {
+              "value": "5 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 17,
+                "cell": "C17"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Energy strategy",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 18,
+                "cell": "B18"
+              }
+            },
+            "value": {
+              "value": "District heating, high-performance buildings, renewable energy, smart grids",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 18,
+                "cell": "C18"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Public transport",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 19,
+                "cell": "B19"
+              }
+            },
+            "value": {
+              "value": "U2 metro, regional rail connections",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 19,
+                "cell": "C19"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Residential satisfaction",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 20,
+                "cell": "B20"
+              }
+            },
+            "value": {
+              "value": "93% happy or very happy (survey reported in 2024)",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Aspern Seestadt - Key Chara...",
+                "row": 20,
+                "cell": "C20"
+              }
+            }
+          }
+        ],
+        "notes": [],
+        "references": [
+          {
+            "value": "https://www.aspern-seestadt.at/en",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 163
+            }
+          },
+          {
+            "value": "Magistrat der Stadt Wien, MA 21 B. (2008). Masterplan Flugfeld Aspern: Kurzfassung. Stadt Wien.",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 164
+            }
+          },
+          {
+            "value": "https://www.wien.gv.at/pdf/ma21/flugfeldaspern-kurzfassung-masterplan.pdf",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 165
+            }
+          },
+          {
+            "value": "Gutmann, R., & Neff, S. (2006). Gender Mainstreaming im Stadtentwicklungsgebiet Flugfeld Aspern: Begleitende Expertise zum Masterplan. Entwurfsbegleitung und -bewertung sowie Formulierung von Qualitätsbausteinen der Umsetzung. wohnbund:consult. Commissioned by Stadt Wien, MA 21 B. ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 167
+            }
+          },
+          {
+            "value": "https://www.wien.gv.at/pdf/ma21/studie-gendermainstreaming-flugfeld-aspern.pdf",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 168
+            }
+          },
+          {
+            "value": "Wien 3420 aspern Development AG. The Masterplan. ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 170
+            }
+          },
+          {
+            "value": "https://www.aspern-seestadt.at/en/seestadt/vision/masterplan_en?",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 171
+            }
+          },
+          {
+            "value": "Gehl Architects. Aspern Seestadt – Enhancing Livability in Vienna's Largest Urban Development Site. ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 173
+            }
+          },
+          {
+            "value": "https://www.gehlpeople.com/projects/aspern-seestadt/",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 174
+            }
+          },
+          {
+            "value": "Aspern Seestadt Building Quality Monitoring. ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 177
+            }
+          },
+          {
+            "value": "https://monitor.aspern-seestadt.at/whois.htm",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 178
+            }
+          }
+        ],
+        "referenceNote": "The case-study reference list is reproduced as supplied; its links and citation associations have not been independently verified.",
+        "withholdingNotice": "Some material is withheld pending citation or methodology review."
+      }
     },
     {
       "id": "orestad-syd",
@@ -22553,7 +24689,399 @@
           "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_solar_energy_260925.PNG",
           "status": "present"
         }
-      ]
+      ],
+      "narrative": {
+        "descriptions": [
+          {
+            "value": "A defining characteristic of Ørestad Syd is its direct relationship with the surrounding natural landscape. The urban design establishes strong east–west connections between the metro corridor and Kalvebod Fælled, integrating streets, promenades, pocket parks, landscaped courtyards, green roofs and water channels. The masterplan for Kalvebodkvarteret Vest, developed by TRANSFORM in collaboration with Bascon and other partners, emphasises a central main street, clearly defined residential quarters and gradual transitions between public, semi-private and private spaces (TRANSFORM, 2014–present).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 16,
+              "cell": "F16"
+            }
+          },
+          {
+            "value": "Ørestad Syd demonstrates how compact urban development can be combined with extensive access to nature, differentiated building typologies and public transport infrastructure. Its development also illustrates the opportunities and challenges of large-scale, publicly coordinated urban expansion, particularly in balancing high-density construction, architectural diversity, social interaction and the long-term development of local urban life (Majoor, 2014; TRANSFORM, 2014–present).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY",
+              "row": 15,
+              "cell": "I15"
+            }
+          }
+        ],
+        "planningPrinciples": [
+          {
+            "value": "Mixed-use and diverse neighbourhood – Integrating housing, employment, local services, educational and recreational facilities, with varied building typologies supporting different household needs and lifestyles (City of Copenhagen, 2005; TRANSFORM, 2014–present).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 42,
+              "cell": "C42"
+            }
+          },
+          {
+            "value": "Strong metro–nature connections – Establishing east–west pedestrian routes linking public transport, residential quarters, green corridors and the Kalvebod Fælled nature reserve (TRANSFORM, 2014–present).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 43,
+              "cell": "C43"
+            }
+          },
+          {
+            "value": "Pedestrian-oriented public spaces and active urban life – Creating interconnected streets, neighbourhood squares, promenades and activity spaces, with a central main street supporting local services and social interaction (TRANSFORM, 2014–present).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 44,
+              "cell": "C44"
+            }
+          },
+          {
+            "value": "Diverse building typologies and privacy gradients – Providing a range of residential forms, from large multifunctional blocks to smaller townhouses, with carefully designed transitions between public, semi-private and private spaces (TRANSFORM, 2014–present).",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "OPISY-Main Planning Principles",
+              "row": 46,
+              "cell": "C46"
+            }
+          }
+        ],
+        "characteristics": [
+          {
+            "label": {
+              "value": "Location",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 5,
+                "cell": "B5"
+              }
+            },
+            "value": {
+              "value": "Southern Copenhagen, Amager, Denmark",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 5,
+                "cell": "C5"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Original development initiative",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 6,
+                "cell": "B6"
+              }
+            },
+            "value": {
+              "value": "1989–1992",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 6,
+                "cell": "C6"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Overall Ørestad masterplan",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 7,
+                "cell": "B7"
+              }
+            },
+            "value": {
+              "value": "1994–1995",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 7,
+                "cell": "C7"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Ørestad Syd detailed planning",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 8,
+                "cell": "B8"
+              }
+            },
+            "value": {
+              "value": 2005,
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 8,
+                "cell": "C8"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "First residential occupation",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 9,
+                "cell": "B9"
+              }
+            },
+            "value": {
+              "value": "2009–2010",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 9,
+                "cell": "C9"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Development status",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 10,
+                "cell": "B10"
+              }
+            },
+            "value": {
+              "value": "Phased construction, ongoing",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 10,
+                "cell": "C10"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Coordinating developer",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 11,
+                "cell": "B11"
+              }
+            },
+            "value": {
+              "value": "By & Havn",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 11,
+                "cell": "C11"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Total district area",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 12,
+                "cell": "B12"
+              }
+            },
+            "value": {
+              "value": "Approximately 81 ha",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 12,
+                "cell": "C12"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Planned gross floor area",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 13,
+                "cell": "B13"
+              }
+            },
+            "value": {
+              "value": "Approximately 1.2 million m²",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 13,
+                "cell": "C13"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main functions",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 18,
+                "cell": "B18"
+              }
+            },
+            "value": {
+              "value": "Residential, offices, commercial, education, recreation",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 18,
+                "cell": "C18"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main natural asset",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 22,
+                "cell": "B22"
+              }
+            },
+            "value": {
+              "value": "Kalvebod Fælled / Naturpark Amager",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 22,
+                "cell": "C22"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Public transport",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 23,
+                "cell": "B23"
+              }
+            },
+            "value": {
+              "value": "M1 metro, Vestamager station",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 23,
+                "cell": "C23"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Energy strategy",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 24,
+                "cell": "B24"
+              }
+            },
+            "value": {
+              "value": "District heating, energy-efficient buildings",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 24,
+                "cell": "C24"
+              }
+            }
+          },
+          {
+            "label": {
+              "value": "Main sustainability approach",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 25,
+                "cell": "B25"
+              }
+            },
+            "value": {
+              "value": "Compact TOD, nature integration, blue-green infrastructure",
+              "source": {
+                "file": "ATLASY_DANE_261107.xlsx",
+                "sheet": "Ørestad Syd - Key Characteri...",
+                "row": 25,
+                "cell": "C25"
+              }
+            }
+          }
+        ],
+        "notes": [
+          {
+            "value": "*Study-specific spatial analysis. The analysed gross floor area differs from the official planning capacity and should not be interpreted as verified completed floor area.",
+            "source": {
+              "file": "ATLASY_DANE_261107.xlsx",
+              "sheet": "Ørestad Syd - Key Characteri...",
+              "row": 26,
+              "cell": "B26"
+            }
+          }
+        ],
+        "references": [
+          {
+            "value": "Majoor, S. (2014). Ørestad: Copenhagen’s radical new town project in transition. Planning Theory & Practice, 15(3), 432–438. https://doi.org/10.1080/14649357.2014.935610",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 377
+            }
+          },
+          {
+            "value": "City of Copenhagen (2005). Ørestad Syd – Local Planning Proposal. Copenhagen Municipality. ",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 378
+            }
+          },
+          {
+            "value": "https://www.kk.dk/dagsordener-og-referater/Borgerrepr%C3%A6sentationen/m%C3%B8de-15062005-160100/dagsorden",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 379
+            }
+          },
+          {
+            "value": "https://www.transform.dk/da/project/orestad-syd",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 380
+            }
+          },
+          {
+            "value": "https://urbanitarian.com/masterplans_post?id=346",
+            "source": {
+              "file": "case study_261114.docx",
+              "paragraph": 381
+            }
+          }
+        ],
+        "referenceNote": "The case-study reference list is reproduced as supplied; its links and citation associations have not been independently verified.",
+        "withholdingNotice": "Some material is withheld pending citation or methodology review."
+      }
     }
   ],
   "benchmarks": [],
@@ -24842,7 +27370,7 @@
   ],
   "notices": [
     "The website workbook contains no coordinates. Map points are independently verified against OpenStreetMap features; Ørestad Syd uses the 8tallet building within the study area, not the district centre.",
-    "Longer site narratives, planning principles, and key characteristics are stored locally pending citation and content review.",
+    "Some narrative material is withheld pending citation or methodology review.",
     "Elephant Park DANE!DG8 is preserved as recorded; its displayed panel area uses the owner's missing-decimal correction and retains a coverage warning."
   ],
   "exclusions": [

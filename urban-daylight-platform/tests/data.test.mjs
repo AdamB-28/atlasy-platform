@@ -47,7 +47,7 @@ test('published data contains no retired locations, room scenarios, or legacy sh
   assert.doesNotMatch(atlasText, /hudson|selected.room|room.scale.simulation|shadingAnalysis/i)
 })
 
-test('workbook provenance is public without exposing unapproved narrative text', () => {
+test('workbook provenance is public without exposing unselected source sheets', () => {
   assert.deepEqual(Object.keys(atlas.sourceWorkbook.sheets), [
     'DANE',
     'OPISY',
@@ -72,7 +72,10 @@ test('workbook provenance is public without exposing unapproved narrative text',
   assert.ok(atlas.sourceWorkbook.sheets.OPISY.every((row) => !('cells' in row)))
   assert.ok(atlas.sourceWorkbook.sheets['OPISY-Main Planning Principles'].every((row) => !('cells' in row)))
   assert.ok(atlas.sourceWorkbook.sheets['Elephant Park - Key Character..'].every((row) => !('cells' in row)))
-  assert.doesNotMatch(JSON.stringify(atlas), /Elephant Park is a large-scale|Integrated urban regeneration and densification/)
+  assert.match(elephant.narrative.descriptions[0].value, /^Elephant Park is a large-scale/)
+  assert.match(elephant.narrative.withholdingNotice, /withheld pending/)
+  assert.ok(!elephant.narrative.planningPrinciples.some((entry) => entry.source.cell === 'C5'))
+  assert.ok(atlas.cities[1].narrative)
   const block = elephant.analysisUnits.find((item) => item.name === 'UB_1')
   assert.equal(block.source.cell, 'BC8')
   assert.equal(block.sourceData.cells.BE8, 'Elephant_and_Castle_UB_model_3D')

@@ -7,6 +7,7 @@ import SafeImage from '../components/SafeImage'
 import DistributionChart from '../components/DistributionChart'
 import SolarEnergyTable from '../components/SolarEnergyTable'
 import AdminDataPanel from '../components/AdminDataPanel'
+import LocationNarrative from '../components/LocationNarrative'
 import { LoadingSpinner, ErrorMessage, NoData } from '../components/LoadingStates'
 import { useCity, useCities } from '../hooks/useCitiesData'
 import { hasData, getCityFolderName, findImageLink, formatBlockName, SITE_MODEL_CREDIT } from '../utils/helpers'
@@ -205,6 +206,11 @@ export default function CityPage() {
       </section>
       
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        {city.narrative && (
+          <div className="card mb-8 sm:mb-12">
+            <LocationNarrative narrative={city.narrative} />
+          </div>
+        )}
         {city.urbanForm && (
           <section className="card mb-8 sm:mb-12" aria-labelledby="urban-form-heading">
             <h2 id="urban-form-heading" className="section-title text-base md:text-lg">Urban form</h2>

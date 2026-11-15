@@ -8,6 +8,8 @@ import re
 import shutil
 import sys
 import unicodedata
+import zipfile
+from xml.etree import ElementTree
 from pathlib import Path
 from typing import Any, BinaryIO
 
@@ -27,6 +29,70 @@ DEFAULT_WORKBOOK = (
     / "ATLASY_DANE_261107.xlsx"
 )
 DEFAULT_OUTPUT = ROOT / "urban-daylight-platform" / "public" / "data" / "atlas.json"
+CASE_STUDY = ROOT / "TEMP__TRUTH" / "IEA_TASK_70_ATLASY" / "case study_261114.docx"
+NARRATIVE_CONFIG = {
+    "Garnizon": {
+        "description_row": 5, "description_end": 7,
+        "planning": (14, 23), "sheet": "Garnizon -Key Characteristics",
+        "indicator_columns": ("C", "D"), "indicator_rows": (4, 24),
+        "notes": ("C24",),
+        "heading": "Garnizon, Gdańsk, Poland", "next_heading": "Ørestad Syd, Copenhagen, Denmark",
+        "reference_heading": "References",
+        "reference_paragraphs": (262, 263, 264, 265, 266),
+        "warnings": {
+            "OPISY!F5": "The spatial analysis boundaries and methods require verification.",
+            "OPISY!G5": "The spatial analysis boundaries and methods require verification.",
+            "OPISY!H5": "The spatial analysis boundaries and methods require verification.",
+            "OPISY!H6": "The energy passage has no identified supporting citation.",
+            "OPISY-Main Planning Principles!C15": "The spatial analysis boundaries and methods require verification.",
+            **{f"Garnizon -Key Characteristics!D{r}": "The spatial analysis boundaries and methods require verification." for r in (13, 14, 15, 17, 18, 19)},
+        },
+    },
+    "Kronsberg": {
+        "description_row": 8, "description_end": 10,
+        "planning": (23, 31), "sheet": "Kronsberg-Key characteristics",
+        "indicator_columns": ("C", "D"), "indicator_rows": (4, 24),
+        "notes": (),
+        "heading": "Kronsberg, Hannover, Germany", "next_heading": "Aspern Seestadt, Vienna, Austria",
+        "reference_heading": "Sources:",
+        "reference_paragraphs": (61, 62, 63, 64, 65),
+        "warnings": {
+            **{f"OPISY!{column}8": "This narrative has no inline citations; the supporting sources for its claims require verification." for column in "DEFGHI"},
+        },
+    },
+    "Aspern Seestadt": {
+        "description_row": 10, "description_end": 15,
+        "planning": (31, 40), "sheet": "Aspern Seestadt - Key Chara...",
+        "indicator_columns": ("B", "C"), "indicator_rows": (3, 21),
+        "notes": (),
+        "heading": "Aspern Seestadt, Vienna, Austria", "next_heading": "Garnizon, Gdańsk, Poland",
+        "reference_heading": "References",
+        "reference_paragraphs": (163, 164, 165, 167, 168, 170, 171, 173, 174, 177, 178),
+        "warnings": {
+            **{f"OPISY!{column}10": "The case-study draft contains unresolved +1/+2 citation markers; source associations require verification." for column in "DEFGHI"},
+            "OPISY!F10": "The spatial analysis boundaries and methods, and the case-study draft's unresolved +1/+2 citation markers, require verification.",
+            "OPISY!F11": "The case-study draft contains unresolved +1/+2 citation markers; source associations require verification.",
+            "Aspern Seestadt - Key Chara...!C15": "The spatial analysis boundaries and methods require verification.",
+        },
+    },
+    "Ørestad Syd": {
+        "description_row": 15, "description_end": 17,
+        "planning": (40, 49), "sheet": "Ørestad Syd - Key Characteri...",
+        "indicator_columns": ("B", "C"), "indicator_rows": (5, 26),
+        "notes": ("B26",),
+        "heading": "Ørestad Syd, Copenhagen, Denmark", "next_heading": "Elephant & Castle – Elephant Park, London, United Kingdom",
+        "reference_heading": "References",
+        "reference_paragraphs": (377, 378, 379, 380, 381),
+        "warnings": {
+            **{f"OPISY!{c}": "By & Havn (n.d.) is not identifiable in the supplied reference list." for c in ("D15", "D16", "E15", "G15")},
+            **{f"OPISY!{c}": "The spatial analysis boundaries and methods require verification." for c in ("F15", "H15")},
+            "OPISY!H16": "The study-specific energy assessment and its supporting citation require verification.",
+            **{f"OPISY-Main Planning Principles!{c}": "By & Havn (n.d.) is not identifiable in the supplied reference list." for c in ("C40", "C48")},
+            **{f"OPISY-Main Planning Principles!{c}": "The study-specific analysis or assessment methods require verification." for c in ("C41", "C45", "C47")},
+            **{f"Ørestad Syd - Key Characteri...!C{r}": "The spatial analysis boundaries and methods require verification." for r in (14, 15, 16, 17, 19, 20, 21)},
+        },
+    },
+}
 EXCLUDED_BLOCKS = {("garnizon", "ub_2"): "Excluded by TEMP__TRUTH/IEA_TASK_70_ATLASY/NOTATKI.docx"}
 CITY_ID_OVERRIDES = {
     "elephant & castle – elephant park": "elephant-and-castle",
@@ -171,6 +237,156 @@ def source_ref(sheet: str, row: int, cell: str | None = None) -> dict[str, Any]:
     if cell:
         result["cell"] = cell
     return result
+
+
+def document_references(document: Path, heading: str, next_heading: str | None,
+                        reference_heading: str, expected: tuple[int, ...]) -> list[dict[str, Any]]:
+    """Fail closed if the source's section boundaries or bibliography change."""
+    with zipfile.ZipFile(document) as archive:
+        root = ElementTree.fromstring(archive.read("word/document.xml"))
+    ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+    paragraphs = ["".join(node.text or "" for node in p.findall(".//w:t", ns))
+                  for p in root.findall(".//w:p", ns)]
+    start = paragraphs.index(heading)
+    end = paragraphs.index(next_heading, start + 1) if next_heading else len(paragraphs)
+    marker = next(i for i in range(start + 1, end) if paragraphs[i].strip() == reference_heading)
+    actual = tuple(i + 1 for i in range(marker + 1, end) if paragraphs[i].strip())
+    if actual != expected:
+        raise ValueError(f"{document.name}: {heading} bibliography boundary changed; source review required")
+    return [{"value": paragraphs[number - 1], "source": {"file": document.name, "paragraph": number}}
+            for number in expected]
+
+
+def elephant_narrative(workbook_data: dict[str, Any], document: Path | None) -> dict[str, Any]:
+    """Export only the selected Elephant Park cells, never neighbouring site cells."""
+    file = workbook_data["sourceFile"]
+    sheets = workbook_data["sheets"]
+
+    def cells(sheet: str) -> dict[str, Any]:
+        return {key: value for row in sheets[sheet] for key, value in row["cells"].items()}
+
+    descriptions = cells("OPISY")
+    planning = cells("OPISY-Main Planning Principles")
+    sheet = "Elephant Park - Key Character.."
+    characteristics = cells(sheet)
+    if descriptions.get("C3") != "Elephant & Castle – Elephant Park" or planning.get("B4") != descriptions["C3"]:
+        raise ValueError("Elephant Park narrative sheet identifiers do not match")
+
+    def entry(sheet_name: str, coordinate: str, value: Any) -> dict[str, Any]:
+        row = int(re.search(r"\d+$", coordinate).group())
+        return {"value": value, "source": {"file": file, **source_ref(sheet_name, row, coordinate)}}
+
+    narrative = [
+        entry("OPISY", coordinate, descriptions[coordinate])
+        for column in "DEFGHI"
+        for coordinate in (f"{column}3", f"{column}4")
+        if coordinate in descriptions
+    ]
+    principles = []
+    for row in range(4, 14):
+        coordinate = f"C{row}"
+        if coordinate in planning:
+            item = entry("OPISY-Main Planning Principles", coordinate, planning[coordinate])
+            if coordinate == "C5":
+                item["verification"] = "Greater London Authority (2013) is not identifiable in the supplied reference list."
+            principles.append(item)
+    indicators = [
+        {"label": entry(sheet, f"C{row}", characteristics[f"C{row}"]),
+         "value": entry(sheet, f"D{row}", characteristics[f"D{row}"])}
+        for row in range(6, 27)
+        if f"C{row}" in characteristics and f"D{row}" in characteristics
+    ]
+    notes = [entry(sheet, coordinate, characteristics[coordinate])
+             for coordinate in ("C4", "C27") if coordinate in characteristics]
+
+    references = []
+    if document is not None:
+        references = document_references(
+            document, "Elephant & Castle – Elephant Park, London, United Kingdom",
+            None, "References", (470, 471, 473, 474, 475, 476, 477, 479),
+        )
+    return {
+        "descriptions": narrative, "planningPrinciples": principles,
+        "characteristics": indicators, "notes": notes, "references": references,
+        "referenceNote": "The case-study reference list is reproduced as supplied; its links and citation associations have not been independently verified.",
+    }
+
+
+def location_narrative(workbook_data: dict[str, Any], document: Path, name: str) -> dict[str, Any]:
+    config = NARRATIVE_CONFIG[name]
+    file = workbook_data["sourceFile"]
+    sheets = workbook_data["sheets"]
+
+    def cells(sheet: str) -> dict[str, Any]:
+        return {key: value for row in sheets[sheet] for key, value in row["cells"].items()}
+
+    descriptions = cells("OPISY")
+    planning = cells("OPISY-Main Planning Principles")
+    sheet = config["sheet"]
+    characteristics = cells(sheet)
+    start, end = config["planning"]
+    description_row = config["description_row"]
+    if descriptions.get(f"C{description_row}") != name or planning.get(f"B{start}") != name:
+        raise ValueError(f"{name}: narrative sheet identifiers do not match")
+
+    def entry(sheet_name: str, coordinate: str, value: Any) -> dict[str, Any]:
+        row = int(re.search(r"\d+$", coordinate).group())
+        result = {"value": value, "source": {"file": file, **source_ref(sheet_name, row, coordinate)}}
+        warning = config["warnings"].get(f"{sheet_name}!{coordinate}")
+        if warning:
+            result["verification"] = warning
+        return result
+
+    narrative = [
+        entry("OPISY", coordinate, descriptions[coordinate])
+        for column in "DEFGHI"
+        for coordinate in (f"{column}{row}" for row in range(description_row, config["description_end"]))
+        if coordinate in descriptions
+    ]
+    principles = [
+        entry("OPISY-Main Planning Principles", f"C{row}", planning[f"C{row}"])
+        for row in range(start, end) if f"C{row}" in planning
+    ]
+    label_column, value_column = config["indicator_columns"]
+    indicators = [
+        {"label": entry(sheet, label, characteristics[label]),
+         "value": entry(sheet, value, characteristics[value])}
+        for row in range(*config["indicator_rows"])
+        for label, value in [(f"{label_column}{row}", f"{value_column}{row}")]
+        if label in characteristics and value in characteristics
+    ]
+    notes = [entry(sheet, coordinate, characteristics[coordinate])
+             for coordinate in config["notes"] if coordinate in characteristics]
+    references = document_references(document, config["heading"], config["next_heading"],
+                                     config["reference_heading"], config["reference_paragraphs"])
+    return {
+        "descriptions": narrative, "planningPrinciples": principles,
+        "characteristics": indicators, "notes": notes, "references": references,
+        "referenceNote": "The case-study reference list is reproduced as supplied; its links and citation associations have not been independently verified.",
+    }
+
+
+def public_narrative(narrative: dict[str, Any]) -> dict[str, Any]:
+    """Withhold entire unresolved source entries, never merely remove their warning."""
+    descriptions = [item for item in narrative["descriptions"] if not item.get("verification")]
+    principles = [item for item in narrative["planningPrinciples"] if not item.get("verification")]
+    characteristics = [
+        item for item in narrative["characteristics"]
+        if not item["label"].get("verification") and not item["value"].get("verification")
+    ]
+    withheld = (
+        len(descriptions) != len(narrative["descriptions"])
+        or len(principles) != len(narrative["planningPrinciples"])
+        or len(characteristics) != len(narrative["characteristics"])
+    )
+    return {
+        **narrative, "descriptions": descriptions, "planningPrinciples": principles,
+        "characteristics": characteristics,
+        "withholdingNotice": (
+            "Some material is withheld pending citation or methodology review."
+            if withheld else None
+        ),
+    }
 
 
 def public_dane_cells(cells: dict[str, Any]) -> dict[str, Any]:
@@ -685,6 +901,7 @@ def build_data(
     source_file: str | None = None,
     asset_root: Path | None = None,
     public_dir: Path | None = None,
+    case_study: Path | None = None,
 ) -> tuple[dict[str, Any], list[str]]:
     workbook_data = read_workbook(workbook_path, source_file=source_file)
     unapproved_sites = [
@@ -709,6 +926,14 @@ def build_data(
     sites = workbook_data["sites"]
     cities = [build_city(site, source_file, d_data_rows, header_cells) for site in sites]
     cities_by_name = {city["name"].casefold(): city for city in cities}
+    elephant = cities_by_name.get("elephant & castle – elephant park")
+    reviewed_narratives = isinstance(workbook_path, Path) and workbook_path.resolve() == DEFAULT_WORKBOOK.resolve()
+    if elephant and reviewed_narratives:
+        elephant["narrative"] = public_narrative(elephant_narrative(workbook_data, case_study or CASE_STUDY))
+        for name in NARRATIVE_CONFIG:
+            city = cities_by_name.get(name.casefold())
+            if city:
+                city["narrative"] = public_narrative(location_narrative(workbook_data, case_study or CASE_STUDY, name))
 
     for row in d_data_rows:
         row_number = row["row"]
@@ -768,7 +993,9 @@ def build_data(
 
     notices = [
         "The website workbook contains no coordinates. Map points are independently verified against OpenStreetMap features; Ørestad Syd uses the 8tallet building within the study area, not the district centre.",
-        "Longer site narratives, planning principles, and key characteristics are stored locally pending citation and content review.",
+        ("Some narrative material is withheld pending citation or methodology review."
+         if reviewed_narratives else
+         "Narratives are omitted: this workbook is not the reviewed authoritative workbook; citation and methodology review is required."),
     ]
     elephant = cities_by_name.get("elephant & castle – elephant park")
     if elephant:
@@ -862,6 +1089,7 @@ def import_data(
         workbook_path,
         asset_root=source_root,
         public_dir=output_path.parent.parent,
+        case_study=CASE_STUDY if isinstance(workbook_path, Path) and workbook_path.resolve() == DEFAULT_WORKBOOK.resolve() else None,
     )
     private_output_path = private_output_path or ROOT / ".venv" / "atlas-private-content.json"
     private_output_path.parent.mkdir(parents=True, exist_ok=True)

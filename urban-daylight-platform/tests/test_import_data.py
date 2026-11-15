@@ -10,12 +10,17 @@ from openpyxl import Workbook, load_workbook
 
 from scripts.import_data import (
     build_data,
+    build_private_content,
+    elephant_narrative,
+    location_narrative,
+    CASE_STUDY,
+    NARRATIVE_CONFIG,
     exact_asset_matches,
     import_data,
     resolve_image_links,
     validate_data,
 )
-from scripts.workbook_source import REQUIRED_SHEETS
+from scripts.workbook_source import REQUIRED_SHEETS, read_workbook
 
 
 WORKBOOK_PATH = (
@@ -207,6 +212,7 @@ class ImportDataTests(unittest.TestCase):
         self.assertEqual(data["sourceWorkbook"]["file"], "source.xlsx")
         self.assertNotIn("cells", data["sourceWorkbook"]["sheets"]["OPISY"][0])
         self.assertFalse(validate_data(data))
+        self.assertIn("Narratives are omitted", " ".join(data["notices"]))
 
     def test_rejects_locations_outside_the_approved_source_set(self):
         workbook = load_workbook(fixture_workbook())
@@ -496,11 +502,164 @@ class ImportDataTests(unittest.TestCase):
                 row for row in private["sourceSheets"]["OPISY"] if row["row"] == 3
             )
             self.assertTrue(opisy["cells"]["D3"])
-            self.assertNotIn(opisy["cells"]["D3"], public_text)
+            self.assertIn(opisy["cells"]["D3"], public_text)
             self.assertEqual(
                 generated_public["cities"][0]["location"]["imageUrl"],
                 generated_public["cities"][0]["imageLinks"][0]["resolvedName"],
             )
+
+    def test_elephant_narrative_matches_selected_source_cells_and_reference_list(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            data, _ = import_data(WORKBOOK_PATH, root / "public" / "data" / "atlas.json",
+                                  private_output_path=root / "private.json")
+        content = data["cities"][0]["narrative"]
+        workbook = load_workbook(WORKBOOK_PATH, data_only=True)
+        try:
+            self.assertEqual(len(content["descriptions"]), 9)
+            self.assertEqual(len(content["planningPrinciples"]), 9)
+            self.assertEqual(len(content["characteristics"]), 21)
+            for entry in (content["descriptions"] + content["planningPrinciples"]
+                          + content["notes"]
+                          + [e for row in content["characteristics"] for e in row.values()]):
+                source = entry["source"]
+                self.assertEqual(entry["value"], workbook[source["sheet"]][source["cell"]].value)
+                self.assertEqual(source["file"], WORKBOOK_PATH.name)
+            self.assertEqual([x["source"]["cell"] for x in content["descriptions"]],
+                             ["D3", "D4", "E3", "F3", "F4", "G3", "H3", "H4", "I3"])
+            self.assertNotIn("C5", [entry["source"]["cell"] for entry in content["planningPrinciples"]])
+            self.assertTrue(content["references"])
+            self.assertTrue(all(x["source"]["file"] == "case study_261114.docx"
+                                for x in content["references"]))
+        finally:
+            workbook.close()
+
+    def test_garnizon_narrative_exact_cells_and_scoped_bibliography(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        data, _ = build_data(WORKBOOK_PATH)
+        content = next(city["narrative"] for city in data["cities"] if city["id"] == "garnizon")
+        workbook = load_workbook(WORKBOOK_PATH, data_only=True)
+        try:
+            for entry in (content["descriptions"] + content["planningPrinciples"] + content["notes"]
+                          + [e for row in content["characteristics"] for e in row.values()]):
+                source = entry["source"]
+                self.assertEqual(entry["value"], workbook[source["sheet"]][source["cell"]].value)
+            self.assertEqual(len(content["descriptions"]), 3)
+            self.assertEqual(len(content["planningPrinciples"]), 8)
+            self.assertEqual(len(content["characteristics"]), 14)
+            self.assertEqual([x["source"]["paragraph"] for x in content["references"]], list(range(262, 267)))
+            self.assertTrue(all("Ørestad" not in x["value"] for x in content["references"]))
+        finally:
+            workbook.close()
+
+    def test_kronsberg_narrative_exact_cells_and_scoped_sources(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        data, _ = build_data(WORKBOOK_PATH)
+        content = next(city["narrative"] for city in data["cities"] if city["id"] == "kronsberg")
+        workbook = load_workbook(WORKBOOK_PATH, data_only=True)
+        try:
+            for entry in (content["descriptions"] + content["planningPrinciples"] + content["notes"]
+                          + [e for row in content["characteristics"] for e in row.values()]):
+                source = entry["source"]
+                self.assertEqual(entry["value"], workbook[source["sheet"]][source["cell"]].value)
+            self.assertEqual(len(content["descriptions"]), 0)
+            self.assertEqual(len(content["planningPrinciples"]), 8)
+            self.assertEqual(len(content["characteristics"]), 20)
+            self.assertEqual([x["source"]["paragraph"] for x in content["references"]], list(range(61, 66)))
+        finally:
+            workbook.close()
+
+    def test_aspern_narrative_exact_cells_and_scoped_bibliography(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        data, _ = build_data(WORKBOOK_PATH)
+        content = next(city["narrative"] for city in data["cities"] if city["id"] == "aspern-seestadt")
+        workbook = load_workbook(WORKBOOK_PATH, data_only=True)
+        try:
+            for entry in (content["descriptions"] + content["planningPrinciples"] + content["notes"]
+                          + [e for row in content["characteristics"] for e in row.values()]):
+                source = entry["source"]
+                self.assertEqual(entry["value"], workbook[source["sheet"]][source["cell"]].value)
+            self.assertEqual(len(content["descriptions"]), 0)
+            self.assertEqual(len(content["planningPrinciples"]), 9)
+            self.assertEqual(len(content["characteristics"]), 17)
+            self.assertEqual([x["source"]["paragraph"] for x in content["references"]],
+                             [163, 164, 165, 167, 168, 170, 171, 173, 174, 177, 178])
+        finally:
+            workbook.close()
+
+    def test_orestad_narrative_exact_cells_and_scoped_bibliography(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        data, _ = build_data(WORKBOOK_PATH)
+        content = next(city["narrative"] for city in data["cities"] if city["id"] == "orestad-syd")
+        workbook = load_workbook(WORKBOOK_PATH, data_only=True)
+        try:
+            for entry in (content["descriptions"] + content["planningPrinciples"] + content["notes"]
+                          + [e for row in content["characteristics"] for e in row.values()]):
+                source = entry["source"]
+                self.assertEqual(entry["value"], workbook[source["sheet"]][source["cell"]].value)
+            self.assertEqual(len(content["descriptions"]), 2)
+            self.assertEqual(len(content["planningPrinciples"]), 4)
+            self.assertEqual(len(content["characteristics"]), 14)
+            self.assertIn("not be interpreted as verified completed", content["notes"][0]["value"])
+            self.assertEqual([x["source"]["paragraph"] for x in content["references"]], list(range(377, 382)))
+        finally:
+            workbook.close()
+
+    def test_flagged_entries_are_private_and_absent_from_public_narratives(self):
+        if not WORKBOOK_PATH.exists():
+            self.skipTest("Approved source workbook is not available")
+        workbook_data = read_workbook(WORKBOOK_PATH)
+        private = build_private_content(WORKBOOK_PATH)
+        public, _ = build_data(WORKBOOK_PATH)
+        raw = {"elephant-and-castle": elephant_narrative(workbook_data, CASE_STUDY)}
+        for name in NARRATIVE_CONFIG:
+            city = next(city for city in public["cities"] if city["name"] == name)
+            raw[city["id"]] = location_narrative(workbook_data, CASE_STUDY, name)
+        private_cells = {
+            sheet: {key: value for row in rows for key, value in row["cells"].items()}
+            for sheet, rows in private["sourceSheets"].items()
+        }
+        public_json = json.dumps(public, ensure_ascii=False)
+        for city in public["cities"]:
+            original = raw[city["id"]]
+            shown = city["narrative"]
+            self.assertIn("withheld", shown["withholdingNotice"])
+            entries = original["descriptions"] + original["planningPrinciples"] + [
+                entry for row in original["characteristics"] for entry in row.values()
+            ]
+            shown_cells = {
+                (entry["source"]["sheet"], entry["source"]["cell"])
+                for entry in shown["descriptions"] + shown["planningPrinciples"] + [
+                    entry for row in shown["characteristics"] for entry in row.values()
+                ]
+            }
+            withheld_labels = {
+                (row["label"]["source"]["sheet"], row["label"]["source"]["cell"])
+                for row in original["characteristics"]
+                if row["label"].get("verification") or row["value"].get("verification")
+            }
+            for entry in entries:
+                sheet, cell = entry["source"]["sheet"], entry["source"]["cell"]
+                self.assertEqual(private_cells[sheet][cell], entry["value"])
+                if entry.get("verification"):
+                    self.assertNotIn((sheet, cell), shown_cells)
+                    if isinstance(entry["value"], str) and len(entry["value"]) > 80:
+                        self.assertNotIn(json.dumps(entry["value"], ensure_ascii=False), public_json)
+                elif (sheet, cell) in withheld_labels:
+                    self.assertNotIn((sheet, cell), shown_cells)
+                else:
+                    self.assertIn((sheet, cell), shown_cells)
+            self.assertEqual(original["references"], shown["references"])
+        self.assertTrue(any(e["source"]["cell"] == "H6" and e.get("verification")
+                            for e in raw["garnizon"]["descriptions"]))
+        self.assertTrue(any(e["source"]["cell"] == "H16" and e.get("verification")
+                            for e in raw["orestad-syd"]["descriptions"]))
 
     def test_exact_image_matches_are_location_scoped_and_exclude_stale_assets(self):
         asset_root = Path(__file__).parent / "fixtures" / "asset_match_scope"

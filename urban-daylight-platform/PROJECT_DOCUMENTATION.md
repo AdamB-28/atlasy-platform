@@ -26,6 +26,7 @@ Importer korzysta wyłącznie z zatwierdzonego skoroszytu i jego aktualnego fold
 
 - `cities[]`: pięć lokalizacji nazwanych w `DANE`; nazwy źródłowe i wiersze pochodzenia są zachowane.
 - `analysisUnits[]`: bloki urbanistyczne przypisane przez identyfikator z `DANE!BC`; każde pole źródłowe ma adres komórki w `sourceData`.
+- `narrative`: wybrane opisy, zasady planowania, charakterystyki i bibliografia studium przypadku. Wskazane fragmenty z nierozstrzygniętymi cytowaniami lub metodami są pomijane w publicznym eksporcie; lista źródeł nie oznacza niezależnej weryfikacji powiązania każdego twierdzenia ze źródłem.
 - `sourceWorkbook.sheets`: publiczne, bezpieczne wartości arkusza `DANE` i indeks wierszy pozostałych arkuszy bez ich treści. Proza źródłowa z `DANE` nie trafia do publicznego raw data. Garnizon UB_2 jest pominięty w wyjściu, a dokładne źródło decyzji zapisano w `exclusions[]`.
 - `imageCatalog[]`: odwołania do grafik z surową nazwą i komórką źródłową. Dopasowanie jest ograniczone do folderu właściwej lokalizacji w `RYSUNKI` lub `GRAFIKI_LOCATION`, z udokumentowanymi wyjątkami dla potwierdzonego modelu Elephant Park UB_1 oraz uzgodnionych obrazów Aspern. Brak pliku jest raportowany.
 - `notices[]`: ograniczenia źródła i nierozstrzygnięte kwestie wymagające weryfikacji.

@@ -147,6 +147,23 @@ export interface City {
   analysisUnits: UrbanBlock[];
   source: DataSource;
   imageLinks?: ImageLink[];
+  narrative?: LocationNarrative;
+}
+
+export interface NarrativeEntry {
+  value: string | number;
+  source: { file: string; sheet: string; row: number; cell: string };
+  verification?: string;
+}
+
+export interface LocationNarrative {
+  descriptions: NarrativeEntry[];
+  planningPrinciples: NarrativeEntry[];
+  characteristics: { label: NarrativeEntry; value: NarrativeEntry }[];
+  notes: NarrativeEntry[];
+  references: { value: string; source: { file: string; paragraph: number } }[];
+  referenceNote: string;
+  withholdingNotice: string | null;
 }
 
 export interface DataSource {
