@@ -731,7 +731,23 @@ def build_data(
         excluded_reason = EXCLUDED_BLOCKS.get((site["name"].casefold(), block.casefold()))
         if excluded_reason:
             continue
-        city["analysisUnits"].append(build_block(row, source_file, header_cells))
+        unit = build_block(row, source_file, header_cells)
+        if (
+            source_file == "ATLASY_DANE_261107.xlsx"
+            and city["id"] == "elephant-and-castle"
+            and unit["name"] == "UB_1"
+            and row_number == 8
+            and unit["solarEnergySpecs"]["area"] == 9971
+            and row["cells"].get("DG8") == 59982
+        ):
+            unit["solarEnergySpecs"]["panelArea"] = 5998.2
+            unit["solarEnergySpecs"]["panelAreaWarning"] = (
+                "The owner identified a missing decimal comma in DANE DG8 (59982); "
+                "the displayed 5,998.2 m² is interpreted from that correction. "
+                "It differs from 60% of the DANE DD8 roof area (5,982.6 m²); "
+                "the coverage calculation requires clarification."
+            )
+        city["analysisUnits"].append(unit)
 
     exclusion_rows = []
     excluded_dane_rows: set[int] = set()
@@ -761,10 +777,14 @@ def build_data(
             item["label"]: item["value"]
             for item in (block or {}).get("solarEnergySpecsSource", [])
         }
-        if solar.get("area (m²)") == 9971 and solar.get("area to be covered by the panels (m²) - 60%") == 59982:
+        if (
+            solar.get("area (m²)") == 9971
+            and solar.get("area to be covered by the panels (m²) - 60%") == 59982
+            and (block or {}).get("solarEnergySpecs", {}).get("panelArea") == 5998.2
+        ):
             notices.append(
-                "Elephant Park DANE!DD8 and DANE!DG8 are preserved exactly despite the solar-area "
-                "inconsistency; no correction is inferred pending TASK-16."
+                "Elephant Park DANE!DG8 is preserved as recorded; its displayed panel area "
+                "uses the owner's missing-decimal correction and retains a coverage warning."
             )
 
     data = {

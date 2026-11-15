@@ -136,6 +136,8 @@ test('reported solar panel areas follow the stated coverage or remain flagged', 
       if (!specs || specs.area === null) continue
       if (specs.panelArea === null) {
         assert.ok(specs.panelAreaWarning, `${city.name}: missing panel-area explanation`)
+      } else if (Math.abs(specs.panelArea - specs.area * 0.6) > 1) {
+        assert.ok(specs.panelAreaWarning, `${city.name}: missing coverage discrepancy warning`)
       } else {
         assert.ok(Math.abs(specs.panelArea - specs.area * 0.6) <= 1, `${city.name}: panel area differs from 60%`)
       }
@@ -143,7 +145,7 @@ test('reported solar panel areas follow the stated coverage or remain flagged', 
   }
 })
 
-test('confirmed model and reconciled Aspern images retain provenance; solar ambiguity remains flagged', () => {
+test('confirmed model, corrected solar area and reconciled Aspern images retain provenance', () => {
   const elephant = atlas.cities[0]
   const block = elephant.analysisUnits.find((item) => item.name === 'UB_1')
   const model = block.imageLinks.find((link) => link.cell === 'BE8')
@@ -156,13 +158,14 @@ test('confirmed model and reconciled Aspern images retain provenance; solar ambi
   const blockSolar = Object.fromEntries(block.solarEnergySpecsSource.map((item) => [item.label, item.value]))
   assert.equal(blockSolar['area (m²)'], 9971)
   assert.equal(blockSolar['area to be covered by the panels (m²) - 60%'], 59982)
-  assert.equal(block.solarEnergySpecs.panelArea, null)
+  assert.equal(block.solarEnergySpecs.panelArea, 5998.2)
   assert.match(block.solarEnergySpecs.panelAreaWarning, /DG8.*DD8/)
+  assert.match(block.solarEnergySpecs.panelAreaWarning, /5,982\.6/)
   assert.equal(
     block.solarEnergySpecsSource.find((item) => item.label === 'area to be covered by the panels (m²) - 60%').source.cell,
     'DG8',
   )
-  assert.ok(atlas.notices.some((notice) => notice.includes('TASK-16')))
+  assert.ok(atlas.notices.some((notice) => notice.includes('missing-decimal')))
 
   const aspern = atlas.cities.find((city) => city.name === 'Aspern Seestadt')
   for (const cell of ['Q15', 'AL15', 'AV15']) {

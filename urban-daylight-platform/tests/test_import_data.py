@@ -315,11 +315,31 @@ class ImportDataTests(unittest.TestCase):
         self.assertEqual(
             solar_values["area to be covered by the panels (m²) - 60%"], 59982
         )
-        self.assertIsNone(block["solarEnergySpecs"]["panelArea"])
+        self.assertEqual(block["solarEnergySpecs"]["panelArea"], 5998.2)
         self.assertIn("DG8", block["solarEnergySpecs"]["panelAreaWarning"])
         self.assertIn("DD8", block["solarEnergySpecs"]["panelAreaWarning"])
-        self.assertTrue(any("TASK-16" in notice for notice in data["notices"]))
+        self.assertIn("5,982.6", block["solarEnergySpecs"]["panelAreaWarning"])
+        self.assertTrue(any("missing-decimal" in notice for notice in data["notices"]))
         self.assertFalse(any(row["row"] == 11 for row in data["sourceWorkbook"]["sheets"]["DANE"]))
+
+    def test_owner_decimal_correction_is_scoped_to_exact_workbook_and_values(self):
+        source_name = "ATLASY_DANE_261107.xlsx"
+        data, _ = build_data(fixture_workbook(), source_file=source_name)
+        block = data["cities"][0]["analysisUnits"][0]
+        self.assertEqual(block["solarEnergySpecs"]["panelArea"], 5998.2)
+        self.assertEqual(block["sourceData"]["cells"]["DG8"], 59982)
+
+        workbook = load_workbook(fixture_workbook())
+        workbook["DANE"]["DG8"] = 59983
+        changed = BytesIO()
+        workbook.save(changed)
+        workbook.close()
+        changed.seek(0)
+        data, _ = build_data(changed, source_file=source_name)
+        block = data["cities"][0]["analysisUnits"][0]
+        self.assertIsNone(block["solarEnergySpecs"]["panelArea"])
+        self.assertIn("omitted", block["solarEnergySpecs"]["panelAreaWarning"])
+        self.assertFalse(any("missing-decimal" in notice for notice in data["notices"]))
 
     def test_site_analysis_matches_workbook_cells_when_available(self):
         if not WORKBOOK_PATH.exists():
