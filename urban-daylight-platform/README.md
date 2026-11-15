@@ -20,7 +20,7 @@ Vite wypisze adres lokalnego serwera. Przy pierwszym uruchomieniu aplikacja pobi
 2. Z katalogu aplikacji uruchom `npm run data:import`. Importer czyta wyłącznie powyższy skoroszyt i generuje `public/data/atlas.json`.
 3. Sprawdź komunikaty `NOTICE`, a następnie uruchom `npm test`, `npm run lint` i `npm run build`.
 
-Publiczny atlas zachowuje pochodzenie lokalizacji, bloków, liczb i obrazów. Zatwierdzenia opisów nie zostały ustalone: pełne komórki wszystkich arkuszy, w tym opisowe kolumny `DANE`, funkcje bloków i wykluczony wiersz Garnizonu UB_2, trafiają wyłącznie do lokalnego `.venv/atlas-private-content.json`, nie do pobieralnego `atlas.json`. Skoroszyt nie zawiera współrzędnych; cztery punkty mapy są niezależnie zweryfikowane w OpenStreetMap jako odpowiadające lokalizacji albo projektowi urbanistycznemu i zapisane jako oddzielne metadane wraz z zapytaniem Nominatim oraz odnośnikiem do obiektu OSM. Nie zmienia to źródłowych komórek skoroszytu. Ørestad Syd pozostaje bez punktu na mapie: jedyny wynik wyszukiwania OSM o tej nazwie jest restauracją, nie obszarem dzielnicy; nie znaleziono wiarygodnego źródła geograficznego dla obszaru studium. Garnizon UB_2 jest wyłączony z publicznego atlasu zgodnie z `NOTATKI.docx`. Obrazy są publikowane tylko przy unikalnym, dokładnym dopasowaniu nazwy pliku w folderze właściwej lokalizacji (albo `GRAFIKI_LOCATION` dla map lokalizacyjnych); katalogi `stare` i inne lokalizacje są ignorowane, a brak dopasowania jest raportowany. Niespójny obszar paneli jest zachowany z pochodzeniem źródłowym, lecz pominięty w tabeli do weryfikacji.
+Atlas zachowuje pochodzenie danych do weryfikacji; oznaczenia komórek i wewnętrzne komunikaty są ukryte w zwykłym widoku strony. Pełne surowe arkusze są zapisywane lokalnie w `.venv/atlas-private-content.json`, natomiast zatwierdzone opisy formy i funkcji zabudowy są publikowane. Skoroszyt nie zawiera współrzędnych; pięć punktów zweryfikowano niezależnie w OpenStreetMap. Dla Ørestad Syd punktem jest budynek 8tallet wewnątrz obszaru studium, a nie centrum dzielnicy. Garnizon UB_2 jest wyłączony zgodnie z `NOTATKI.docx`. Obrazy są dopasowywane do właściwych lokalizacji; dwa udokumentowane wyjątki dotyczą potwierdzonego modelu Elephant Park UB_1 oraz uzgodnionych obrazów Aspern. Wartość powierzchni paneli Elephant Park UB_1 pokazuje interpretację poprawki przecinka zgłoszonej przez właściciela, wraz z ostrzeżeniem o pozostałej różnicy względem 60% powierzchni dachu.
 
 Launcher Pythona szuka interpretera wskazanego przez `PYTHON`, następnie w lokalnym `.venv`, na `PATH` i w Windowsowym launcherze `py`. Czytnik skoroszytu i importer wymagają `openpyxl` z `requirements.txt`.
 
@@ -31,7 +31,7 @@ Launcher Pythona szuka interpretera wskazanego przez `PYTHON`, następnie w loka
 - `benchmarks` oraz symulacje pomieszczeń nie są odtwarzane ze starszych CSV i pozostają puste.
 - Każdy rekord zachowuje pochodzenie: nazwę skoroszytu, arkusz, wiersz i — dla wartości komórkowych — adres komórki.
 - Puste pola pozostają puste. Aplikacja nie dopisuje fikcyjnych wartości i nie porównuje bezpośrednio wyników z różnych skal analizy.
-- Niezweryfikowane odwołania graficzne i niespójne wartości słoneczne są zachowane jako źródłowe i oznaczone do sprawdzenia; importer ich nie poprawia ani nie zastępuje.
+- Niezweryfikowane odwołania graficzne i niespójne wartości słoneczne są oznaczone do sprawdzenia. Wyjątki zatwierdzone przez właściciela lub uzgodnione z materiałem źródłowym zachowują oryginalną wartość i opis decyzji.
 
 ## Polecenia
 
@@ -45,8 +45,8 @@ npm run preview      # podgląd buildu
 
 ## Podgląd administratora
 
-Hasło `KTMadmin!` włącza lokalny tryb inspekcji: można wpisać je na bramce logowania albo otworzyć pozycję `Admin` w nagłówku po zwykłym zalogowaniu. Tryb pokazuje surowe rekordy JSON i zachowane pochodzenie danych skoroszytu. Nierozstrzygnięte odwołania do obrazów nie mają publicznego URL ani automatycznego aliasu. `Admin on` wyłącza podgląd; stan istnieje tylko w bieżącej karcie. Podpisy obrazów są metadanymi inspekcji, nie kontrolą dostępu.
+Publiczna strona nie wymaga hasła. Pozycja `Admin` w nagłówku włącza opcjonalny lokalny tryb inspekcji, pokazujący rekordy JSON i pochodzenie danych skoroszytu; `Admin on` wyłącza podgląd. Stan istnieje tylko w bieżącej karcie.
 
-To nie jest mechanizm bezpieczeństwa: aplikacja jest statyczna, a oba hasła i cały atlas są dostarczane do przeglądarki. Używaj tego wyłącznie do lokalnej inspekcji danych, nie do ochrony poufnych informacji.
+To nie jest mechanizm bezpieczeństwa: aplikacja jest statyczna, a dane atlasu i przełącznik inspekcji są dostarczane do przeglądarki. Ukrycie etykiet nie chroni danych przed odczytem.
 
 Szczegółowy model i zasady aktualizacji opisuje [PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md); skrócona konfiguracja jest w [SETUP.md](SETUP.md).
