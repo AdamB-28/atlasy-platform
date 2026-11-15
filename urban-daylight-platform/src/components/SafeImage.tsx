@@ -57,7 +57,7 @@ export default function SafeImage({ src, alt, className = '', imageLink, credit 
       {lightboxOpen && (
         <ImageLightbox src={src} alt={alt} credit={credit} onClose={() => setLightboxOpen(false)} />
       )}
-      {credit && <p className="mt-2 text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">{credit}</p>}
+      {credit && <p className="m-2 text-xs leading-relaxed text-neutral-700 dark:text-neutral-300">{credit}</p>}
       <AdminImageCaption link={imageLink} />
     </>
   )

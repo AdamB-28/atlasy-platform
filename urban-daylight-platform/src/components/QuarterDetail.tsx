@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { hasData, getCityFolderName, extractPercentage, findImageLink, formatBlockName, tempSourcePath } from '../utils/helpers'
+import { hasData, getCityFolderName, extractPercentage, findImageLink, formatBlockName, MODEL_CREDIT, tempSourcePath } from '../utils/helpers'
 import type { UrbanBlock } from '../types'
 import SafeImage from './SafeImage'
 import DistributionChart from './DistributionChart'
@@ -67,6 +67,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
               <SafeImage
                 src={getImagePath(quarter.form3d)}
                 alt={`${blockName} 3D`}
+                credit={MODEL_CREDIT}
                 imageLink={findImageLink(quarter.imageLinks, 'form3d')}
                 className="w-full rounded-lg"
               />

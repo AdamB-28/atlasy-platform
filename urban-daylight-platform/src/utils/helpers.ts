@@ -8,6 +8,9 @@ export function formatBlockName(cityName: string, blockName: string): string {
   return `${cityName} - ${blockName}`
 }
 
+export const MODEL_CREDIT = 'Project models include modified student-created or Autodesk Forma models, prepared using Autodesk Forma and SketchUp. The source of each individual model is not specified.'
+export const SITE_MODEL_CREDIT = `${MODEL_CREDIT} Site 3D graphics use an OBJ export from Autodesk Forma, graphically prepared in SketchUp.`
+
 export function getImagePath(imageName: string | null, cityFolder: string): string {
   if (!imageName) return ''
   // Files are already clean ASCII, no encoding needed

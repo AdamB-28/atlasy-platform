@@ -10,7 +10,7 @@ import SolarEnergyTable from '../components/SolarEnergyTable'
 import UrbanSectionDiagram from '../components/UrbanSectionDiagram'
 import StreetSunSimulator from '../components/StreetSunSimulator'
 import { useCities, useCity } from '../hooks/useCitiesData'
-import { findImageLink, formatBlockName, formatMetricValue, getCityFolderName, hasData, tempSourcePath, valueContainsUnit } from '../utils/helpers'
+import { findImageLink, formatBlockName, formatMetricValue, getCityFolderName, hasData, MODEL_CREDIT, tempSourcePath, valueContainsUnit } from '../utils/helpers'
 import AdminDataPanel from '../components/AdminDataPanel'
 import type { ImageLink } from '../types'
 import { generateDaylightInsights, generateUrbanFormInsights, generateUrbanMorphologyInsights } from '../utils/insights'
@@ -231,10 +231,10 @@ export default function ComparePage() {
         <h4 className="font-semibold text-sm md:text-base text-neutral-900 dark:text-white mb-3 md:mb-4 transition-colors duration-500">{title}</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div>
-            {hasA ? <div className="border-2 border-blue-300 dark:border-blue-700 rounded-lg overflow-hidden transition-colors duration-500"><div className="bg-blue-100 dark:bg-blue-900 px-3 py-1.5 text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide transition-colors duration-500">{leftTitle}</div><SafeImage src={getImagePathA(imageA)} alt={`${leftTitle} - ${title}`} className="w-full aspect-video object-cover" imageLink={linkA} /></div> : <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500"><p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p></div>}
+            {hasA ? <div className="border-2 border-blue-300 dark:border-blue-700 rounded-lg overflow-hidden transition-colors duration-500"><div className="bg-blue-100 dark:bg-blue-900 px-3 py-1.5 text-xs font-semibold text-blue-900 dark:text-blue-100 uppercase tracking-wide transition-colors duration-500">{leftTitle}</div><SafeImage src={getImagePathA(imageA)} alt={`${leftTitle} - ${title}`} className="w-full aspect-video object-cover" imageLink={linkA} credit={field === 'form3d' ? MODEL_CREDIT : undefined} /></div> : <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500"><p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p></div>}
           </div>
           <div>
-            {hasB ? <div className="border-2 border-amber-300 dark:border-amber-700 rounded-lg overflow-hidden transition-colors duration-500"><div className="bg-amber-100 dark:bg-amber-900 px-3 py-1.5 text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide transition-colors duration-500">{rightTitle}</div><SafeImage src={getImagePathB(imageB)} alt={`${rightTitle} - ${title}`} className="w-full aspect-video object-cover" imageLink={linkB} /></div> : <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500"><p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p></div>}
+            {hasB ? <div className="border-2 border-amber-300 dark:border-amber-700 rounded-lg overflow-hidden transition-colors duration-500"><div className="bg-amber-100 dark:bg-amber-900 px-3 py-1.5 text-xs font-semibold text-amber-900 dark:text-amber-100 uppercase tracking-wide transition-colors duration-500">{rightTitle}</div><SafeImage src={getImagePathB(imageB)} alt={`${rightTitle} - ${title}`} className="w-full aspect-video object-cover" imageLink={linkB} credit={field === 'form3d' ? MODEL_CREDIT : undefined} /></div> : <div className="aspect-video bg-neutral-100 dark:bg-neutral-800 rounded-lg flex items-center justify-center border border-neutral-200 dark:border-neutral-700 transition-colors duration-500"><p className="text-xs md:text-sm text-neutral-400 dark:text-neutral-500">No data available</p></div>}
           </div>
         </div>
       </div>
