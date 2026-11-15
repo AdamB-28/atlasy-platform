@@ -21,28 +21,37 @@ export default function SolarEnergyTable({ specs }: SolarEnergyTableProps) {
     { label: 'Annual Electricity (20% eff.)', value: specs.annualElectricity, unit: 'kWh' },
   ].filter(r => r.value !== null)
 
-  if (rows.length === 0) return null
+  if (rows.length === 0 && !specs.panelAreaWarning) return null
 
   return (
-    <div className="overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700">
-      <table className="w-full text-sm">
-        <tbody>
-          {rows.map((row, i) => (
-            <tr
-              key={i}
-              className={i % 2 === 0 ? 'bg-white dark:bg-neutral-800' : 'bg-neutral-50 dark:bg-neutral-800/50'}
-            >
-              <td className="px-3 py-2 text-neutral-600 dark:text-neutral-400 text-xs md:text-sm">
-                {row.label}
-              </td>
-              <td className="px-3 py-2 text-right font-semibold text-neutral-900 dark:text-white text-xs md:text-sm">
-                {formatNumber(row.value, row.unit)}
-                <span className="text-neutral-400 dark:text-neutral-500 font-normal ml-1 text-[10px] md:text-xs"> {row.unit}</span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-3">
+      {specs.panelAreaWarning && (
+        <p role="status" className="rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-200">
+          {specs.panelAreaWarning}
+        </p>
+      )}
+      {rows.length > 0 && (
+        <div className="overflow-hidden rounded-lg border border-neutral-200 dark:border-neutral-700">
+          <table className="w-full text-sm">
+            <tbody>
+              {rows.map((row, i) => (
+                <tr
+                  key={i}
+                  className={i % 2 === 0 ? 'bg-white dark:bg-neutral-800' : 'bg-neutral-50 dark:bg-neutral-800/50'}
+                >
+                  <td className="px-3 py-2 text-neutral-600 dark:text-neutral-400 text-xs md:text-sm">
+                    {row.label}
+                  </td>
+                  <td className="px-3 py-2 text-right font-semibold text-neutral-900 dark:text-white text-xs md:text-sm">
+                    {formatNumber(row.value, row.unit)}
+                    <span className="text-neutral-400 dark:text-neutral-500 font-normal ml-1 text-[10px] md:text-xs"> {row.unit}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }

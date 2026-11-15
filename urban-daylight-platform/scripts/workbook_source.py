@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, BinaryIO
 
 from openpyxl import load_workbook
 
@@ -20,13 +20,14 @@ REQUIRED_SHEETS = (
 BLOCK_ID = re.compile(r"UB_[A-Z0-9]+", re.IGNORECASE)
 
 
-def read_workbook(path: Path) -> dict[str, Any]:
+def read_workbook(path: Path | BinaryIO, source_file: str | None = None) -> dict[str, Any]:
     """Read the website workbook without inferring or altering source values."""
+    file_name = source_file or (path.name if isinstance(path, Path) else "source.xlsx")
     workbook = load_workbook(path, data_only=False)
     try:
         missing = [sheet for sheet in REQUIRED_SHEETS if sheet not in workbook.sheetnames]
         if missing:
-            raise ValueError(f"{path.name}: missing required sheets: {', '.join(missing)}")
+            raise ValueError(f"{file_name}: missing required sheets: {', '.join(missing)}")
 
         sheets: dict[str, list[dict[str, Any]]] = {}
         for sheet in workbook:
@@ -75,6 +76,6 @@ def read_workbook(path: Path) -> dict[str, Any]:
 
         if not sites:
             raise ValueError("DANE: no location rows found")
-        return {"sourceFile": path.name, "sheets": sheets, "sites": sites}
+        return {"sourceFile": file_name, "sheets": sheets, "sites": sites}
     finally:
         workbook.close()

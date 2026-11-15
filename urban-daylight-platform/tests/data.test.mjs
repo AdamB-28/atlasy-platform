@@ -4,102 +4,155 @@ import path from 'node:path'
 import test from 'node:test'
 
 const atlas = JSON.parse(await readFile(new URL('../public/data/atlas.json', import.meta.url), 'utf8'))
+const sourceFile = 'ATLASY_DANE_261107.xlsx'
 
-test('atlas contains the three stable case-study IDs and five benchmarks', () => {
-  assert.deepEqual(atlas.cities.map((city) => city.id), ['elephant-and-castle', 'garnizon', 'hudson-yards'])
-  assert.equal(atlas.benchmarks.length, 5)
+test('atlas is generated from the website workbook and all five source locations', () => {
+  assert.equal(atlas.version, 2)
+  assert.deepEqual(atlas.generatedFrom, [sourceFile])
+  assert.equal(
+    atlas.sourceWorkbook.path,
+    'TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/TABELA_EXCEL/ATLASY_DANE_261107.xlsx',
+  )
+  assert.deepEqual(atlas.cities.map((city) => city.name), [
+    'Elephant & Castle – Elephant Park',
+    'Garnizon',
+    'Kronsberg',
+    'Aspern Seestadt',
+    'Ørestad Syd',
+  ])
+  assert.deepEqual(atlas.benchmarks, [])
+  assert.ok(!JSON.stringify(atlas).includes('hudson-yards'))
+  assert.ok(!JSON.stringify(atlas).includes('.venv/TEMP'))
 })
 
-test('urban-block and selected-room measurements retain their distinct scales', () => {
-  const cities = Object.fromEntries(atlas.cities.map((city) => [city.id, city]))
-  assert.deepEqual(cities['elephant-and-castle'].analysisUnits.filter((unit) => unit.analysisLevel === 'urban-block').map((unit) => unit.name), ['UB_1', 'UB_2'])
-  assert.ok(cities['elephant-and-castle'].analysisUnits.some((unit) => unit.analysisLevel === 'selected-room'))
-  assert.equal(cities['elephant-and-castle'].analysisUnits.find((unit) => unit.analysisLevel === 'selected-room').daylightFactor.simulation1.avgValue, '5,17%')
-  assert.equal(cities['elephant-and-castle'].analysisUnits.find((unit) => unit.analysisLevel === 'selected-room').spatialDaylightAutonomy.simulation1.autonomy, 'Average sDA value is 49,54%')
-  assert.equal(cities['elephant-and-castle'].analysisUnits.find((unit) => unit.analysisLevel === 'selected-room').usefulDaylightIlluminance.simulation1.avgValue, '64,09%')
-  assert.equal(cities['elephant-and-castle'].siteAnalysis.urbanBlocksImage, 'ELEPHANT_AND_CASTLE_260925')
-  assert.deepEqual(cities.garnizon.analysisUnits.map((unit) => unit.name), ['UB_1', 'UB_2', 'UB_3'])
-  assert.equal(cities['hudson-yards'].analysisUnits[0].analysisLevel, 'selected-room')
-  assert.equal(cities['hudson-yards'].analysisUnits[0].comparisonKey, 'room-300lx')
-  assert.equal(cities['elephant-and-castle'].analysisUnits.find((unit) => unit.analysisLevel === 'selected-room').comparisonKey, 'room-750lx')
-  assert.equal(cities['hudson-yards'].analysisUnits[0].comparisonKey, 'room-300lx')
-  assert.ok(atlas.cities.filter((city) => city.id === 'garnizon').every((city) => city.analysisUnits.every((unit) => unit.analysisLevel === 'urban-block')))
+test('workbook provenance is public without exposing unapproved narrative text', () => {
+  assert.deepEqual(Object.keys(atlas.sourceWorkbook.sheets), [
+    'DANE',
+    'OPISY',
+    'OPISY-Main Planning Principles',
+    'Kronsberg-Key characteristics',
+    'Aspern Seestadt - Key Chara...',
+    'Garnizon -Key Characteristics',
+    'Ørestad Syd - Key Characteri...',
+    'Elephant Park - Key Character..',
+  ])
+  const elephant = atlas.cities[0]
+  assert.deepEqual(elephant.source, {
+    file: sourceFile,
+    sheet: 'DANE',
+    row: 8,
+    cell: 'C8',
+    status: 'source',
+  })
+  assert.ok(!('descriptions' in elephant))
+  assert.ok(!('planningPrinciples' in elephant))
+  assert.ok(!('keyCharacteristics' in elephant))
+  assert.ok(atlas.sourceWorkbook.sheets.OPISY.every((row) => !('cells' in row)))
+  assert.ok(atlas.sourceWorkbook.sheets['OPISY-Main Planning Principles'].every((row) => !('cells' in row)))
+  assert.ok(atlas.sourceWorkbook.sheets['Elephant Park - Key Character..'].every((row) => !('cells' in row)))
+  assert.doesNotMatch(JSON.stringify(atlas), /Elephant Park is a large-scale|Integrated urban regeneration and densification/)
+  const block = elephant.analysisUnits.find((item) => item.name === 'UB_1')
+  assert.equal(block.source.cell, 'BC8')
+  assert.equal(block.sourceData.cells.BE8, 'Elephant_and_Castle_UB_model_3D')
+  assert.equal(block.indicators.buildingIntensity, block.sourceData.cells.BF8)
+  assert.equal(block.distributions[0].bins[0].value, block.sourceData.cells.BO8)
 })
 
-test('five benchmark records include available site context from Arkusz 1', () => {
-  const benchmarks = Object.fromEntries(atlas.benchmarks.map((benchmark) => [benchmark.id, benchmark]))
-  assert.equal(benchmarks.kronsberg.context.floorAreaRatio, 0.55)
-  assert.equal(benchmarks.seestadt.context.solarEnergySpecs.annualElectricity, 19800000)
-  assert.equal(benchmarks.kronsberg.context.source.sheet, 'Arkusz1')
-  assert.equal(benchmarks.orestad.name, 'Ørestad')
-  assert.equal(benchmarks.orestad.context.country, 'Denmark, Copenhagen')
-  assert.equal(benchmarks.kronsberg.unassignedProfiles.length, 1)
-  assert.equal(atlas.unassignedProfiles.length, 1)
-  assert.match(atlas.unassignedProfiles[0].attributionNote, /without assigning them to a place/)
+test('the excluded Garnizon UB_2 row is not exported, while its exclusion source is recorded', () => {
+  const garnizon = atlas.cities.find((city) => city.name === 'Garnizon')
+  assert.deepEqual(garnizon.analysisUnits.map((block) => block.name), ['UB_1', 'UB_3'])
+  assert.ok(!atlas.sourceWorkbook.sheets.DANE.some((row) => row.row === 11))
+  assert.deepEqual(atlas.exclusions, [{
+    reason: 'Excluded by TEMP__TRUTH/IEA_TASK_70_ATLASY/NOTATKI.docx',
+    source: {
+      file: sourceFile,
+      sheet: 'DANE',
+      row: 11,
+      cell: 'BC11',
+    },
+  }])
 })
 
-test('all benchmark percentage distributions are complete and sum to 100', () => {
-  for (const benchmark of atlas.benchmarks) {
-    const bins = benchmark.distribution.bins
-    assert.ok(bins.every((bin) => Number.isFinite(bin.value) && bin.value >= 0 && bin.value <= 100))
-    assert.ok(Math.abs(bins.reduce((total, bin) => total + bin.value, 0) - 100) <= 2, benchmark.name)
+test('known asset and solar ambiguities remain unresolved without substitutions or corrections', () => {
+  const elephant = atlas.cities[0]
+  const block = elephant.analysisUnits.find((item) => item.name === 'UB_1')
+  const model = block.imageLinks.find((link) => link.cell === 'BE8')
+  assert.equal(model.referencedName, 'Elephant_and_Castle_UB_model_3D')
+  assert.equal(model.resolvedName, null)
+  assert.equal(model.publicUrl, null)
+  assert.equal(model.status, 'unresolved')
+
+  const blockSolar = Object.fromEntries(block.solarEnergySpecsSource.map((item) => [item.label, item.value]))
+  assert.equal(blockSolar['area (m²)'], 9971)
+  assert.equal(blockSolar['area to be covered by the panels (m²) - 60%'], 59982)
+  assert.equal(block.solarEnergySpecs.panelArea, null)
+  assert.match(block.solarEnergySpecs.panelAreaWarning, /DG8.*DD8/)
+  assert.equal(
+    block.solarEnergySpecsSource.find((item) => item.label === 'area to be covered by the panels (m²) - 60%').source.cell,
+    'DG8',
+  )
+  assert.ok(atlas.notices.some((notice) => notice.includes('TASK-15')))
+  assert.ok(atlas.notices.some((notice) => notice.includes('TASK-16')))
+
+  const aspern = atlas.cities.find((city) => city.name === 'Aspern Seestadt')
+  for (const cell of ['Q15', 'AL15', 'AV15']) {
+    const link = aspern.imageLinks.find((item) => item.cell === cell)
+    assert.ok(link)
+    assert.equal(link.resolvedName, null)
+    assert.equal(link.publicUrl, null)
   }
+  assert.ok(atlas.notices.some((notice) => notice.includes('TASK-17')))
+  assert.deepEqual(
+    atlas.imageCatalog.filter((link) => link.status === 'unresolved').map((link) => link.cell).sort(),
+    ['AL15', 'AV15', 'BE8', 'Q15'],
+  )
 })
 
-test('partial input is disclosed and no invented or lorem-ipsum data is published', () => {
-  assert.ok(atlas.notices.some((notice) => notice.includes('DATA_FORMA_260630')))
-  assert.doesNotMatch(JSON.stringify(atlas).toLowerCase(), /lorem ipsum|example data/)
-  assert.doesNotMatch(JSON.stringify(atlas), /\?rednia warto|Ni\?sze warto\?ci/)
-  assert.ok(atlas.cities.every((city) => city.source.status === 'partial' && city.source.row > 0))
-  assert.doesNotMatch(JSON.stringify(atlas), /\?rednia warto|Ni\?sze warto\?ci/)
-})
-
-test('every published image has source linkage and a resolved public URL', () => {
-  assert.ok(Array.isArray(atlas.imageCatalog) && atlas.imageCatalog.length > 0)
-  for (const city of atlas.cities) {
-    assert.ok(city.imageLinks?.length > 0, city.id)
-    for (const link of city.imageLinks) {
-      assert.equal(link.sheet, 'Arkusz1')
-      assert.match(link.sourceTempPath, /\.csv$/)
-      assert.ok(link.row > 0 && link.columnLetter)
-      if (link.referencedName) {
-        assert.ok(link.publicUrl?.includes(`/${link.resolvedName}.PNG`))
-        assert.notEqual(link.status, 'missing')
-        if (link.status !== 'public-only') assert.ok(link.tempPath)
-      }
-    }
-  }
-  const elephant = atlas.cities.find((city) => city.id === 'elephant-and-castle')
-  const block = elephant.analysisUnits.find((unit) => unit.name === 'UB_1')
-  const model = block.imageLinks.find((link) => link.field === 'form3d')
-  assert.equal(model.resolvedName, 'Elephant_and_Case_UB_1_model_3D')
-  assert.match(model.aliasNote, /Known filename alias/)
-})
-
-test('every image referenced by the atlas exists in its public location folder', async () => {
+test('exact approved image references resolve to public assets', async () => {
   const folders = {
     'elephant-and-castle': 'ELEPHANT_AND_CASTLE',
     garnizon: 'GARNIZON',
-    'hudson-yards': 'HUDSON_YARDS',
+    kronsberg: 'KRONSBERG',
+    'aspern-seestadt': 'SEESTADT',
+    'orestad-syd': 'ORESTADT',
   }
-  const imageKeys = new Set(['imageUrl', 'schwarzplanImage', 'model3dImage', 'plan', 'form3d', 'sunHours', 'daylightPotential', 'daylightPotential2', 'solarEnergy', 'image'])
-  const references = []
-  const collect = (value, folder) => {
-    if (Array.isArray(value)) return value.forEach((item) => collect(item, folder))
-    if (!value || typeof value !== 'object') return
-    for (const [key, child] of Object.entries(value)) {
-      if ((imageKeys.has(key) || key.endsWith('Image')) && typeof child === 'string') references.push(path.resolve('public', folder, `${child}.PNG`))
-      else collect(child, folder)
-    }
+  const resolved = atlas.imageCatalog.filter((link) => ['copied', 'present'].includes(link.status))
+  assert.ok(resolved.length > 0)
+  for (const link of resolved) {
+    assert.equal(link.referencedName, link.resolvedName)
+    assert.equal(link.sheet, 'DANE')
+    assert.ok(link.cell)
+    const assetPath = path.resolve('public', folders[link.cityId], `${link.resolvedName}.PNG`)
+    await access(assetPath)
   }
-  for (const city of atlas.cities) collect(city, folders[city.id])
-  const missing = []
-  for (const imagePath of references) {
-    try {
-      await access(imagePath)
-    } catch {
-      missing.push(path.relative('public', imagePath))
-    }
+  const elephant = atlas.cities[0]
+  assert.ok(elephant.location.imageUrl)
+  assert.ok(elephant.overview.schwarzplanImage)
+  assert.ok(elephant.overview.model3dImage)
+  assert.ok(elephant.siteAnalysis.sunHoursImage)
+  assert.equal(elephant.siteAnalysis.urbanBlocksImage, 'ELEPHANT_AND_CASTLE_261017')
+  const block = elephant.analysisUnits.find((item) => item.name === 'UB_1')
+  assert.equal(block.sunHours, 'Elephant_and_Castle_sun_hours_261107_UB_1')
+  assert.equal(block.daylightPotential, 'Elephant_and_Castle_daylight_potential_261107_UB_1')
+  for (const [record, cell, name] of [
+    [elephant, 'BB8', 'ELEPHANT_AND_CASTLE_261017'],
+    [block, 'BN8', 'Elephant_and_Castle_sun_hours_261107_UB_1'],
+    [block, 'CS8', 'Elephant_and_Castle_daylight_potential_261107_UB_1'],
+  ]) {
+    const link = record.imageLinks.find((item) => item.cell === cell)
+    assert.ok(link)
+    assert.equal(link.referencedName, name)
+    assert.equal(link.resolvedName, name)
+    assert.ok(['copied', 'present'].includes(link.status))
   }
-  assert.deepEqual(missing, [])
+})
+
+test('missing data remains null and coordinates are not inferred', () => {
+  for (const city of atlas.cities) {
+    assert.equal(city.location.coordinates, null)
+    assert.ok(city.source.row > 0)
+  }
+  const dane = atlas.sourceWorkbook.sheets.DANE
+  assert.equal(dane.find((row) => row.row === 9).cells.C9, undefined)
+  assert.ok(atlas.notices.some((notice) => notice.includes('Coordinates are not supplied')))
 })

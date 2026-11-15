@@ -56,9 +56,11 @@ export function tempSourcePath(tempPath?: string | null): string | null {
 
 export function getCityFolderName(cityName: string): string {
   const folderMap: Record<string, string> = {
-    'Elephant and Castle': 'ELEPHANT_AND_CASTLE',
+    'Elephant & Castle – Elephant Park': 'ELEPHANT_AND_CASTLE',
     'Garnizon': 'GARNIZON',
-    'Hudson Yards': 'HUDSON_YARDS'
+    'Kronsberg': 'KRONSBERG',
+    'Aspern Seestadt': 'SEESTADT',
+    'Ørestad Syd': 'ORESTADT',
   }
   return folderMap[cityName] || cityName.toUpperCase().replace(/\s+/g, '_')
 }

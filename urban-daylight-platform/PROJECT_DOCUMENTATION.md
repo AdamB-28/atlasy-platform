@@ -2,71 +2,56 @@
 
 ## Cel
 
-Atlas służy do nauki interpretowania relacji między formą miejską, ekspozycją na słońce, dostępem do światła dziennego i potencjałem energii słonecznej. Wykresy opisują rozkłady; pojedynczy najwyższy słupek nie jest sam w sobie oceną „dobrego” projektu.
-
-## Doświadczenie użytkownika
-
-- Mapa i lista prowadzą do trzech głównych studiów przypadku.
-- Strona lokalizacji przedstawia kontekst, wskaźniki, zacienienie sezonowe i analizę terenu.
-- Wybór urban blocku pokazuje dostępne dane morfologiczne i środowiskowe.
-- Elephant and Castle i Hudson Yards zawierają dostępne symulacje wybranych pomieszczeń. E&C używa kryterium sDA 750 lx, Hudson Yards 300 lx; oba scenariusze są odróżnione od urban blocks i wzajemnie nie są rankingowane.
-- Eksplorator benchmarków pokazuje rozkłady Arkusza 2 oraz dostępny kontekst FAR/GAR, opisy, rozkłady słońca i potencjał energii solarnej z Arkusza 1.
-- Wiersz Kronsberg zawiera dodatkowy profil bez ID bloku; następujący wiersz pomiarowy nie ma nazwy miejsca ani bloku. Interfejs pokazuje numery obu źródłowych wierszy i nie dopowiada lokalizacji.
-- Porównania pokazują dostępne wartości także wtedy, gdy druga strona nie ma pomiaru. Różne skale/protokoły są blokowane, a wskaźniki FAR, GAR i liczba pięter nie są oznaczane jako „lepsze” przez samą wielkość.
-- Lokalny tryb administratora (`KTMadmin!`) otwiera surowe rekordy JSON na poziomie lokalizacji, jednostki, benchmarku, porównania i profilu bez przypisania. Pokazuje ścieżkę CSV w `.venv/TEMP`. Pod każdym obrazem pokazuje komórkę CSV, alias, plik TEMP i publiczny URL.
+Atlas wspiera naukę interpretowania relacji między formą miejską, ekspozycją na słońce, dostępem do światła dziennego i potencjałem energii słonecznej. Rozkłady opisują wyniki źródłowe; pojedynczy najwyższy słupek sam w sobie nie jest oceną projektu.
 
 ## Lokalny tryb administratora
 
-Administrator może użyć `KTMadmin!` na bramce logowania albo włączyć tryb przez pozycję `Admin` w nagłówku. W trybie admina rozwijane panele pokazują pełny JSON rekordu, w tym pochodzenie, surowe wyniki, brakujące wartości i serie. Podpisy obrazów są metadanymi inspekcji, nie kontrolą dostępu. `Admin on` wyłącza tryb; stan jest przechowywany tylko w `sessionStorage` bieżącej karty.
+Administrator może użyć `KTMadmin!` na bramce logowania albo włączyć tryb przez pozycję `Admin` w nagłówku. Panele pokazują JSON rekordów, w tym pochodzenie, surowe wyniki i brakujące wartości. Odwołania do grafik bez weryfikacji pozostają bez publicznego URL. Podpisy obrazów są metadanymi inspekcji, nie kontrolą dostępu. `Admin on` wyłącza tryb; stan jest przechowywany tylko w `sessionStorage` bieżącej karty.
 
 To wyłącznie przełącznik interfejsu, a nie kontrola dostępu: hasło oraz `atlas.json` są wysyłane do każdej przeglądarki przez statyczną aplikację. Nie umieszczaj tu poufnych danych. Do rzeczywistej ochrony potrzebny byłby backend z autoryzacją serwerową.
 
 ## Przepływ danych
 
 ```text
-.venv/TEMP/*.csv + dostarczone grafiki
+../TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/TABELA_EXCEL/ATLASY_DANE_261107.xlsx
+          -> scripts/workbook_source.py
           -> scripts/import_data.py
-          -> public/data/atlas.json + public/{CITY}/
+          -> public/data/atlas.json
           -> React hooks -> strony i wizualizacje
 ```
 
-Importer używa wyłącznie standardowej biblioteki Pythona. Obsługuje CSV rozdzielany średnikami, cytowane pola wielowierszowe, UTF-8/CP1250, przecinki dziesiętne oraz typowe znaczniki pustych danych. Lokalizacje wykrywa po nazwach, a urban blocks przypisuje po identyfikatorach i nazwach referencji w wierszu, nie po numerze wiersza ani kolejności miast.
+Importer korzysta wyłącznie z zatwierdzonego skoroszytu i jego aktualnego folderu `RYSUNKI`. Nie czyta starszych CSV, `.venv/TEMP` ani katalogów `DANE`/`stare`. Wartości wymagające jawnej weryfikacji są odrzucane, gdy są formułami.
 
 ### Kontrakt `atlas.json`
 
-- `cities[]`: stabilne ID lokalizacji, pozycja mapy, kontekst, wskaźniki, zacienienie, `siteAnalysis`, `analysisUnits[]` i `source`.
-- `analysisUnits[]`: ID, nazwa, `analysisLevel` (`urban-block` lub `selected-room`), dostępne obrazy, wskaźniki, rozkłady i dane symulacji.
-- `benchmarks[]`: ID, nazwa, rozkład daylight potential z Arkusza 2, opcjonalny kontekst Arkusza 1 i źródła obu arkuszy. Benchmarki nie są lokalizacjami mapy.
-- `unassignedProfiles[]`: zachowane serie rozkładów, dla których w źródle brakuje identyfikatora miejsca/bloku.
-- `notices[]`: widoczne ograniczenia wejściowych danych.
-- `source`: plik wejściowy, arkusz, numer wiersza i stan kompletności.
+- `cities[]`: pięć lokalizacji nazwanych w `DANE`; nazwy źródłowe i wiersze pochodzenia są zachowane.
+- `analysisUnits[]`: bloki urbanistyczne przypisane przez identyfikator z `DANE!BC`; każde pole źródłowe ma adres komórki w `sourceData`.
+- `sourceWorkbook.sheets`: publiczne, bezpieczne wartości arkusza `DANE` i indeks wierszy pozostałych arkuszy bez ich treści. Proza źródłowa z `DANE` nie trafia do publicznego raw data. Garnizon UB_2 jest pominięty w wyjściu, a dokładne źródło decyzji zapisano w `exclusions[]`.
+- `imageCatalog[]`: odwołania do grafik z surową nazwą i komórką źródłową. Dopasowanie jest dokładne i ograniczone do folderu właściwej lokalizacji w `RYSUNKI` (lub `GRAFIKI_LOCATION` dla map lokalizacyjnych); katalogi `stare` i pozostałe lokalizacje są ignorowane. Brak pliku jest raportowany, a znane konflikty pozostają `unresolved`, bez zgadywania aliasów.
+- `notices[]`: ograniczenia źródła i nierozstrzygnięte kwestie wymagające weryfikacji.
+- `source`: plik, arkusz, wiersz i komórka źródłowa rekordu.
 
-Procentowe rozkłady są sprawdzane pod kątem zakresu 0–100 i sumy kompletnego rozkładu (tolerancja 2 punkty procentowe). Walidator sprawdza również unikalność ID studiów, bloków i benchmarków. Nieobecne dane pozostają `null`/pominięte; wyników liczbowych nie zastępuje się lorem ipsum.
+Pełne komórki wszystkich arkuszy są zapisywane lokalnie w `.venv/atlas-private-content.json`, z oryginalnymi wartościami i pochodzeniem arkusz/wiersz/komórka; obejmuje to opisowe kolumny `DANE`, funkcje bloków i wykluczony publicznie wiersz Garnizonu UB_2. Ten plik nie może być kopiowany do `public/`; w nim także pozostają wszystkie dane osobowe/kontaktowe znalezione w arkuszach do czasu oceny ich publikacji. Puste komórki nie są zamieniane na zera. Wartości źródłowe zachowują oryginalny typ i zapis. Jeżeli obszar paneli przekracza podany obszar dachu, dokładne wartości i komórki źródłowe są zachowane, lecz wartość panel area jest pominięta w tabeli i opatrzona ostrzeżeniem do weryfikacji.
 
 ## Aktualizacja źródeł
 
-1. Zachowaj folder `../.venv/TEMP`; to przewidziane miejsce na kolejne wersje danych.
-2. Umieść w nim najnowsze `ATLASY_DANE_<data>(Arkusz1).csv` i `ATLASY_DANE_<data>(Arkusz2).csv`; obrazy mogą być w podkatalogach.
-3. Uruchom `npm run data:import` z katalogu aplikacji.
-4. Rozwiąż zgłoszone braki grafik albo świadomie zaakceptuj puste obrazy.
-5. Uruchom `npm test`, `npm run lint` i `npm run build`.
+1. Użyj zatwierdzonego skoroszytu w `../TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/TABELA_EXCEL/ATLASY_DANE_261107.xlsx`.
+2. Uruchom `npm run data:import` z katalogu aplikacji.
+3. Rozstrzygnij nierozwiązane odwołania do grafik i niespójności w odpowiednich zadaniach źródłowych; do tego czasu nie wprowadzaj aliasów ani korekt.
+4. Uruchom `npm test`, `npm run lint` i `npm run build`.
 
-Aplikacja nie czyta ani nie usuwa źródłowego folderu po imporcie. Arkusz 1 wspomina o `DATA_FORMA_260630`, ale pliku nie dostarczono. Dodatkowe informacje z tego pliku pozostają nieuzupełnione do czasu otrzymania prawdziwego źródła.
+Importer nie modyfikuje skoroszytu ani katalogu `TEMP__TRUTH`. Starsze CSV i archiwalne materiały nie są fallbackiem.
 
 ## Testowanie
 
-- `npm run test:data` kontroluje strukturę wygenerowanego atlasu i kompletność benchmarków.
-- `npm run test:import` uruchamia testy parsera, kolejności rekordów, braków, powtarzalności eksportu i walidatora.
-- Testy przygotowywanego czytnika skoroszytu wymagają `openpyxl` z `requirements.txt`; dotychczasowy importer nadal używa CSV.
-- `npm test` uruchamia oba zestawy.
-- `npm run lint` sprawdza kod źródłowy.
-- `npm run build` uruchamia TypeScript i kompilację produkcyjną.
-
-Testy importera korzystające z lokalnych danych pomijają tylko test źródłowy, gdy `.venv/TEMP` nie istnieje; pozostałe przypadki parsera i walidatora nadal są uruchamiane.
+- `npm run test:data` sprawdza wygenerowany atlas, pochodzenie, wykluczenia i nierozstrzygnięte kwestie źródłowe.
+- `npm run test:import` sprawdza import skoroszytu, prywatność niezatwierdzonego tekstu, grupowanie, dopasowanie obrazów, braki, powtarzalność i pochodzenie.
+- Czytnik i importer wymagają `openpyxl` z `requirements.txt`.
+- `npm run lint` sprawdza kod źródłowy, a `npm run build` kompilację TypeScript i aplikacji.
 
 ## Ograniczenia i utrzymanie
 
-- Arkusz 2 dostarcza rozkłady dla pięciu miejsc, ale nie komplet metadanych lokalizacyjnych; dlatego jest benchmarkiem, a nie kolejnymi markerami mapy.
-- Wartości z różnych skal, jednostek i metod symulacji wymagają weryfikacji źródłowej przed porównaniem.
-- Nie usuwaj nieużywanych jeszcze grafik źródłowych bez sprawdzenia nowych odwołań w CSV.
-- `.venv/TEMP` pozostaje lokalny i ignorowany przez Git; nie czyść go automatycznie.
+- Współrzędne nie są podane w skoroszycie i pozostają puste; wymagają niezależnej weryfikacji przed użyciem na mapie.
+- DANE!BE8 ma nierozstrzygniętą nazwę modelu 3D UB_1; Q15, AL15 i AV15 przypisują wierszowi Aspern Seestadt nazwy plików Kronsberg. Żadne z tych odwołań nie jest automatycznie rozwiązywane.
+- DANE!DD8 i DG8 pozostają w źródłowych wartościach mimo niespójności obszaru paneli; importer nie wprowadza korekty.
+- Stare obrazy w `public/` nie są dowodem poprawnego mapowania nowego workbooka i nie są używane jako fallback.

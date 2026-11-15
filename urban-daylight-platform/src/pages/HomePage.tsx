@@ -161,13 +161,13 @@ export default function HomePage() {
               <p className="text-xs font-semibold uppercase tracking-wide text-primary-700 dark:text-primary-300">Urban daylight atlas</p>
               <h1 className="mt-2 text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">Explore the evidence</h1>
               <p className="mt-2 max-w-2xl text-sm text-neutral-600 dark:text-neutral-300">
-                Compare urban form, seasonal sun exposure and environmental performance across three mapped case studies.
+                Explore source-backed urban form, sun exposure and environmental data across five case studies.
               </p>
             </div>
             <div className="flex items-center gap-4 text-xs text-neutral-500 dark:text-neutral-400">
               <span><strong className="text-neutral-900 dark:text-white">{cities.length}</strong> case studies</span>
               <span className="h-4 border-l border-neutral-300 dark:border-neutral-600" />
-              <span><strong className="text-neutral-900 dark:text-white">{benchmarks.length}</strong> references</span>
+              <span><strong className="text-neutral-900 dark:text-white">{cities.filter((city) => city.location.coordinates != null).length}</strong> verified map locations</span>
             </div>
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function HomePage() {
               <MapPin className="w-4 h-4 text-primary-600 dark:text-primary-400" />
               <h2 className="text-lg font-semibold text-neutral-900 dark:text-white">Case studies</h2>
             </div>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">London · Gdańsk · New York</p>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">Unverified locations are omitted from the map.</p>
           </div>
 
           <div className="grid lg:grid-cols-[300px_minmax(0,1fr)] gap-5 lg:gap-7 items-start">

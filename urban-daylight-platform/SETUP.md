@@ -3,7 +3,7 @@
 ## Wymagania
 
 - Node.js 18 lub nowszy i npm
-- Python 3.8 lub nowszy; testy nowego czytnika skoroszytu wymagają `openpyxl` z `requirements.txt`
+- Python 3.10 lub nowszy i `openpyxl` z `requirements.txt`
 - Dostęp do internetu dla kafli OpenStreetMap
 
 ## Praca lokalna
@@ -15,9 +15,11 @@ node scripts/run-python.mjs -m pip install -r requirements.txt
 npm run dev
 ```
 
-## Import najnowszych danych
+## Import danych źródłowych
 
-Umieść oba arkusze CSV w `../.venv/TEMP/`, zachowując wzór nazw `ATLASY_DANE_<data>(Arkusz1).csv` i `ATLASY_DANE_<data>(Arkusz2).csv`. Obrazy mogą znajdować się w podkatalogach tego samego drop-zone.
+Importer korzysta z zatwierdzonego skoroszytu:
+`../TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/TABELA_EXCEL/ATLASY_DANE_261107.xlsx`.
+Nie wybiera starszych CSV ani plików z `.venv/TEMP`.
 
 ```powershell
 npm run data:import
@@ -26,16 +28,17 @@ npm run lint
 npm run build
 ```
 
-Importer tworzy `public/data/atlas.json`, kopiuje potrzebne obrazy i zgłasza brakujące zasoby. Dla każdego rekordu i obrazu zapisuje względną ścieżkę pliku CSV w `.venv/TEMP`, komórkę, ścieżkę obrazu w TEMP i publiczny URL. Brak obrazu pozostaje `tempPath: null`; importer nie zgaduje ścieżki. Nie usuwa ani nie modyfikuje plików w TEMP. Jeżeli Python nie jest wykrywany, launcher próbuje kolejno lokalnego `.venv`, zmiennej `PYTHON`, `python` i `py -3`.
+Importer tworzy `public/data/atlas.json` oraz lokalny `.venv/atlas-private-content.json`. Prywatny plik zachowuje wszystkie komórki źródłowe wraz z pochodzeniem — także opisowe pola `DANE`, funkcje bloków i wykluczony wiersz UB_2 — do czasu zatwierdzenia publikacji; nie kopiuj go do `public/`. Publiczny atlas zawiera tylko wartości zatwierdzone do wyświetlania. Jednoznaczne, dokładne nazwy obrazów są dopasowywane wyłącznie w folderze źródłowym właściwej lokalizacji albo w `GRAFIKI_LOCATION` dla map lokalizacyjnych; foldery `stare` i inne lokalizacje są ignorowane, a brak dopasowania jest raportowany. Niejednoznaczne lub konfliktowe referencje pozostają nierozwiązane. Obszar paneli większy niż podany obszar dachu zachowuje źródło, ale jest pomijany w tabeli i oznaczany ostrzeżeniem. Puste wartości nie są zastępowane. Garnizon UB_2 jest wyłączony zgodnie z notatkami źródłowymi. Współrzędne, których nie ma w skoroszycie, pozostają puste.
 
-Trwa przygotowanie przejścia na skoroszyt `TEMP__TRUTH`. Czytnik `scripts/workbook_source.py` i jego testy sprawdzają układ arkuszy oraz zachowują współrzędne komórek, ale `npm run data:import` nadal korzysta z poprzednich plików CSV; nie należy uważać obecnego atlasu za zaktualizowany na podstawie nowego źródła.
+Jeżeli Python nie jest wykrywany, launcher próbuje kolejno lokalnego `.venv`, zmiennej `PYTHON`, `python` i `py -3`.
 
 ## Gdzie szukać kodu
 
 - `src/pages/` — eksploracja lokalizacji i porównania
 - `src/components/` — mapa, wykresy, wizualizacje i szczegóły analizy
 - `src/types/index.ts` — kontrakt atlasu
-- `scripts/import_data.py` — parser, normalizacja i walidacja CSV
+- `scripts/workbook_source.py` — walidacja skoroszytu i odczyt arkuszy/komórek
+- `scripts/import_data.py` — import workbooka i pochodzenie danych
 - `tests/` — testy danych oraz importera
 
 Pełny opis schematu i ograniczeń źródła znajduje się w [PROJECT_DOCUMENTATION.md](PROJECT_DOCUMENTATION.md).

@@ -1,4 +1,4 @@
-import tempfile
+from io import BytesIO
 import unittest
 from pathlib import Path
 
@@ -8,7 +8,7 @@ from scripts.workbook_source import REQUIRED_SHEETS, read_workbook
 
 
 class WorkbookSourceTests(unittest.TestCase):
-    def make_workbook(self, path: Path) -> None:
+    def make_workbook(self) -> BytesIO:
         workbook = Workbook()
         workbook.active.title = REQUIRED_SHEETS[0]
         for name in REQUIRED_SHEETS[1:]:
@@ -24,15 +24,16 @@ class WorkbookSourceTests(unittest.TestCase):
         sheet["BC10"] = "UB_1"
         workbook["OPISY"]["C3"] = "Ørestad Syd"
         workbook["OPISY"]["D3"] = "A description"
-        workbook.save(path)
+        stream = BytesIO()
+        workbook.save(stream)
         workbook.close()
+        stream.seek(0)
+        return stream
 
     def test_reads_locations_cells_and_sheets_without_changing_values(self):
-        with tempfile.TemporaryDirectory() as folder:
-            path = Path(folder) / "source.xlsx"
-            self.make_workbook(path)
-            result = read_workbook(path)
-            self.assertEqual(result, read_workbook(path))
+        result = read_workbook(self.make_workbook(), source_file="source.xlsx")
+        repeated = read_workbook(self.make_workbook(), source_file="source.xlsx")
+        self.assertEqual(result, repeated)
         self.assertEqual(result["sourceFile"], "source.xlsx")
         self.assertEqual(result["sites"], [
             {"name": "Ørestad Syd", "sourceRow": 8, "blocks": [
@@ -47,31 +48,35 @@ class WorkbookSourceTests(unittest.TestCase):
         self.assertEqual(result["sheets"]["OPISY"][0]["cells"]["D3"], "A description")
 
     def test_rejects_missing_sheets_formulas_and_orphan_blocks(self):
-        with tempfile.TemporaryDirectory() as folder:
-            path = Path(folder) / "source.xlsx"
-            self.make_workbook(path)
-            workbook = load_workbook(path)
-            del workbook[REQUIRED_SHEETS[-1]]
-            workbook.save(path)
-            workbook.close()
-            with self.assertRaisesRegex(ValueError, "missing required sheets"):
-                read_workbook(path)
+        source = self.make_workbook()
+        workbook = load_workbook(source)
+        del workbook[REQUIRED_SHEETS[-1]]
+        stream = BytesIO()
+        workbook.save(stream)
+        workbook.close()
+        stream.seek(0)
+        with self.assertRaisesRegex(ValueError, "missing required sheets"):
+            read_workbook(stream)
 
-            self.make_workbook(path)
-            workbook = load_workbook(path)
-            workbook["DANE"]["BF8"] = "=1+1"
-            workbook.save(path)
-            workbook.close()
-            with self.assertRaisesRegex(ValueError, "DANE!BF8: formula"):
-                read_workbook(path)
+        source = self.make_workbook()
+        workbook = load_workbook(source)
+        workbook["DANE"]["BF8"] = "=1+1"
+        stream = BytesIO()
+        workbook.save(stream)
+        workbook.close()
+        stream.seek(0)
+        with self.assertRaisesRegex(ValueError, "DANE!BF8: formula"):
+            read_workbook(stream)
 
-            self.make_workbook(path)
-            workbook = load_workbook(path)
-            workbook["DANE"]["C8"] = None
-            workbook.save(path)
-            workbook.close()
-            with self.assertRaisesRegex(ValueError, "block has no preceding location"):
-                read_workbook(path)
+        source = self.make_workbook()
+        workbook = load_workbook(source)
+        workbook["DANE"]["C8"] = None
+        stream = BytesIO()
+        workbook.save(stream)
+        workbook.close()
+        stream.seek(0)
+        with self.assertRaisesRegex(ValueError, "block has no preceding location"):
+            read_workbook(stream)
 
     def test_actual_workbook_structure_when_present(self):
         root = Path(__file__).resolve().parents[2]

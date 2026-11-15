@@ -22,11 +22,12 @@ interface InteractiveMapProps {
 
 function MapController({ selectedCity }: { selectedCity?: City | null }) {
   const map = useMap()
-  
-  if (selectedCity) {
+  const coordinates = selectedCity?.location.coordinates
+
+  if (coordinates) {
     map.setView(
-      [selectedCity.location.coordinates.lat, selectedCity.location.coordinates.lng],
-      selectedCity.location.coordinates.zoom
+      [coordinates.lat, coordinates.lng],
+      coordinates.zoom
     )
   }
   
@@ -35,13 +36,14 @@ function MapController({ selectedCity }: { selectedCity?: City | null }) {
 
 export default function InteractiveMap({ cities, selectedCity, onCitySelect }: InteractiveMapProps) {
   const navigate = useNavigate()
+  const locatedCities = cities.filter((city) => city.location.coordinates != null)
+  const unlocatedCount = cities.length - locatedCities.length
   
-  // Center map on Europe/Atlantic
-  const defaultCenter: [number, number] = [45, -30]
+  const defaultCenter: [number, number] = [20, 0]
   const defaultZoom = 2
   
   return (
-    <div className="h-full w-full rounded-lg overflow-hidden shadow-lg">
+    <div className="relative h-full w-full rounded-lg overflow-hidden shadow-lg">
       <MapContainer
         center={defaultCenter}
         zoom={defaultZoom}
@@ -53,39 +55,53 @@ export default function InteractiveMap({ cities, selectedCity, onCitySelect }: I
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        {cities.map((city) => (
-          <Marker
-            key={city.id}
-            position={[city.location.coordinates.lat, city.location.coordinates.lng]}
-            eventHandlers={{
-              click: () => {
-                if (onCitySelect) {
-                  onCitySelect(city)
-                } else {
-                  navigate(`/city/${city.id}`)
-                }
-              },
-            }}
-          >
-            <Popup>
-              <div className="text-center py-2">
-                <h3 className="font-semibold text-neutral-900 dark:text-white transition-colors duration-500">{city.name}</h3>
-                {city.location.country && (
-                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 transition-colors duration-500">{city.location.country}</p>
-                )}
-                <button
-                  onClick={() => navigate(`/city/${city.id}`)}
-                  className="mt-3 text-sm text-primary-600 hover:text-primary-700 font-medium"
-                >
-                  View Details →
-                </button>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+        {locatedCities.map((city) => {
+          const coordinates = city.location.coordinates
+          if (!coordinates) return null
+          return (
+            <Marker
+              key={city.id}
+              position={[coordinates.lat, coordinates.lng]}
+              eventHandlers={{
+                click: () => {
+                  if (onCitySelect) {
+                    onCitySelect(city)
+                  } else {
+                    navigate(`/city/${city.id}`)
+                  }
+                },
+              }}
+            >
+              <Popup>
+                <div className="text-center py-2">
+                  <h3 className="font-semibold text-neutral-900 dark:text-white transition-colors duration-500">{city.name}</h3>
+                  {city.location.country && (
+                    <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1 transition-colors duration-500">{city.location.country}</p>
+                  )}
+                  <button
+                    onClick={() => navigate(`/city/${city.id}`)}
+                    className="mt-3 text-sm text-primary-600 hover:text-primary-700 font-medium"
+                  >
+                    View Details →
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          )
+        })}
         
-        <MapController selectedCity={selectedCity} />
+        <MapController selectedCity={selectedCity?.location.coordinates ? selectedCity : null} />
       </MapContainer>
+      {unlocatedCount > 0 && (
+        <div
+          className="absolute z-[1000] top-3 left-3 right-3 sm:left-auto sm:right-3 sm:max-w-sm rounded-md bg-white/95 dark:bg-neutral-900/95 px-3 py-2 text-xs text-neutral-700 dark:text-neutral-200 shadow"
+          role="status"
+        >
+          {locatedCities.length === 0
+            ? 'No verified map locations are available. Choose a case study from the list to view its details.'
+            : `${unlocatedCount} case studies have no verified coordinates and are not shown on the map.`}
+        </div>
+      )}
     </div>
   )
 }

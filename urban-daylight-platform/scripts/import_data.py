@@ -1,744 +1,755 @@
 from __future__ import annotations
 
 import argparse
-import csv
+import filecmp
+from io import BytesIO
 import json
-import math
 import re
 import shutil
 import sys
+import unicodedata
 from pathlib import Path
-from typing import Any
+from typing import Any, BinaryIO
+
+try:
+    from .workbook_source import REQUIRED_SHEETS, read_workbook
+except ImportError:
+    from workbook_source import REQUIRED_SHEETS, read_workbook
 
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_TEMP = ROOT / ".venv" / "TEMP"
+DEFAULT_WORKBOOK = (
+    ROOT
+    / "TEMP__TRUTH"
+    / "IEA_TASK_70_ATLASY"
+    / "DANE_NA_STRONE"
+    / "TABELA_EXCEL"
+    / "ATLASY_DANE_261107.xlsx"
+)
 DEFAULT_OUTPUT = ROOT / "urban-daylight-platform" / "public" / "data" / "atlas.json"
-CITY_CONFIG = {
-    "elephant and castle": {
-        "id": "elephant-and-castle",
-        "name": "Elephant and Castle",
-        "folder": "ELEPHANT_AND_CASTLE",
-        "coordinates": {"lat": 51.4937, "lng": -0.0996, "zoom": 15},
-    },
-    "garnizon": {
-        "id": "garnizon",
-        "name": "Garnizon",
-        "folder": "GARNIZON",
-        "coordinates": {"lat": 54.3813, "lng": 18.5955, "zoom": 15},
-    },
-    "hudson yards": {
-        "id": "hudson-yards",
-        "name": "Hudson Yards",
-        "folder": "HUDSON_YARDS",
-        "coordinates": {"lat": 40.7536, "lng": -74.0019, "zoom": 15},
-    },
+EXCLUDED_BLOCKS = {("garnizon", "ub_2"): "Excluded by TEMP__TRUTH/IEA_TASK_70_ATLASY/NOTATKI.docx"}
+CITY_ID_OVERRIDES = {
+    "elephant & castle – elephant park": "elephant-and-castle",
+    "garnizon": "garnizon",
+    "kronsberg": "kronsberg",
+    "aspern seestadt": "aspern-seestadt",
+    "ørestad syd": "orestad-syd",
 }
-SUN_LABELS = ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6", "6-7", "7-8", "8-9", "9+"]
-DAYLIGHT_LABELS = ["0-5", "5-10", "10-15", "15-19", "19-23", "23-27", "27-32", "32-37", "37+"]
-PUBLIC_BASE = "/atlasy-platform"
-IMAGE_ALIASES = {("elephant-and-castle", "elephant_and_castle_ub_model_3d"): "elephant_and_case_ub_1_model_3d"}
-IMAGE_FIELDS = {
-    "location.imageUrl": ("Location image", 3),
-    "overview.schwarzplanImage": ("Schwarzplan", 7),
-    "overview.model3dImage": ("3D model", 8),
-    "shadingAnalysis.marchSeptember": ("Shading · March/September", 14),
-    "shadingAnalysis.june": ("Shading · June", 15),
-    "shadingAnalysis.december": ("Shading · December", 16),
-    "siteAnalysis.sunHoursImage": ("Site sun hours", 17),
-    "siteAnalysis.daylightPotentialImage": ("Site daylight potential", 38),
-    "siteAnalysis.solarEnergyImage": ("Site solar energy", 48),
-    "siteAnalysis.urbanBlocksImage": ("Urban-block locator", 54),
-    "plan": ("Site plan", 56),
-    "form3d": ("3D form", 57),
-    "sunHours": ("Sun hours", 66),
-    "daylightPotential": ("Daylight potential", 97),
-    "solarEnergy": ("Solar energy", 107),
-    "daylightFactor.simulation1.image": ("Daylight factor · simulation 1", 113),
-    "daylightFactor.simulation2.image": ("Daylight factor · simulation 2", 116),
-    "spatialDaylightAutonomy.simulation1.image": ("Spatial daylight autonomy · simulation 1", 119),
-    "spatialDaylightAutonomy.simulation2.image": ("Spatial daylight autonomy · simulation 2", 121),
-    "usefulDaylightIlluminance.simulation1.image": ("Useful daylight illuminance · simulation 1", 124),
-    "usefulDaylightIlluminance.simulation2.image": ("Useful daylight illuminance · simulation 2", 126),
+SITE_IMAGE_FIELDS = {
+    "D": ("location.imageUrl", "Location map", "location", "imageUrl"),
+    "N": ("overview.schwarzplanImage", "Site top view", "overview", "schwarzplanImage"),
+    "O": ("overview.model3dImage", "Site 3D model", "overview", "model3dImage"),
+    "BB": ("siteAnalysis.urbanBlocksImage", "Selected urban blocks", "siteAnalysis", "urbanBlocksImage"),
+    "Q": ("siteAnalysis.sunHoursImage", "Site sun hours", "siteAnalysis", "sunHoursImage"),
+    "AL": ("siteAnalysis.daylightPotentialImage", "Site daylight potential", "siteAnalysis", "daylightPotentialImage"),
+    "AV": ("siteAnalysis.solarEnergyImage", "Site solar potential", "siteAnalysis", "solarEnergyImage"),
 }
-
-
-def read_csv(path: Path) -> list[list[str]]:
-    errors = []
-    for encoding in ("utf-8-sig", "cp1250", "latin-1"):
-        try:
-            with path.open("r", encoding=encoding, newline="") as file:
-                return list(csv.reader(file, delimiter=";", quotechar='"'))
-        except UnicodeDecodeError as error:
-            errors.append(error)
-    raise errors[-1]
-
-
-def value(row: list[str], column: int) -> str | None:
-    if column >= len(row):
-        return None
-    cleaned = row[column].strip().strip('"').strip()
-    if cleaned.casefold() in {"", "no data", "brak", "nan", "-"}:
-        return None
-    cleaned = cleaned.replace("Gda?sk", "Gdańsk").replace("Strzy?a", "Strzyża").replace("G?rny", "Górny")
-    cleaned = cleaned.replace("militarybarracks", "military barracks")
-    cleaned = cleaned.replace("value.The", "value. The").replace("outstandingaccess", "outstanding access")
-    cleaned = cleaned.replace("east�west", "east-west").replace("Hell�s", "Hell's").replace("room�s", "room's")
-    cleaned = cleaned.replace("urban fabric: � a direct", "urban fabric: a direct")
-    sda_match = re.search(r"[?�]+rednia warto[?�]+ sDA wynosi\s*([\d]+[,.][\d]+\s*%)", cleaned, re.IGNORECASE)
-    if sda_match:
-        return f"Average sDA value is {sda_match.group(1)}"
-    if cleaned.startswith(("Ni?sze warto?ci UDI", "Ni?sze wartości UDI")):
-        return (
-            "Lower UDI values near the windows result from exceeding the upper useful-illuminance limit "
-            "(3000 lx). Although these areas receive abundant daylight, they are classified as excessive "
-            "(UDI-high) and are excluded from UDI-acceptable. UDI describes whether illuminance falls "
-            "within a useful range, not simply how much light is present."
-        )
-    return cleaned
-
-
-def number(raw: str | None) -> float | None:
-    if raw is None:
-        return None
-    match = re.search(r"[-+]?\d[\d\s]*(?:[,.]\d+)?", raw)
-    if not match:
-        return None
-    try:
-        return float(match.group(0).replace(" ", "").replace(",", "."))
-    except ValueError:
-        return None
-
-
-def image_name(raw: str | None) -> str | None:
-    if raw is None:
-        return None
-    return re.sub(r"^obraz(?:ek)?\s*:\s*", "", raw, flags=re.IGNORECASE).strip() or None
+BLOCK_IMAGE_FIELDS = {
+    "BD": ("plan", "Urban-block top view"),
+    "BE": ("form3d", "Simplified 3D form"),
+    "BN": ("sunHours", "Urban-block sun hours"),
+    "CS": ("daylightPotential", "Urban-block daylight potential"),
+    "DC": ("solarEnergy", "Urban-block solar potential"),
+}
+CITY_FOLDERS = {
+    "elephant-and-castle": "ELEPHANT_AND_CASTLE",
+    "garnizon": "GARNIZON",
+    "kronsberg": "KRONSBERG",
+    "aspern-seestadt": "SEESTADT",
+    "orestad-syd": "ORESTADT",
+}
+KNOWN_CONFLICT_CELLS = {
+    "BE8": "TASK-15: the similar UB_1 model filename has not been confirmed.",
+    "Q15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+    "AL15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+    "AV15": "TASK-17: the file name identifies Kronsberg, not the Aspern Seestadt source row.",
+}
+PRIVATE_DANE_COLUMNS = {"F", "G", "H", "I", "J", "K", "L", "M", "P", "BM"}
+SITE_DISTRIBUTIONS = (
+    ("Sun hours", "GROUND", range(18, 28), 7, "R5"),
+    ("Sun hours", "BUILDINGS (FACADES, ROFFS, OTHER)", range(28, 38), 7, "R5"),
+    ("Daylight potential", "BUILDINGS (FACADES, ROFFS, OTHER)", range(39, 48), 7, "AM5"),
+)
+BLOCK_DISTRIBUTIONS = (
+    ("Sun hours", "GROUND", range(67, 77), 7, "R5"),
+    ("Sun hours", "FACADES", range(77, 87), 7, "R5"),
+    ("Sun hours", "ROOFS", range(87, 97), 7, "R5"),
+    ("Daylight potential", "FACADES", range(98, 107), 7, "AM5"),
+)
+SITE_SOLAR_COLUMNS = range(49, 54)
+BLOCK_SOLAR_COLUMNS = range(108, 113)
+def column_number(label: str) -> int:
+    number = 0
+    for character in label:
+        number = number * 26 + ord(character.upper()) - ord("A") + 1
+    return number
 
 
 def column_letter(index: int) -> str:
     label = ""
-    number_index = index + 1
-    while number_index:
-        number_index, remainder = divmod(number_index - 1, 26)
+    while index:
+        index, remainder = divmod(index - 1, 26)
         label = chr(65 + remainder) + label
     return label
 
 
-def relative_temp_path(temp_dir: Path, path: Path) -> str:
-    return path.resolve().relative_to(temp_dir.resolve()).as_posix()
+def source_ref(sheet: str, row: int, cell: str | None = None) -> dict[str, Any]:
+    result: dict[str, Any] = {"sheet": sheet, "row": row}
+    if cell:
+        result["cell"] = cell
+    return result
 
 
-def record_image_link(
-    row: list[str],
-    field: str,
-    column: int,
-    source_file: str,
+def public_dane_cells(cells: dict[str, Any]) -> dict[str, Any]:
+    return {
+        coordinate: value
+        for coordinate, value in cells.items()
+        if not any(
+            coordinate.startswith(column)
+            and coordinate[len(column):].isdigit()
+            for column in PRIVATE_DANE_COLUMNS
+        )
+    }
+
+
+def source_row_data(
+    sheet: str, row: dict[str, Any], include_values: bool = True
+) -> dict[str, Any]:
+    cells = row["cells"]
+    if sheet == "DANE":
+        cells = public_dane_cells(cells)
+    return {
+        "row": row["row"],
+        **({"cells": cells} if include_values else {}),
+        "source": source_ref(sheet, row["row"]),
+    }
+
+
+def workbook_path_label(workbook_path: Path | BinaryIO, source_file: str) -> str:
+    if not isinstance(workbook_path, Path):
+        return "in-memory"
+    try:
+        return workbook_path.resolve().relative_to(ROOT).as_posix()
+    except ValueError:
+        return source_file
+
+
+def slug(value: str) -> str:
+    value = value.replace("Ø", "O").replace("ø", "o")
+    normalized = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
+    normalized = normalized.casefold().replace("&", " and ")
+    return re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")
+
+
+def make_distribution(
+    sheet: str,
     source_row: int,
-    sheet: str = "Arkusz1",
-    source_temp_path: str | None = None,
-) -> dict[str, Any] | None:
-    raw_cell = row[column].strip() if column < len(row) and row[column].strip() else None
-    referenced = image_name(value(row, column))
-    if not referenced and not raw_cell:
-        return None
-    label, expected_column = IMAGE_FIELDS.get(field, (field, column))
+    cells: dict[str, Any],
+    header_cells: dict[str, Any],
+    label_row: int,
+    data_columns: range,
+    scope: str,
+    distribution_name: str,
+    header: str | None,
+) -> dict[str, Any]:
+    bins = []
+    for column in data_columns:
+        cell = f"{column_letter(column)}{source_row}"
+        label_cell = f"{column_letter(column)}{label_row}"
+        bins.append({
+            "label": header_cells.get(label_cell),
+            "value": cells.get(cell),
+            "source": source_ref(sheet, source_row, cell),
+        })
+    return {
+        "name": distribution_name,
+        "scope": scope,
+        "unitHeader": header,
+        "bins": bins,
+        "source": source_ref(sheet, source_row),
+    }
+
+
+def distributions_for_row(
+    sheet: str,
+    source_row: int,
+    row_cells: dict[str, Any],
+    header_cells: dict[str, Any],
+    specifications: tuple[tuple[str, str, range, int, str], ...],
+) -> list[dict[str, Any]]:
+    result = []
+    for name, scope, columns, label_row, unit_header_cell in specifications:
+        result.append(make_distribution(
+            sheet,
+            source_row,
+            row_cells,
+            header_cells,
+            label_row,
+            columns,
+            scope,
+            name,
+            header_cells.get(unit_header_cell),
+        ))
+    return result
+
+
+def labeled_values(
+    sheet: str,
+    row_number: int,
+    data_cells: dict[str, Any],
+    header_cells: dict[str, Any],
+    label_row: int,
+    columns: range,
+) -> list[dict[str, Any]]:
+    return [
+        {
+            "label": header_cells.get(f"{column_letter(column)}{label_row}"),
+            "value": data_cells.get(f"{column_letter(column)}{row_number}"),
+            "source": source_ref(sheet, row_number, f"{column_letter(column)}{row_number}"),
+        }
+        for column in columns
+    ]
+
+
+def chart_distribution(source_distribution: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "unit": "%" if "%" in (source_distribution["unitHeader"] or "") else None,
+        "unitHeader": source_distribution["unitHeader"],
+        "scope": source_distribution["scope"],
+        "bins": source_distribution["bins"],
+        "source": source_distribution["source"],
+    }
+
+
+def solar_specs(
+    source_values: list[dict[str, Any]],
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    keys = ("area", "totalSolarEnergy", "avgSolarEnergy", "panelArea", "annualElectricity")
+    specs = {key: item["value"] for key, item in zip(keys, source_values)}
+    area = specs.get("area")
+    panel_area = specs.get("panelArea")
+    if (
+        isinstance(area, (int, float))
+        and isinstance(panel_area, (int, float))
+        and panel_area > area
+    ):
+        area_source = next((item for item in source_values if item["label"] == "area (m²)"), None)
+        panel_source = next(
+            (item for item in source_values if item["label"] == "area to be covered by the panels (m²) - 60%"),
+            None,
+        )
+        area_cell = area_source["source"]["cell"] if area_source else "source area cell"
+        panel_cell = panel_source["source"]["cell"] if panel_source else "source panel-area cell"
+        specs["panelArea"] = None
+        specs["panelAreaWarning"] = (
+            f"Panel area from {panel_cell} exceeds the reported roof area from {area_cell}; "
+            "the panel-area result is omitted pending source verification."
+        )
+    return specs, source_values
+
+
+def image_link(
+    workbook_file: str,
+    sheet: str,
+    row_number: int,
+    column: int,
+    value: Any,
+    label: str,
+    field: str,
+) -> dict[str, Any]:
+    cell = f"{column_letter(column)}{row_number}"
+    referenced_name = value.strip() if isinstance(value, str) and value.strip() else None
     return {
         "field": field,
-        "label": label if expected_column == column else field,
-        "column": column,
+        "label": label,
+        "column": column - 1,
         "columnLetter": column_letter(column),
-        "rawCell": raw_cell,
-        "referencedName": referenced,
-        "resolvedName": referenced,
+        "cell": cell,
+        "rawCell": value,
+        "referencedName": referenced_name,
+        "resolvedName": None,
         "aliasNote": None,
-        "sourceFile": source_file,
-        "sourceTempPath": source_temp_path,
+        "sourceFile": workbook_file,
+        "sourceTempPath": None,
         "sheet": sheet,
-        "row": source_row,
+        "row": row_number,
         "tempPath": None,
         "publicUrl": None,
-        "status": "unresolved" if referenced else "empty",
+        "status": "unresolved" if referenced_name else "empty",
     }
 
 
-def attach_image_links(record: dict[str, Any], links: list[dict[str, Any]]) -> None:
-    present = [link for link in links if link]
-    if present:
-        record["imageLinks"] = present
+def image_links_for_row(
+    workbook_file: str,
+    sheet: str,
+    row_number: int,
+    cells: dict[str, Any],
+    mappings: dict[str, tuple[str, str]],
+) -> list[dict[str, Any]]:
+    links = []
+    for column_letters, (field, label) in mappings.items():
+        column = column_number(column_letters)
+        cell = f"{column_letters}{row_number}"
+        if cells.get(cell) is not None:
+            links.append(image_link(
+                workbook_file, sheet, row_number, column, cells[cell], label, field
+            ))
+    return links
 
 
-def distribution(row: list[str], start: int, labels: list[str], unit: str) -> dict[str, Any] | None:
-    values = [number(value(row, start + offset)) for offset in range(len(labels))]
-    if not any(item is not None for item in values):
-        return None
-    return {"unit": unit, "bins": [{"label": label, "value": item} for label, item in zip(labels, values)]}
-
-
-def normalize_city(raw: str | None) -> dict[str, Any] | None:
-    if raw is None:
-        return None
-    folded = raw.strip().casefold()
-    for alias, config in CITY_CONFIG.items():
-        if folded == alias or folded.startswith(f"{alias} ("):
-            return config
-    return None
-
-
-def infer_city_from_row(row: list[str]) -> dict[str, Any] | None:
-    searchable = re.sub(r"[^a-z0-9]", "", " ".join(row).casefold())
-    for alias, config in CITY_CONFIG.items():
-        if re.sub(r"[^a-z0-9]", "", alias) in searchable:
-            return config
-    return None
-
-
-def make_unit(row: list[str], city: dict[str, Any], source_row: int, asset_dir: Path, source_file: str, source_temp_path: str | None = None) -> dict[str, Any] | None:
-    unit_code = value(row, 55)
-    if not unit_code or not re.fullmatch(r"UB[_ -]?\d+", unit_code, re.IGNORECASE):
-        return None
-
-    unit_id = int(re.search(r"\d+", unit_code).group())
-    sun_distribution = {
-        "ground": distribution(row, 67, SUN_LABELS, "%"),
-        "facades": distribution(row, 77, SUN_LABELS, "%"),
-        "roofs": distribution(row, 87, SUN_LABELS, "%"),
-    }
-    sun_distribution = {key: item for key, item in sun_distribution.items() if item}
-    daylight_distribution = distribution(row, 98, DAYLIGHT_LABELS, "%")
-    daylight_image = image_name(value(row, 97))
-    solar_image = image_name(value(row, 107))
-    if city["id"] == "elephant-and-castle":
-        for field, candidate in (("daylight", daylight_image), ("solar", solar_image)):
-            if not candidate:
-                continue
-            suffixed = f"{candidate}_UB_{unit_id}"
-            if any(path.stem.casefold() == suffixed.casefold() for path in asset_dir.rglob("*")):
-                if field == "daylight":
-                    daylight_image = suffixed
-                else:
-                    solar_image = suffixed
-
-    unit: dict[str, Any] = {
-        "id": str(unit_id),
-        "name": unit_code.upper().replace(" ", "_"),
-        "analysisLevel": "urban-block",
-        "sourceRow": source_row,
-        "plan": image_name(value(row, 56)),
-        "form3d": image_name(value(row, 57)),
-        "far": number(value(row, 58)),
-        "indicators": {
-            "buildingIntensity": number(value(row, 58)),
-            "greenSpaceRatio": value(row, 59),
-            "buildingCoverage": value(row, 60),
-            "avgFloors": number(value(row, 61)),
-            "treeCount": value(row, 62),
-            "heightToWidthRatio": value(row, 63),
-            "streetWidth": value(row, 64),
-        },
-        "function": value(row, 65),
-        "sunHours": image_name(value(row, 66)),
-        "daylightPotential": daylight_image,
-        "solarEnergy": solar_image,
-    }
-    if sun_distribution:
-        unit["sunHoursDistribution"] = sun_distribution
-    if daylight_distribution:
-        unit["daylightPotentialDistribution"] = daylight_distribution
-    links = [
-        record_image_link(row, field, column, source_file, source_row, source_temp_path=source_temp_path)
-        for field, column in (("plan", 56), ("form3d", 57), ("sunHours", 66), ("daylightPotential", 97), ("solarEnergy", 107))
-    ]
-    for link in links:
-        if not link or link["field"] not in {"daylightPotential", "solarEnergy"}:
-            continue
-        if city["id"] != "elephant-and-castle" or not link["referencedName"]:
-            continue
-        suffixed = f"{link['referencedName']}_UB_{unit_id}"
-        if any(path.stem.casefold() == suffixed.casefold() for path in asset_dir.rglob("*")):
-            link["resolvedName"] = suffixed
-            link["aliasNote"] = f"CSV stem matched a unit-specific TEMP file: {link['referencedName']} -> {suffixed}"
-            if link["field"] == "daylightPotential":
-                unit["daylightPotential"] = suffixed
-            else:
-                unit["solarEnergy"] = suffixed
-    attach_image_links(unit, links)
-
-    solar_specs = [number(value(row, column)) for column in range(108, 113)]
-    if any(item is not None for item in solar_specs):
-        unit["solarEnergySpecs"] = {
-            "area": solar_specs[0],
-            "totalSolarEnergy": solar_specs[1],
-            "avgSolarEnergy": solar_specs[2],
-            "panelArea": solar_specs[3],
-            "annualElectricity": solar_specs[4],
-        }
-    return unit
-
-
-def make_city(row: list[str], config: dict[str, Any], source_row: int, source_file: str, source_temp_path: str | None = None) -> dict[str, Any]:
-    city: dict[str, Any] = {
-        "id": config["id"],
-        "name": config["name"],
+def build_city(
+    site: dict[str, Any], source_file: str, root_sites: list[dict[str, Any]],
+    header_cells: dict[str, Any],
+) -> dict[str, Any]:
+    row_number = site["sourceRow"]
+    row = next(item for item in root_sites if item["row"] == row_number)
+    cells = row["cells"]
+    site_sun_hours = distributions_for_row(
+        "DANE", row_number, cells, header_cells, SITE_DISTRIBUTIONS[:2]
+    )
+    site_daylight = distributions_for_row(
+        "DANE", row_number, cells, header_cells, SITE_DISTRIBUTIONS[2:]
+    )
+    site_solar_values = labeled_values(
+        "DANE", row_number, cells, header_cells, 7, SITE_SOLAR_COLUMNS
+    )
+    site_solar_specs, site_solar_source = solar_specs(site_solar_values)
+    city = {
+        "id": CITY_ID_OVERRIDES.get(site["name"].casefold(), slug(site["name"])),
+        "name": site["name"],
         "location": {
-            "country": value(row, 4),
-            "coordinates": config["coordinates"],
-            "imageUrl": image_name(value(row, 3)),
+            "country": cells.get(f"E{row_number}"),
+            "coordinates": None,
+            "imageUrl": None,
         },
-        "timeline": {"years": value(row, 5), "description": value(row, 6)},
-        "overview": {
-            "schwarzplanImage": image_name(value(row, 7)),
-            "model3dImage": image_name(value(row, 8)),
-            "far": number(value(row, 9)),
-        },
+        "timeline": {"years": None, "description": None},
+        "overview": {"schwarzplanImage": None, "model3dImage": None, "far": None},
         "urbanIndicators": {
-            "buildingIntensity": number(value(row, 9)),
-            "greenSpacePercentage": value(row, 10),
-            "buildingTypes": value(row, 11),
-            "transport": value(row, 12),
-            "greenBlueInfrastructure": value(row, 13),
+            "buildingIntensity": None,
+            "greenSpacePercentage": None,
+            "buildingTypes": None,
+            "transport": None,
+            "greenBlueInfrastructure": None,
         },
-        "shadingAnalysis": {
-            "marchSeptember": image_name(value(row, 14)),
-            "june": image_name(value(row, 15)),
-            "december": image_name(value(row, 16)),
-        },
+        "shadingAnalysis": {"marchSeptember": None, "june": None, "december": None},
         "siteAnalysis": {
-            "sunHoursImage": image_name(value(row, 17)),
-            "urbanBlocksImage": image_name(value(row, 54)),
+            "sunHoursImage": None,
+            "daylightPotentialImage": None,
+            "solarEnergyImage": None,
+            "urbanBlocksImage": None,
+            "sunHours": site_sun_hours,
             "sunHoursDistribution": {
-                "ground": distribution(row, 18, SUN_LABELS, "%"),
-                "facades": distribution(row, 28, SUN_LABELS, "%"),
+                "ground": chart_distribution(site_sun_hours[0]),
+                "buildings": chart_distribution(site_sun_hours[1]),
             },
-            "daylightPotentialImage": image_name(value(row, 38)),
-            "daylightPotentialDistribution": distribution(row, 39, DAYLIGHT_LABELS, "%"),
-            "solarEnergyImage": image_name(value(row, 48)),
-            "solarEnergySpecs": {
-                "area": number(value(row, 49)),
-                "totalSolarEnergy": number(value(row, 50)),
-                "avgSolarEnergy": number(value(row, 51)),
-                "panelArea": number(value(row, 52)),
-                "annualElectricity": number(value(row, 53)),
-            },
+            "daylightPotential": site_daylight,
+            "daylightPotentialDistribution": chart_distribution(site_daylight[0]),
+            "solarEnergySpecs": site_solar_specs,
+            "solarEnergySpecsSource": site_solar_source,
         },
         "analysisUnits": [],
         "source": {
             "file": source_file,
-            "tempPath": source_temp_path,
-            "sheet": "Arkusz1",
-            "row": source_row,
-            "status": "partial",
+            "sheet": "DANE",
+            "row": row_number,
+            "cell": f"C{row_number}",
+            "status": "source",
         },
+        "sourceData": source_row_data("DANE", row),
+        "imageLinks": image_links_for_row(
+            source_file, "DANE", row_number, cells,
+            {
+                column: (field, label)
+                for column, (field, label, _section, _property) in SITE_IMAGE_FIELDS.items()
+            },
+        ),
     }
-    city["siteAnalysis"]["sunHoursDistribution"] = {
-        key: item for key, item in city["siteAnalysis"]["sunHoursDistribution"].items() if item
-    }
-    if not city["siteAnalysis"]["sunHoursDistribution"]:
-        city["siteAnalysis"].pop("sunHoursDistribution")
-    if not any(city["siteAnalysis"]["solarEnergySpecs"].values()):
-        city["siteAnalysis"].pop("solarEnergySpecs")
-    attach_image_links(city, [
-        record_image_link(row, field, column, source_file, source_row, source_temp_path=source_temp_path)
-        for field, (_, column) in IMAGE_FIELDS.items()
-        if "." in field and not field.startswith(("daylightFactor", "spatialDaylight", "usefulDaylight"))
-    ])
     return city
 
 
-def add_room_analysis(city: dict[str, Any], row: list[str], source_row: int, source_file: str, source_temp_path: str | None = None) -> None:
-    if city["id"] not in {"elephant-and-castle", "hudson-yards"}:
-        return
-
-    def simulation(image_col: int, value_col: int, value_key: str = "avgValue") -> dict[str, Any]:
-        result = {"image": image_name(value(row, image_col)), value_key: value(row, value_col)}
-        return result
-
-    df = {"simulation1": simulation(113, 114), "simulation2": simulation(116, 117)}
-    df["simulation1"]["description"] = value(row, 115)
-    df["simulation2"]["description"] = value(row, 118)
-    sda = {
-        "simulation1": simulation(119, 120, "autonomy"),
-        "simulation2": simulation(121, 122, "autonomy"),
-        "interpretation": value(row, 123),
-    }
-    udi = {
-        "simulation1": simulation(124, 125),
-        "simulation2": simulation(126, 127),
-        "interpretation": None,
-        "conclusions": value(row, 128),
-    }
-    room_id = "selected-room"
-    room_name = "Selected room scenarios"
-    if city["id"] == "elephant-and-castle":
-        room_id = "selected-room-1"
-        room_name = "Selected room · 750 lx study"
-
-    unit = {
-        "id": room_id,
-        "name": room_name,
-        "analysisLevel": "selected-room",
-        "comparisonKey": "room-750lx" if city["id"] == "elephant-and-castle" else "room-300lx",
-        "sourceRow": source_row,
+def build_block(
+    row: dict[str, Any], source_file: str,
+    header_cells: dict[str, Any],
+) -> dict[str, Any]:
+    row_number = row["row"]
+    cells = row["cells"]
+    block_name = cells[f"BC{row_number}"]
+    block_distributions = distributions_for_row(
+        "DANE", row_number, cells, header_cells, BLOCK_DISTRIBUTIONS
+    )
+    block_solar_values = labeled_values(
+        "DANE", row_number, cells, header_cells, 7, BLOCK_SOLAR_COLUMNS
+    )
+    block_solar_specs, block_solar_source = solar_specs(block_solar_values)
+    return {
+        "id": block_name,
+        "name": block_name,
+        "analysisLevel": "urban-block",
+        "sourceRow": row_number,
+        "source": {
+            "file": source_file,
+            "sheet": "DANE",
+            "row": row_number,
+            "cell": f"BC{row_number}",
+            "status": "source",
+        },
+        "sourceData": source_row_data("DANE", row),
         "plan": None,
         "form3d": None,
-        "far": None,
+        "far": cells.get(f"BF{row_number}"),
         "indicators": {
-            "buildingIntensity": None,
-            "greenSpaceRatio": None,
-            "buildingCoverage": None,
-            "avgFloors": None,
+            "buildingIntensity": cells.get(f"BF{row_number}"),
+            "greenSpaceRatio": cells.get(f"BG{row_number}"),
+            "buildingCoverage": cells.get(f"BH{row_number}"),
+            "avgFloors": cells.get(f"BI{row_number}"),
             "treeCount": None,
-            "heightToWidthRatio": None,
-            "streetWidth": None,
+            "heightToWidthRatio": cells.get(f"BL{row_number}"),
+            "streetWidth": cells.get(f"BK{row_number}"),
+            "buildingHeight": cells.get(f"BJ{row_number}"),
         },
-        "function": "Room-scale daylight simulation; sDA criterion is 750 lx for this study. Results are not urban-block measurements." if city["id"] == "elephant-and-castle" else "Room-scale daylight simulations use a 300 lx sDA threshold; results are not urban-block measurements.",
+        "function": None,
         "sunHours": None,
         "daylightPotential": None,
         "solarEnergy": None,
-        "daylightFactor": df,
-        "spatialDaylightAutonomy": sda,
-        "usefulDaylightIlluminance": udi,
-    }
-    attach_image_links(unit, [
-        record_image_link(row, field, column, source_file, source_row, source_temp_path=source_temp_path)
-        for field, (_, column) in IMAGE_FIELDS.items()
-        if field.startswith(("daylightFactor", "spatialDaylightAutonomy", "usefulDaylightIlluminance"))
-    ])
-    city["analysisUnits"].append(unit)
-
-
-def make_site_context(row: list[str], source_file: str, source_row: int, source_temp_path: str | None = None) -> dict[str, Any]:
-    context: dict[str, Any] = {
-        "country": value(row, 4),
-        "floorAreaRatio": number(value(row, 9)),
-        "greenSpaceRatio": value(row, 10),
-        "buildingTypes": value(row, 11),
-        "transport": value(row, 12),
-        "greenBlueInfrastructure": value(row, 13),
+        "distributions": block_distributions,
         "sunHoursDistribution": {
-            "ground": distribution(row, 18, SUN_LABELS, "%"),
-            "facades": distribution(row, 28, SUN_LABELS, "%"),
+            "ground": chart_distribution(block_distributions[0]),
+            "facades": chart_distribution(block_distributions[1]),
+            "roofs": chart_distribution(block_distributions[2]),
         },
-        "daylightPotentialDistribution": distribution(row, 39, DAYLIGHT_LABELS, "%"),
-        "solarEnergySpecs": {
-            "area": number(value(row, 49)),
-            "totalSolarEnergy": number(value(row, 50)),
-            "avgSolarEnergy": number(value(row, 51)),
-            "panelArea": number(value(row, 52)),
-            "annualElectricity": number(value(row, 53)),
-        },
-        "source": {"file": source_file, "tempPath": source_temp_path, "sheet": "Arkusz1", "row": source_row, "status": "partial"},
-    }
-    context["sunHoursDistribution"] = {key: item for key, item in context["sunHoursDistribution"].items() if item}
-    if not context["sunHoursDistribution"]:
-        context.pop("sunHoursDistribution")
-    if not any(context["solarEnergySpecs"].values()):
-        context.pop("solarEnergySpecs")
-    if not any(context[key] for key in ("buildingTypes", "transport", "greenBlueInfrastructure")):
-        for key in ("buildingTypes", "transport", "greenBlueInfrastructure"):
-            context.pop(key)
-    return context
-
-
-def make_unassigned_profile(row: list[str], source_row: int, source_file: str | None = None, source_temp_path: str | None = None) -> dict[str, Any] | None:
-    if source_row <= 5:
-        return None
-    if value(row, 55) and re.fullmatch(r"UB[_ -]?\d+", value(row, 55) or "", re.IGNORECASE):
-        return None
-    sun = {
-        "ground": distribution(row, 67, SUN_LABELS, "%"),
-        "facades": distribution(row, 77, SUN_LABELS, "%"),
-        "roofs": distribution(row, 87, SUN_LABELS, "%"),
-    }
-    sun = {key: item for key, item in sun.items() if item}
-    daylight = distribution(row, 98, DAYLIGHT_LABELS, "%")
-    if not sun and not daylight:
-        return None
-    return {
-        "name": "Unassigned urban profile",
-        "sourceRow": source_row,
-        "source": {"file": source_file, "tempPath": source_temp_path, "sheet": "Arkusz1", "row": source_row, "status": "partial"},
-        "sunHoursDistribution": sun,
-        "daylightPotentialDistribution": daylight,
-        "attributionNote": (
-            "This row belongs to a named place, but the source gives no urban-block identifier. Measurements are retained without assigning them to a named block."
-            if value(row, 2)
-            else "The source row contains measurements but no city or urban-block identifier. Values are retained without assigning them to a place."
+        "daylightPotentialDistribution": chart_distribution(block_distributions[3]),
+        "solarEnergySpecs": block_solar_specs,
+        "solarEnergySpecsSource": block_solar_source,
+        "imageLinks": image_links_for_row(
+            source_file, "DANE", row_number, cells,
+            {column: (field, label) for column, (field, label) in BLOCK_IMAGE_FIELDS.items()},
         ),
     }
 
 
-def benchmark_key(raw_name: str) -> str:
-    cleaned = raw_name.replace("�", "Ø").replace("�", "Ø").strip()
-    if cleaned.casefold().startswith(("ørestad", "orest ad", "orestad")):
-        return "ørestad"
-    return cleaned.casefold()
-
-
-def make_benchmarks(rows: list[list[str]], source_file: str, site_source_file: str, site_rows: list[tuple[list[str], int]], source_temp_path: str | None = None, site_temp_path: str | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    benchmarks = []
-    seen: set[str] = set()
-    profiles_by_place: dict[str, list[dict[str, Any]]] = {}
-    unassigned_profiles = []
-    for row, source_row in site_rows:
-        profile = make_unassigned_profile(row, source_row, site_source_file, site_temp_path)
-        if not profile:
-            continue
-        place_name = value(row, 2)
-        if place_name:
-            profiles_by_place.setdefault(benchmark_key(place_name), []).append(profile)
+def workbook_source_sheets(
+    workbook_data: dict[str, Any], excluded_rows: set[int]
+) -> dict[str, list[dict[str, Any]]]:
+    sheets: dict[str, list[dict[str, Any]]] = {}
+    for name, rows in workbook_data["sheets"].items():
+        if name == "DANE":
+            rows = [row for row in rows if row["row"] not in excluded_rows]
+            sheets[name] = [source_row_data(name, row) for row in rows]
         else:
-            unassigned_profiles.append(profile)
-
-    context_by_place = {
-        benchmark_key(value(row, 2) or ""): make_site_context(row, site_source_file, source_row, site_temp_path)
-        for row, source_row in site_rows
-        if value(row, 2)
-    }
-    if "ørestad" in context_by_place:
-        context_by_place["ørestad"]["country"] = "Denmark, Copenhagen"
-    for source_row, row in enumerate(rows[3:], start=4):
-        raw_name = value(row, 0)
-        if not raw_name:
-            continue
-        name = raw_name.replace("�", "Ø").strip()
-        if key := benchmark_key(name):
-            if key == "ørestad":
-                name = "Ørestad"
-        else:
-            key = name.casefold()
-        if key in seen:
-            continue
-        seen.add(key)
-        bins = [number(value(row, column)) for column in range(6, 15)]
-        if not any(item is not None for item in bins):
-            continue
-        benchmark = {
-            "id": re.sub(r"[^a-z0-9]+", "-", key).strip("-"),
-            "name": name,
-            "distribution": {
-                "unit": "%",
-                "bins": [{"label": label, "value": item} for label, item in zip(DAYLIGHT_LABELS, bins)],
-            },
-            "source": {"file": source_file, "tempPath": source_temp_path, "sheet": "Arkusz2", "row": source_row, "status": "source"},
-        }
-        if key == "ørestad":
-            benchmark["id"] = "orestad"
-            benchmark["context"] = {"country": "Denmark, Copenhagen", "sourceNote": "The place name is normalized to Ørestad; the source spells the city as 'Konhagen'."}
-        if key in context_by_place:
-            benchmark["context"] = {**benchmark.get("context", {}), **context_by_place[key]}
-        if key in profiles_by_place:
-            benchmark["unassignedProfiles"] = profiles_by_place[key]
-        benchmarks.append(benchmark)
-    return benchmarks, unassigned_profiles
+            sheets[name] = [
+                source_row_data(name, row, include_values=False) for row in rows
+            ]
+    return sheets
 
 
-def find_input(temp_dir: Path, sheet_number: int) -> Path:
-    matches = sorted(temp_dir.glob(f"ATLASY_DANE_* (Arkusz{sheet_number}).csv"))
-    if not matches:
-        matches = sorted(temp_dir.glob(f"ATLASY_DANE_*(Arkusz{sheet_number}).csv"))
-    if not matches:
-        raise FileNotFoundError(f"Brak pliku ATLASY_DANE_*(Arkusz{sheet_number}).csv w {temp_dir}")
-    return matches[-1]
+def exact_asset_matches(
+    asset_root: Path,
+    referenced_name: str,
+    city_id: str,
+    is_location_image: bool = False,
+) -> list[Path]:
+    if is_location_image:
+        roots = [
+            path for path in asset_root.iterdir()
+            if path.is_dir() and path.name.casefold() == "grafiki_location"
+        ] if asset_root.is_dir() else []
+    else:
+        location_root = asset_root / CITY_FOLDERS[city_id]
+        roots = [location_root] if location_root.is_dir() else []
+    return [
+        path
+        for root in roots
+        for path in root.rglob("*")
+        if path.is_file()
+        and path.suffix.casefold() == ".png"
+        and path.stem == referenced_name
+        and all(part.casefold() != "stare" for part in path.relative_to(root).parts)
+    ]
 
 
-def collect_images(value_obj: Any) -> set[str]:
-    if isinstance(value_obj, dict):
-        images = set()
-        for key, item in value_obj.items():
-            if key in {"imageUrl", "schwarzplanImage", "model3dImage", "plan", "form3d", "sunHours", "daylightPotential", "daylightPotential2", "solarEnergy", "image"} or key.endswith("Image"):
-                if isinstance(item, str):
-                    images.add(item)
-            else:
-                images.update(collect_images(item))
-        return images
-    if isinstance(value_obj, list):
-        return set().union(*(collect_images(item) for item in value_obj)) if value_obj else set()
-    return set()
+def set_image_field(record: dict[str, Any], field: str, value: str) -> None:
+    target = record
+    segments = field.split(".")
+    for segment in segments[:-1]:
+        target = target[segment]
+    target[segments[-1]] = value
 
 
-def resolve_image_links(data: dict[str, Any], temp_dir: Path, public_dir: Path, copy_assets: bool) -> list[str]:
+def resolve_image_links(
+    data: dict[str, Any],
+    asset_root: Path | None = None,
+    public_dir: Path | None = None,
+) -> list[str]:
     warnings = []
-    source_files = [path for path in temp_dir.rglob("*") if path.is_file() and path.suffix.casefold() in {".png", ".jpg", ".jpeg", ".webp"}]
-    by_stem = {path.stem.casefold(): path for path in source_files}
-    catalog = []
     for city in data["cities"]:
-        folder_name = city["folder"]
-        folder = public_dir / folder_name
-        if copy_assets:
-            folder.mkdir(parents=True, exist_ok=True)
-        seen: set[tuple[str, int, str]] = set()
-        records = [city, *city.get("analysisUnits", [])]
-        for record in records:
+        folder = CITY_FOLDERS[city["id"]]
+        for record in [city, *city.get("analysisUnits", [])]:
             for link in record.get("imageLinks", []):
-                identity = (link["field"], link["row"], link.get("referencedName") or "")
-                if identity in seen:
+                if link["status"] == "empty":
                     continue
-                seen.add(identity)
-                referenced = link.get("resolvedName") or link.get("referencedName")
-                if not referenced:
-                    link["status"] = "empty"
-                    catalog.append({"cityId": city["id"], **link})
+                cell = link["cell"]
+                if cell in KNOWN_CONFLICT_CELLS:
+                    link["aliasNote"] = KNOWN_CONFLICT_CELLS[cell]
                     continue
-                lookup = IMAGE_ALIASES.get((city["id"], referenced.casefold()), referenced).casefold()
-                if lookup != referenced.casefold():
-                    alias_target = next((path.stem for path in source_files if path.stem.casefold() == lookup), lookup)
-                    link["resolvedName"] = alias_target
-                    link["aliasNote"] = f"Known filename alias: {referenced} -> {alias_target}"
-                    referenced = alias_target
-                source = by_stem.get(lookup)
-                public_url = f"{PUBLIC_BASE}/{folder_name}/{referenced}.PNG"
-                link["publicUrl"] = public_url
-                target = folder / f"{referenced}.PNG"
-                if source:
-                    link["tempPath"] = source.relative_to(temp_dir).as_posix()
-                    if copy_assets and not target.exists():
-                        shutil.copy2(source, target)
-                        link["status"] = "copied"
-                    elif target.exists():
-                        link["status"] = "present"
+                if not asset_root:
+                    continue
+                referenced = link["referencedName"]
+                matches = exact_asset_matches(
+                    asset_root,
+                    referenced,
+                    city["id"],
+                    is_location_image=link["field"] == "location.imageUrl",
+                )
+                if len(matches) != 1:
+                    if len(matches) > 1:
+                        link["aliasNote"] = "Multiple approved assets have this exact filename."
+                        warnings.append(
+                            f"{city['name']} {cell}: ambiguous exact image {referenced}.PNG"
+                        )
                     else:
-                        link["status"] = "linked"
-                elif target.exists():
-                    link["tempPath"] = None
-                    link["status"] = "public-only"
-                    note = "No matching file in the current TEMP drop-zone; the published image was already present."
-                    link["aliasNote"] = f"{link['aliasNote']} {note}" if link.get("aliasNote") else note
-                    warnings.append(f"{city['name']}: {referenced}.PNG is published but not in the current TEMP drop-zone")
+                        link["aliasNote"] = "No exact asset found in the approved source folders."
+                        warnings.append(
+                            f"{city['name']} {cell}: {referenced}.PNG was not found in the approved "
+                            "location-specific source folder."
+                        )
+                    continue
+
+                if not public_dir:
+                    continue
+                source = matches[0]
+                target = public_dir / folder / f"{referenced}.PNG"
+                target.parent.mkdir(parents=True, exist_ok=True)
+                if target.exists() and filecmp.cmp(source, target, shallow=False):
+                    link["status"] = "present"
                 else:
-                    link["tempPath"] = None
-                    link["status"] = "missing"
-                    warnings.append(f"{city['name']}: missing image {referenced}.PNG")
-                catalog.append({"cityId": city["id"], **link})
-        for name in sorted(collect_images({key: val for key, val in city.items() if key not in {"source", "folder", "imageLinks"}})):
-            if any(item.get("resolvedName") == name or item.get("referencedName") == name for item in catalog if item["cityId"] == city["id"]):
-                continue
-            warnings.append(f"{city['name']}: image {name}.PNG has no provenance link")
-    data["imageCatalog"] = catalog
+                    shutil.copy2(source, target)
+                    link["status"] = "copied"
+                link["resolvedName"] = referenced
+                try:
+                    link["sourceTempPath"] = source.relative_to(ROOT).as_posix()
+                except ValueError:
+                    link["sourceTempPath"] = None
+                link["tempPath"] = link["sourceTempPath"]
+                link["publicUrl"] = f"/atlasy-platform/{folder}/{referenced}.PNG"
+                set_image_field(record, link["field"], referenced)
+
+    data["imageCatalog"] = [
+        {"cityId": city["id"], **link}
+        for city in data["cities"]
+        for record in [city, *city.get("analysisUnits", [])]
+        for link in record.get("imageLinks", [])
+    ]
     return warnings
+
+
+def build_private_content(workbook_path: Path | BinaryIO) -> dict[str, Any]:
+    source_file = workbook_path.name if isinstance(workbook_path, Path) else "source.xlsx"
+    workbook_data = read_workbook(workbook_path, source_file=source_file)
+    private_sheets = {}
+    for sheet, rows in workbook_data["sheets"].items():
+        private_sheets[sheet] = [
+            {
+                "row": row["row"],
+                "cells": row["cells"],
+                "source": source_ref(sheet, row["row"]),
+            }
+            for row in rows
+        ]
+    return {
+        "sourceWorkbook": workbook_data["sourceFile"],
+        "sourcePath": workbook_path_label(workbook_path, source_file),
+        "sourceSheets": private_sheets,
+        "note": "Local-only source text and metadata; do not publish or copy into public assets.",
+    }
+
+
+def build_data(
+    workbook_path: Path | BinaryIO,
+    source_file: str | None = None,
+    asset_root: Path | None = None,
+    public_dir: Path | None = None,
+) -> tuple[dict[str, Any], list[str]]:
+    workbook_data = read_workbook(workbook_path, source_file=source_file)
+    source_file = workbook_data["sourceFile"]
+    source_path = workbook_path_label(workbook_path, source_file)
+    d_data_rows = workbook_data["sheets"]["DANE"]
+    header_cells: dict[str, Any] = {}
+    for source_row in (5, 6, 7):
+        header_row = next(
+            (row for row in d_data_rows if row["row"] == source_row), None
+        )
+        if header_row:
+            header_cells.update(header_row["cells"])
+    sites = workbook_data["sites"]
+    cities = [build_city(site, source_file, d_data_rows, header_cells) for site in sites]
+    cities_by_name = {city["name"].casefold(): city for city in cities}
+
+    for row in d_data_rows:
+        row_number = row["row"]
+        if row_number < 8:
+            continue
+        block = row["cells"].get(f"BC{row_number}")
+        if not block:
+            continue
+        # The reader's grouped site rows are authoritative; row order is not used to infer ownership.
+        site = next(
+            (
+                item for item in sites
+                if any(block_row["sourceRow"] == row_number for block_row in item["blocks"])
+            ),
+            None,
+        )
+        if site is None:
+            raise ValueError(f"DANE!BC{row_number}: block has no source location")
+        city = cities_by_name[site["name"].casefold()]
+        excluded_reason = EXCLUDED_BLOCKS.get((site["name"].casefold(), block.casefold()))
+        if excluded_reason:
+            continue
+        city["analysisUnits"].append(build_block(row, source_file, header_cells))
+
+    exclusion_rows = []
+    excluded_dane_rows: set[int] = set()
+    for site in sites:
+        for block in site["blocks"]:
+            reason = EXCLUDED_BLOCKS.get((site["name"].casefold(), block["name"].casefold()))
+            if reason:
+                excluded_dane_rows.add(block["sourceRow"])
+                exclusion_rows.append({
+                    "reason": reason,
+                    "source": {
+                        "file": source_file,
+                        "sheet": "DANE",
+                        "row": block["sourceRow"],
+                        "cell": f"BC{block['sourceRow']}",
+                    },
+                })
+
+    notices = [
+        "Coordinates are not supplied in the website workbook; no coordinates were imported or inferred.",
+        "Unapproved descriptions, planning principles, and key characteristics are stored locally pending TASK-12 and TASK-25/30/35/40/48 approval.",
+    ]
+    for city in cities:
+        for link in city["imageLinks"]:
+            if city["name"] == "Aspern Seestadt" and link["cell"] in {"Q15", "AL15", "AV15"}:
+                notices.append(
+                    f"{link['cell']} is a Kronsberg-named image reference on the Aspern Seestadt row; "
+                    "it remains unresolved pending TASK-17."
+                )
+    elephant = cities_by_name.get("elephant & castle – elephant park")
+    if elephant:
+        block = next((item for item in elephant["analysisUnits"] if item["name"] == "UB_1"), None)
+        model = next(
+            (link for link in block.get("imageLinks", []) if link["cell"] == "BE8"),
+            None,
+        ) if block else None
+        if model:
+            notices.append(
+                "DANE!BE8 has an unresolved UB_1 3D-model filename mismatch (TASK-15); "
+                "no similarly named image is substituted."
+            )
+        solar = {
+            item["label"]: item["value"]
+            for item in (block or {}).get("solarEnergySpecsSource", [])
+        }
+        if solar.get("area (m²)") == 9971 and solar.get("area to be covered by the panels (m²) - 60%") == 59982:
+            notices.append(
+                "Elephant Park DANE!DD8 and DANE!DG8 are preserved exactly despite the solar-area "
+                "inconsistency; no correction is inferred pending TASK-16."
+            )
+
+    data = {
+        "version": 2,
+        "generatedFrom": [source_file],
+        "sourceFolder": source_path.rsplit("/", 1)[0] if "/" in source_path else None,
+        "cities": cities,
+        "benchmarks": [],
+        "unassignedProfiles": [],
+        "imageCatalog": [],
+        "notices": notices,
+        "exclusions": exclusion_rows,
+        "sourceWorkbook": {
+            "file": source_file,
+            "path": source_path,
+            "sheets": workbook_source_sheets(workbook_data, excluded_dane_rows),
+        },
+    }
+    errors = validate_data(data)
+    if errors:
+        raise ValueError("Invalid imported data: " + "; ".join(errors))
+    return data, resolve_image_links(data, asset_root, public_dir)
 
 
 def validate_data(data: dict[str, Any]) -> list[str]:
     errors = []
-    city_ids = [city.get("id") for city in data.get("cities", [])]
+    cities = data.get("cities", [])
+    city_ids = [city.get("id") for city in cities]
     if len(city_ids) != len(set(city_ids)):
         errors.append("Case-study IDs must be unique")
-    benchmark_ids = [item.get("id") for item in data.get("benchmarks", [])]
-    if len(benchmark_ids) != len(set(benchmark_ids)):
-        errors.append("Benchmark IDs must be unique")
-
-    def inspect(value_obj: Any, path: str) -> None:
-        if isinstance(value_obj, dict):
-            bins = value_obj.get("bins")
-            if isinstance(bins, list) and value_obj.get("unit") == "%":
-                measured = [item.get("value") for item in bins if item.get("value") is not None]
-                if any(not isinstance(item, (int, float)) or item < 0 or item > 100 for item in measured):
-                    errors.append(f"Percentage values outside 0-100 at {path}")
-                if len(measured) == len(bins) and measured and not math.isclose(sum(measured), 100, abs_tol=2):
-                    errors.append(f"Complete percentage distribution does not sum to 100 at {path}")
-            for key, child in value_obj.items():
-                inspect(child, f"{path}.{key}")
-        elif isinstance(value_obj, list):
-            for index, child in enumerate(value_obj):
-                inspect(child, f"{path}[{index}]")
-
-    for city in data.get("cities", []):
+    for city in cities:
         if not city.get("name") or not city.get("source", {}).get("row"):
             errors.append(f"Case study {city.get('id')} is missing required provenance")
-        unit_ids = [unit.get("id") for unit in city.get("analysisUnits", [])]
-        if len(unit_ids) != len(set(unit_ids)):
+        block_ids = [block.get("id") for block in city.get("analysisUnits", [])]
+        if len(block_ids) != len(set(block_ids)):
             errors.append(f"Analysis-unit IDs must be unique within {city.get('id')}")
-        inspect(city, city.get("id", "city"))
-    inspect(data.get("benchmarks", []), "benchmarks")
-    profile_rows = [profile.get("sourceRow") for profile in data.get("unassignedProfiles", [])]
-    if len(profile_rows) != len(set(profile_rows)):
-        errors.append("Unassigned profile source rows must be unique")
-    for profile in data.get("unassignedProfiles", []):
-        if not profile.get("sourceRow") or not profile.get("attributionNote"):
-            errors.append("Unassigned profiles must retain their source row and attribution note")
-        inspect(profile, f"unassignedProfiles.row-{profile.get('sourceRow')}")
+        if city["name"].casefold() == "garnizon" and "UB_2" in block_ids:
+            errors.append("Garnizon UB_2 must be excluded")
+        for block in city.get("analysisUnits", []):
+            source = block.get("source", {})
+            if source.get("sheet") != "DANE" or not source.get("cell"):
+                errors.append(f"Block {city.get('id')}/{block.get('id')} is missing cell provenance")
     return errors
 
 
-def import_data(temp_dir: Path, output_path: Path, copy_assets: bool = True) -> tuple[dict[str, Any], list[str]]:
-    sheet1 = find_input(temp_dir, 1)
-    sheet2 = find_input(temp_dir, 2)
-    sheet1_temp_path = relative_temp_path(temp_dir, sheet1)
-    sheet2_temp_path = relative_temp_path(temp_dir, sheet2)
-    rows = read_csv(sheet1)
-    cities: dict[str, dict[str, Any]] = {}
-    city_rows: list[tuple[dict[str, Any], list[str], int]] = []
-    for source_row, row in enumerate(rows):
-        config = normalize_city(value(row, 2))
-        if config:
-            city_rows.append((config, row, source_row + 1))
-    for config, row, source_row in city_rows:
-        city = make_city(row, config, source_row, sheet1.name, sheet1_temp_path)
-        cities[config["id"]] = city
-        add_room_analysis(city, row, source_row, sheet1.name, sheet1_temp_path)
-
-    for source_row, row in enumerate(rows):
-        if not value(row, 55) or not re.fullmatch(r"UB[_ -]?\d+", value(row, 55) or "", re.IGNORECASE):
-            continue
-        config = infer_city_from_row(row)
-        city = cities.get(config["id"]) if config else None
-        if city:
-            unit = make_unit(row, city, source_row + 1, temp_dir, sheet1.name, sheet1_temp_path)
-            if unit and unit["id"] not in {existing["id"] for existing in city["analysisUnits"]}:
-                city["analysisUnits"].append(unit)
-
-    for city in cities.values():
-        city["analysisUnits"].sort(key=lambda unit: (unit.get("analysisLevel") != "urban-block", str(unit["id"])))
-
-    missing_cities = [config["name"] for config in CITY_CONFIG.values() if config["id"] not in cities]
-    if missing_cities:
-        raise ValueError(f"Brak wymaganych lokalizacji w Arkuszu 1: {', '.join(missing_cities)}")
-
-    benchmark_site_rows = [(row, source_row + 1) for source_row, row in enumerate(rows)]
-    benchmarks, unassigned_profiles = make_benchmarks(read_csv(sheet2), sheet2.name, sheet1.name, benchmark_site_rows, sheet2_temp_path, sheet1_temp_path)
-    data = {
-        "version": 1,
-        "generatedFrom": [sheet1.name, sheet2.name],
-        "sourceFolder": ".venv/TEMP",
-        "cities": sorted(cities.values(), key=lambda city: city["id"]),
-        "benchmarks": benchmarks,
-        "unassignedProfiles": unassigned_profiles,
-        "notices": [
-            "The source workbook points to DATA_FORMA_260630 for additional values; that file was not provided. Missing values are left blank.",
-            "Some numeric urban profiles have no place or block identifier in the source and are shown separately without guessed attribution.",
-        ],
-    }
-    validation_errors = validate_data(data)
-    if validation_errors:
-        raise ValueError("Invalid imported data: " + "; ".join(validation_errors))
-    public_dir = output_path.parent.parent
-    for city in data["cities"]:
-        city["folder"] = CITY_CONFIG[city["name"].casefold()]["folder"]
-    warnings = resolve_image_links(data, temp_dir, public_dir, copy_assets)
-    for city in data["cities"]:
-        city.pop("folder", None)
+def import_data(
+    workbook_path: Path | BinaryIO,
+    output_path: Path,
+    private_output_path: Path | None = None,
+) -> tuple[dict[str, Any], list[str]]:
+    source_root = (
+        workbook_path.parent.parent / "RYSUNKI"
+        if isinstance(workbook_path, Path) and workbook_path.exists()
+        else None
+    )
+    data, warnings = build_data(
+        workbook_path,
+        asset_root=source_root,
+        public_dir=output_path.parent.parent,
+    )
+    private_output_path = private_output_path or ROOT / ".venv" / "atlas-private-content.json"
+    private_output_path.parent.mkdir(parents=True, exist_ok=True)
+    private_source = (
+        workbook_path
+        if isinstance(workbook_path, Path)
+        else BytesIO(workbook_path.getvalue())
+    )
+    private_output_path.write_text(
+        json.dumps(build_private_content(private_source), indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return data, warnings
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Import the latest urban daylight CSV tables.")
-    parser.add_argument("--temp-dir", type=Path, default=DEFAULT_TEMP)
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="backslashreplace")
+    parser = argparse.ArgumentParser(description="Import the approved website workbook.")
+    parser.add_argument("--workbook", type=Path, default=DEFAULT_WORKBOOK)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument("--no-copy-assets", action="store_true")
     args = parser.parse_args()
     try:
-        data, warnings = import_data(args.temp_dir, args.output, not args.no_copy_assets)
-    except (FileNotFoundError, ValueError, UnicodeError, csv.Error) as error:
+        data, warnings = import_data(args.workbook, args.output)
+    except (FileNotFoundError, ValueError, OSError) as error:
         print(f"Import failed: {error}", file=sys.stderr)
         return 1
-    print(f"Imported {len(data['cities'])} case studies and {len(data['benchmarks'])} benchmarks to {args.output}")
-    print("Missing dependency: DATA_FORMA_260630 (additional source fields remain blank)")
+    print(f"Imported {len(data['cities'])} source locations to {args.output}")
     for city in data["cities"]:
-        print(f"  {city['name']}: {len(city['analysisUnits'])} analysis units")
+        print(f"  {city['name']}: {len(city['analysisUnits'])} eligible urban blocks")
     for warning in warnings:
         print(f"WARNING: {warning}")
+    for notice in data["notices"]:
+        print(f"NOTICE: {notice}")
     return 0
 
 

@@ -6,7 +6,7 @@ export interface Coordinates {
 
 export interface Location {
   country: string | null;
-  coordinates: Coordinates;
+  coordinates: Coordinates | null;
   imageUrl: string | null;
 }
 
@@ -67,6 +67,7 @@ export interface SolarEnergySpecs {
   avgSolarEnergy: number | null;
   panelArea: number | null;
   annualElectricity: number | null;
+  panelAreaWarning?: string;
 }
 
 export interface QuarterIndicators {
