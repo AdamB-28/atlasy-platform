@@ -29,12 +29,6 @@ export interface UrbanIndicators {
   greenBlueInfrastructure?: string | null;
 }
 
-export interface ShadingAnalysis {
-  marchSeptember: string | null;
-  june: string | null;
-  december: string | null;
-}
-
 export interface SiteAnalysis {
   sunHoursImage: string | null;
   urbanBlocksImage?: string | null;
@@ -108,7 +102,7 @@ export interface UsefulDaylightIlluminance {
 export interface UrbanBlock {
   id: number | string;
   name: string;
-  analysisLevel?: 'urban-block' | 'selected-room';
+  analysisLevel?: 'urban-block';
   comparisonKey?: string;
   sourceRow?: number;
   plan: string | null;
@@ -126,7 +120,6 @@ export interface UrbanBlock {
   daylightFactor?: DaylightFactor;
   spatialDaylightAutonomy?: SpatialDaylightAutonomy;
   usefulDaylightIlluminance?: UsefulDaylightIlluminance;
-  shadingAnalysis?: ShadingAnalysis; // For Hudson Yards
   imageLinks?: ImageLink[];
 }
 
@@ -137,7 +130,6 @@ export interface City {
   timeline: Timeline;
   overview: Overview;
   urbanIndicators: UrbanIndicators;
-  shadingAnalysis: ShadingAnalysis;
   siteAnalysis?: SiteAnalysis;
   analysisUnits: UrbanBlock[];
   source: DataSource;

@@ -29,11 +29,6 @@
         "transport": null,
         "greenBlueInfrastructure": null
       },
-      "shadingAnalysis": {
-        "marchSeptember": null,
-        "june": null,
-        "december": null
-      },
       "siteAnalysis": {
         "sunHoursImage": "Elephant_and_Castle_sun_hours_260925",
         "daylightPotentialImage": "Elephant_and_Castle_daylight_potential_260925",
@@ -1729,7 +1724,7 @@
               "row": 8,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/FORMA/Elephant_and_Castle_sun_hours_261107_UB_1.PNG",
               "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/Elephant_and_Castle_sun_hours_261107_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -1747,7 +1742,7 @@
               "row": 8,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/FORMA/Elephant_and_Castle_daylight_potential_261107_UB_1.PNG",
               "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/Elephant_and_Castle_daylight_potential_261107_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -2993,7 +2988,7 @@
           "row": 8,
           "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/GRAFIKI/ELEPHANT_AND_CASTLE_261017.PNG",
           "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/ELEPHANT_AND_CASTLE_261017.PNG",
-          "status": "copied"
+          "status": "present"
         },
         {
           "field": "siteAnalysis.sunHoursImage",
@@ -3074,11 +3069,6 @@
         "buildingTypes": null,
         "transport": null,
         "greenBlueInfrastructure": null
-      },
-      "shadingAnalysis": {
-        "marchSeptember": null,
-        "june": null,
-        "december": null
       },
       "siteAnalysis": {
         "sunHoursImage": "Garnizon_sun_hours_261021",
@@ -4774,7 +4764,7 @@
               "row": 10,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/FORMA/Garnizon_sun_hours_261021_UB_1.PNG",
               "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_sun_hours_261021_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -4792,7 +4782,7 @@
               "row": 10,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/FORMA/Garnizon_daylight_potential_261021_UB_1.PNG",
               "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_daylight_potential_261021_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -5810,7 +5800,7 @@
               "row": 12,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/FORMA/Garnizon_sun_hours_261021_UB_3.PNG",
               "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_sun_hours_261021_UB_3.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -5828,7 +5818,7 @@
               "row": 12,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/FORMA/Garnizon_daylight_potential_261021_UB_3.PNG",
               "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_daylight_potential_261021_UB_3.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -6038,7 +6028,7 @@
           "row": 10,
           "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/GRAFIKI/GARNIZON_261114.PNG",
           "publicUrl": "/atlasy-platform/GARNIZON/GARNIZON_261114.PNG",
-          "status": "copied"
+          "status": "present"
         },
         {
           "field": "siteAnalysis.sunHoursImage",
@@ -6119,11 +6109,6 @@
         "buildingTypes": null,
         "transport": null,
         "greenBlueInfrastructure": null
-      },
-      "shadingAnalysis": {
-        "marchSeptember": null,
-        "june": null,
-        "december": null
       },
       "siteAnalysis": {
         "sunHoursImage": "Kronsberg_sun_hours_261021",
@@ -7819,7 +7804,7 @@
               "row": 13,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261021_UB_1.PNG",
               "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_sun_hours_261021_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -7837,7 +7822,7 @@
               "row": 13,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261021_UB_1.PNG",
               "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_daylight_potential_261021_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -8855,7 +8840,7 @@
               "row": 14,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261021_UB_2.PNG",
               "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_sun_hours_261021_UB_2.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -8873,7 +8858,7 @@
               "row": 14,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261021_UB_2.PNG",
               "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_daylight_potential_261021_UB_2.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -9083,7 +9068,7 @@
           "row": 13,
           "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/GRAFIKI/Kronsberg_261021.PNG",
           "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_261021.PNG",
-          "status": "copied"
+          "status": "present"
         },
         {
           "field": "siteAnalysis.sunHoursImage",
@@ -9164,11 +9149,6 @@
         "buildingTypes": null,
         "transport": null,
         "greenBlueInfrastructure": null
-      },
-      "shadingAnalysis": {
-        "marchSeptember": null,
-        "june": null,
-        "december": null
       },
       "siteAnalysis": {
         "sunHoursImage": null,
@@ -10864,7 +10844,7 @@
               "row": 15,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_1.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -10882,7 +10862,7 @@
               "row": 15,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_1.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -11900,7 +11880,7 @@
               "row": 16,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_2.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_2.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -11918,7 +11898,7 @@
               "row": 16,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_2.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_2.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -12936,7 +12916,7 @@
               "row": 17,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_3.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_3.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -12954,7 +12934,7 @@
               "row": 17,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_3.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_3.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -13972,7 +13952,7 @@
               "row": 18,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_4.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_4.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -13990,7 +13970,7 @@
               "row": 18,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_4.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_4.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -15008,7 +14988,7 @@
               "row": 19,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_A.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_A.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -15026,7 +15006,7 @@
               "row": 19,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_A.PNG",
               "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_A.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -15236,7 +15216,7 @@
           "row": 15,
           "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/GRAFIKI/Seestadt_261114.PNG",
           "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_261114.PNG",
-          "status": "copied"
+          "status": "present"
         },
         {
           "field": "siteAnalysis.sunHoursImage",
@@ -15317,11 +15297,6 @@
         "buildingTypes": null,
         "transport": null,
         "greenBlueInfrastructure": null
-      },
-      "shadingAnalysis": {
-        "marchSeptember": null,
-        "june": null,
-        "december": null
       },
       "siteAnalysis": {
         "sunHoursImage": "Orestadt_sun_hours_261111",
@@ -17017,7 +16992,7 @@
               "row": 20,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_1.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -17035,7 +17010,7 @@
               "row": 20,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_1.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_1.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -18053,7 +18028,7 @@
               "row": 21,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_2.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_2.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -18071,7 +18046,7 @@
               "row": 21,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_2.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_2.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -19089,7 +19064,7 @@
               "row": 22,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_3.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_3.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -19107,7 +19082,7 @@
               "row": 22,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_3.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_3.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -20125,7 +20100,7 @@
               "row": 23,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_4.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_4.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -20143,7 +20118,7 @@
               "row": 23,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_4.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_4.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -21161,7 +21136,7 @@
               "row": 24,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_5.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_5.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -21179,7 +21154,7 @@
               "row": 24,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_5.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_5.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -22197,7 +22172,7 @@
               "row": 25,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_6.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_6.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "daylightPotential",
@@ -22215,7 +22190,7 @@
               "row": 25,
               "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_6.PNG",
               "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_6.PNG",
-              "status": "copied"
+              "status": "present"
             },
             {
               "field": "solarEnergy",
@@ -22425,7 +22400,7 @@
           "row": 20,
           "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/GRAFIKI/Orestadt_261021.PNG",
           "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_261021.PNG",
-          "status": "copied"
+          "status": "present"
         },
         {
           "field": "siteAnalysis.sunHoursImage",
@@ -22561,7 +22536,7 @@
       "row": 8,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/GRAFIKI/ELEPHANT_AND_CASTLE_261017.PNG",
       "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/ELEPHANT_AND_CASTLE_261017.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "elephant-and-castle",
@@ -22675,7 +22650,7 @@
       "row": 8,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/FORMA/Elephant_and_Castle_sun_hours_261107_UB_1.PNG",
       "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/Elephant_and_Castle_sun_hours_261107_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "elephant-and-castle",
@@ -22694,7 +22669,7 @@
       "row": 8,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ELEPHANT_AND_CASTLE/FORMA/Elephant_and_Castle_daylight_potential_261107_UB_1.PNG",
       "publicUrl": "/atlasy-platform/ELEPHANT_AND_CASTLE/Elephant_and_Castle_daylight_potential_261107_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "elephant-and-castle",
@@ -22884,7 +22859,7 @@
       "row": 10,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/GRAFIKI/GARNIZON_261114.PNG",
       "publicUrl": "/atlasy-platform/GARNIZON/GARNIZON_261114.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "garnizon",
@@ -22998,7 +22973,7 @@
       "row": 10,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/FORMA/Garnizon_sun_hours_261021_UB_1.PNG",
       "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_sun_hours_261021_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "garnizon",
@@ -23017,7 +22992,7 @@
       "row": 10,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/FORMA/Garnizon_daylight_potential_261021_UB_1.PNG",
       "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_daylight_potential_261021_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "garnizon",
@@ -23093,7 +23068,7 @@
       "row": 12,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/FORMA/Garnizon_sun_hours_261021_UB_3.PNG",
       "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_sun_hours_261021_UB_3.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "garnizon",
@@ -23112,7 +23087,7 @@
       "row": 12,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/GARNIZON/FORMA/Garnizon_daylight_potential_261021_UB_3.PNG",
       "publicUrl": "/atlasy-platform/GARNIZON/Garnizon_daylight_potential_261021_UB_3.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "garnizon",
@@ -23207,7 +23182,7 @@
       "row": 13,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/GRAFIKI/Kronsberg_261021.PNG",
       "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_261021.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "kronsberg",
@@ -23321,7 +23296,7 @@
       "row": 13,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261021_UB_1.PNG",
       "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_sun_hours_261021_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "kronsberg",
@@ -23340,7 +23315,7 @@
       "row": 13,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261021_UB_1.PNG",
       "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_daylight_potential_261021_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "kronsberg",
@@ -23416,7 +23391,7 @@
       "row": 14,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_sun_hours_261021_UB_2.PNG",
       "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_sun_hours_261021_UB_2.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "kronsberg",
@@ -23435,7 +23410,7 @@
       "row": 14,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/KRONSBERG/FORMA/Kronsberg_daylight_potential_261021_UB_2.PNG",
       "publicUrl": "/atlasy-platform/KRONSBERG/Kronsberg_daylight_potential_261021_UB_2.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "kronsberg",
@@ -23530,7 +23505,7 @@
       "row": 15,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/GRAFIKI/Seestadt_261114.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_261114.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23644,7 +23619,7 @@
       "row": 15,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_1.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23663,7 +23638,7 @@
       "row": 15,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_1.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23739,7 +23714,7 @@
       "row": 16,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_2.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_2.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23758,7 +23733,7 @@
       "row": 16,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_2.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_2.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23834,7 +23809,7 @@
       "row": 17,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_3.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_3.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23853,7 +23828,7 @@
       "row": 17,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_3.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_3.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23929,7 +23904,7 @@
       "row": 18,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_4.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_4.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -23948,7 +23923,7 @@
       "row": 18,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_4.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_4.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -24024,7 +23999,7 @@
       "row": 19,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_sun_hours_261021_UB_A.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_sun_hours_261021_UB_A.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -24043,7 +24018,7 @@
       "row": 19,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/SEESTADT/FORMA/Seestadt_daylight_potential_261021_UB_A.PNG",
       "publicUrl": "/atlasy-platform/SEESTADT/Seestadt_daylight_potential_261021_UB_A.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "aspern-seestadt",
@@ -24138,7 +24113,7 @@
       "row": 20,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/GRAFIKI/Orestadt_261021.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_261021.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24252,7 +24227,7 @@
       "row": 20,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_1.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24271,7 +24246,7 @@
       "row": 20,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_1.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_1.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24347,7 +24322,7 @@
       "row": 21,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_2.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_2.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24366,7 +24341,7 @@
       "row": 21,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_2.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_2.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24442,7 +24417,7 @@
       "row": 22,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_3.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_3.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24461,7 +24436,7 @@
       "row": 22,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_3.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_3.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24537,7 +24512,7 @@
       "row": 23,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_4.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_4.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24556,7 +24531,7 @@
       "row": 23,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_4.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_4.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24632,7 +24607,7 @@
       "row": 24,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_5.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_5.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24651,7 +24626,7 @@
       "row": 24,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_5.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_5.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24727,7 +24702,7 @@
       "row": 25,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_sun_hours_261021_UB_6.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_sun_hours_261021_UB_6.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",
@@ -24746,7 +24721,7 @@
       "row": 25,
       "tempPath": "TEMP__TRUTH/IEA_TASK_70_ATLASY/DANE_NA_STRONE/RYSUNKI/ORESTADT/FORMA/Orestadt_daylight_potential_261021_UB_6.PNG",
       "publicUrl": "/atlasy-platform/ORESTADT/Orestadt_daylight_potential_261021_UB_6.PNG",
-      "status": "copied"
+      "status": "present"
     },
     {
       "cityId": "orestad-syd",

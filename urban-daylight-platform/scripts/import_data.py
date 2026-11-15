@@ -35,6 +35,13 @@ CITY_ID_OVERRIDES = {
     "aspern seestadt": "aspern-seestadt",
     "ørestad syd": "orestad-syd",
 }
+APPROVED_CITY_NAMES = {
+    "Elephant & Castle – Elephant Park",
+    "Garnizon",
+    "Kronsberg",
+    "Aspern Seestadt",
+    "Ørestad Syd",
+}
 SITE_IMAGE_FIELDS = {
     "D": ("location.imageUrl", "Location map", "location", "imageUrl"),
     "N": ("overview.schwarzplanImage", "Site top view", "overview", "schwarzplanImage"),
@@ -331,7 +338,6 @@ def build_city(
             "transport": None,
             "greenBlueInfrastructure": None,
         },
-        "shadingAnalysis": {"marchSeptember": None, "june": None, "december": None},
         "siteAnalysis": {
             "sunHoursImage": None,
             "daylightPotentialImage": None,
@@ -475,6 +481,28 @@ def set_image_field(record: dict[str, Any], field: str, value: str) -> None:
     target[segments[-1]] = value
 
 
+def cleanup_generated_images(data: dict[str, Any], public_dir: Path) -> None:
+    referenced_images = {
+        (CITY_FOLDERS[link["cityId"]], link["resolvedName"].casefold())
+        for link in data["imageCatalog"]
+        if link["status"] in {"copied", "present"} and link["resolvedName"]
+    }
+    generated_folders = {*CITY_FOLDERS.values(), "HUDSON_YARDS"}
+    for folder in sorted(generated_folders):
+        folder_path = public_dir / folder
+        if folder_path.is_symlink() or not folder_path.is_dir():
+            continue
+        for image_path in folder_path.iterdir():
+            if (
+                image_path.is_symlink()
+                or not image_path.is_file()
+                or image_path.suffix.casefold() != ".png"
+                or (folder, image_path.stem.casefold()) in referenced_images
+            ):
+                continue
+            image_path.unlink()
+
+
 def resolve_image_links(
     data: dict[str, Any],
     asset_root: Path | None = None,
@@ -570,6 +598,15 @@ def build_data(
     public_dir: Path | None = None,
 ) -> tuple[dict[str, Any], list[str]]:
     workbook_data = read_workbook(workbook_path, source_file=source_file)
+    unapproved_sites = [
+        site["name"]
+        for site in workbook_data["sites"]
+        if site["name"] not in APPROVED_CITY_NAMES
+    ]
+    if unapproved_sites:
+        raise ValueError(
+            "Unapproved locations in DANE: " + ", ".join(unapproved_sites)
+        )
     source_file = workbook_data["sourceFile"]
     source_path = workbook_path_label(workbook_path, source_file)
     d_data_rows = workbook_data["sheets"]["DANE"]
@@ -683,8 +720,14 @@ def validate_data(data: dict[str, Any]) -> list[str]:
     errors = []
     cities = data.get("cities", [])
     city_ids = [city.get("id") for city in cities]
+    city_names = [city.get("name") for city in cities]
     if len(city_ids) != len(set(city_ids)):
         errors.append("Case-study IDs must be unique")
+    approved_city_ids = set(CITY_ID_OVERRIDES.values())
+    if set(city_ids) != approved_city_ids or set(city_names) != APPROVED_CITY_NAMES:
+        errors.append("Case studies must contain exactly the five approved locations")
+    if data.get("benchmarks") or data.get("unassignedProfiles"):
+        errors.append("Legacy benchmark profiles are not supported by the website workbook")
     for city in cities:
         if not city.get("name") or not city.get("source", {}).get("row"):
             errors.append(f"Case study {city.get('id')} is missing required provenance")
@@ -697,6 +740,18 @@ def validate_data(data: dict[str, Any]) -> list[str]:
             source = block.get("source", {})
             if source.get("sheet") != "DANE" or not source.get("cell"):
                 errors.append(f"Block {city.get('id')}/{block.get('id')} is missing cell provenance")
+            if block.get("analysisLevel") != "urban-block":
+                errors.append(f"Block {city.get('id')}/{block.get('id')} is not an urban-block analysis")
+            if any(field in block for field in (
+                "daylightFactor",
+                "spatialDaylightAutonomy",
+                "usefulDaylightIlluminance",
+                "shadingAnalysis",
+                "daylightPotential2",
+            )):
+                errors.append(f"Block {city.get('id')}/{block.get('id')} contains legacy scenario data")
+        if "shadingAnalysis" in city:
+            errors.append(f"Case study {city.get('id')} contains legacy shading data")
     return errors
 
 
@@ -728,6 +783,7 @@ def import_data(
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    cleanup_generated_images(data, output_path.parent.parent)
     return data, warnings
 
 

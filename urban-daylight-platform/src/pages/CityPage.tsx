@@ -22,7 +22,6 @@ export default function CityPage() {
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const [showUrbanInsights, setShowUrbanInsights] = useState(false)
-  const [showShadingInsights, setShowShadingInsights] = useState(false)
   const [showCityPicker, setShowCityPicker] = useState(false)
 
   const cityFolder = getCityFolderName(city?.name ?? '')
@@ -378,99 +377,6 @@ export default function CityPage() {
             )}
           </div>
         </div>
-        
-        {/* Shading Analysis */}
-        {(hasData(city.shadingAnalysis.marchSeptember) || 
-          hasData(city.shadingAnalysis.june) || 
-          hasData(city.shadingAnalysis.december)) && (
-          <div className="mb-8 md:mb-12">
-            <h2 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-4 md:mb-6 transition-colors duration-500">Seasonal Shading Analysis</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {hasData(city.shadingAnalysis.marchSeptember) && (
-                <div className="card">
-                  <h3 className="section-title text-base md:text-lg">March & September</h3>
-                  <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">Equinox conditions</p>
-                  <SafeImage
-                    src={getImagePath(city.shadingAnalysis.marchSeptember)}
-                    imageLink={findImageLink(city.imageLinks, 'shadingAnalysis.marchSeptember')}
-                    alt="Shading analysis - March/September"
-                    className="w-full rounded-lg"
-                  />
-                </div>
-              )}
-              
-              {hasData(city.shadingAnalysis.june) && (
-                <div className="card">
-                  <h3 className="section-title text-base md:text-lg">June</h3>
-                  <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">Summer solstice</p>
-                  <SafeImage
-                    src={getImagePath(city.shadingAnalysis.june)}
-                    imageLink={findImageLink(city.imageLinks, 'shadingAnalysis.june')}
-                    alt="Shading analysis - June"
-                    className="w-full rounded-lg"
-                  />
-                </div>
-              )}
-              
-              {hasData(city.shadingAnalysis.december) && (
-                <div className="card">
-                  <h3 className="section-title text-base md:text-lg">December</h3>
-                  <p className="text-xs md:text-sm text-neutral-600 dark:text-neutral-400 mb-4 transition-colors duration-500">Winter solstice</p>
-                  <SafeImage
-                    src={getImagePath(city.shadingAnalysis.december)}
-                    imageLink={findImageLink(city.imageLinks, 'shadingAnalysis.december')}
-                    alt="Shading analysis - December"
-                    className="w-full rounded-lg"
-                  />
-                </div>
-              )}
-            </div>
-            
-            {/* Shading Analysis Insights */}
-            <div className="mt-4 md:mt-6">
-              <button
-                onClick={() => setShowShadingInsights(!showShadingInsights)}
-                className="w-full flex items-center justify-between p-3 bg-primary-100 dark:bg-primary-900/30 hover:bg-primary-200 dark:hover:bg-primary-800/30 rounded-lg transition-colors duration-500 border border-primary-200 dark:border-primary-700">
-                <div className="flex items-center gap-2">
-                  <Lightbulb className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary-600 dark:text-primary-400" />
-                  <span className="text-xs md:text-sm font-semibold text-primary-900 dark:text-primary-100 transition-colors duration-500">
-                    {showShadingInsights ? 'Hide' : 'Show'} Seasonal Shading Guide
-                  </span>
-                </div>
-                {showShadingInsights ? <ChevronUp className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary-600 dark:text-primary-400" /> : <ChevronDown className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary-600 dark:text-primary-400" />}
-              </button>
-              
-              {showShadingInsights && (
-                <div className="mt-3 p-4 bg-white dark:bg-neutral-800 rounded-lg border border-primary-200 dark:border-primary-700 shadow-sm space-y-3 animate-in fade-in slide-in-from-top-2 duration-300 transition-colors">
-                  <div>
-                    <h4 className="text-sm md:text-base font-semibold text-neutral-900 dark:text-white mb-1 transition-colors duration-500">Why Study Seasonal Shading?</h4>
-                    <p className="text-xs md:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed transition-colors duration-500">
-                      Seasonal shading patterns reveal how building heights and orientations affect daylight access throughout the year. Understanding these patterns is crucial for passive solar design and energy-efficient urban planning.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="text-sm md:text-base font-semibold text-neutral-900 dark:text-white mb-1 transition-colors duration-500">Equinox (March/September)</h4>
-                    <p className="text-xs md:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed transition-colors duration-500">
-                      Shows balanced daylight conditions when day and night are equal length. These conditions represent average shading patterns throughout spring and autumn.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="text-sm md:text-base font-semibold text-neutral-900 dark:text-white mb-1 transition-colors duration-500">Summer Solstice (June)</h4>
-                    <p className="text-xs md:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed transition-colors duration-500">
-                      Longest day of the year with highest sun angle. Shorter shadows mean better natural daylight penetration but require strategies to prevent overheating.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="text-sm md:text-base font-semibold text-neutral-900 dark:text-white mb-1 transition-colors duration-500">Winter Solstice (December)</h4>
-                    <p className="text-xs md:text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed transition-colors duration-500">
-                      Shortest day with lowest sun angle creates longest shadows. This is the most challenging period for daylight access and reveals where buildings obstruct winter sunlight.
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
         
         {/* Site-Level Analysis */}
         {city.siteAnalysis && (hasData(city.siteAnalysis.sunHoursImage) || 

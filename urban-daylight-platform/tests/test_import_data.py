@@ -6,7 +6,7 @@ import unittest
 from io import BytesIO
 from pathlib import Path
 
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 
 from scripts.import_data import (
     build_data,
@@ -167,6 +167,7 @@ class ImportDataTests(unittest.TestCase):
         })
         self.assertEqual(elephant["location"]["country"], "Source location text")
         self.assertIsNone(elephant["location"]["coordinates"])
+        self.assertNotIn("shadingAnalysis", elephant)
         self.assertEqual(elephant["sourceData"]["cells"]["D8"], " exact location ref ")
         self.assertNotIn("descriptions", elephant)
         self.assertNotIn("planningPrinciples", elephant)
@@ -175,6 +176,7 @@ class ImportDataTests(unittest.TestCase):
 
         block = elephant["analysisUnits"][0]
         self.assertEqual(block["name"], "UB_1")
+        self.assertEqual(block["analysisLevel"], "urban-block")
         self.assertEqual(block["source"]["cell"], "BC8")
         self.assertEqual(block["indicators"]["buildingIntensity"], 2.29)
         self.assertEqual(block["distributions"][0]["bins"][0], {
@@ -193,6 +195,27 @@ class ImportDataTests(unittest.TestCase):
         self.assertEqual(data["sourceWorkbook"]["file"], "source.xlsx")
         self.assertNotIn("cells", data["sourceWorkbook"]["sheets"]["OPISY"][0])
         self.assertFalse(validate_data(data))
+
+    def test_rejects_locations_outside_the_approved_source_set(self):
+        workbook = load_workbook(fixture_workbook())
+        workbook["DANE"]["C8"] = "Hudson Yards"
+        stream = BytesIO()
+        workbook.save(stream)
+        workbook.close()
+        stream.seek(0)
+
+        with self.assertRaisesRegex(ValueError, "Unapproved locations in DANE: Hudson Yards"):
+            build_data(stream, source_file="source.xlsx")
+
+    def test_validation_rejects_legacy_room_scenarios_and_profiles(self):
+        data, _ = build_data(fixture_workbook(), source_file="source.xlsx")
+        data["cities"][0]["analysisUnits"][0]["daylightFactor"] = {"simulation1": {}}
+        data["benchmarks"] = [{"name": "retired benchmark"}]
+
+        errors = validate_data(data)
+
+        self.assertTrue(any("legacy scenario data" in error for error in errors))
+        self.assertTrue(any("Legacy benchmark profiles" in error for error in errors))
 
     def test_unapproved_narrative_is_private_with_provenance(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -366,6 +389,145 @@ class ImportDataTests(unittest.TestCase):
         self.assertEqual(links["BD8"]["status"], "unresolved")
         self.assertIn("BD8", " ".join(warnings))
         self.assertIn("No exact asset found", links["BD8"]["aliasNote"])
+
+    def test_reimport_prunes_only_scoped_assets_after_success_and_is_idempotent(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            workbook_path = root / "DANE_NA_STRONE" / "TABELA_EXCEL" / "source.xlsx"
+            asset_root = root / "DANE_NA_STRONE" / "RYSUNKI"
+            public_dir = root / "public"
+            output_path = public_dir / "data" / "atlas.json"
+            private_path = root / "private" / "content.json"
+            workbook_path.parent.mkdir(parents=True)
+            workbook_path.write_bytes(fixture_workbook().getvalue())
+
+            source_assets = {
+                asset_root / "GRAFIKI_LOCATION" / "exact location ref.PNG": b"location",
+                asset_root / "ELEPHANT_AND_CASTLE" / "overview_test.PNG": b"overview",
+                asset_root / "ELEPHANT_AND_CASTLE" / "sun_test.PNG": b"sun",
+                asset_root / "ELEPHANT_AND_CASTLE" / "daylight_test.PNG": b"daylight",
+            }
+            for path, content in source_assets.items():
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(content)
+
+            valid_existing = public_dir / "ELEPHANT_AND_CASTLE" / "overview_test.PNG"
+            valid_existing.parent.mkdir(parents=True, exist_ok=True)
+            valid_existing.write_bytes(source_assets[
+                asset_root / "ELEPHANT_AND_CASTLE" / "overview_test.PNG"
+            ])
+
+            stale_images = [
+                public_dir / "HUDSON_YARDS" / "Hudson_Yards_21marzec.PNG",
+                public_dir / "GARNIZON" / "old_test.PNG",
+                public_dir / "ELEPHANT_AND_CASTLE" / "old_test.PNG",
+            ]
+            for path in stale_images:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"stale")
+
+            unrelated_images = [
+                public_dir / "unrelated.PNG",
+                public_dir / "OTHER" / "unrelated.PNG",
+                public_dir / "ELEPHANT_AND_CASTLE" / "nested" / "unrelated.PNG",
+            ]
+            for path in unrelated_images:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"unrelated")
+            source_before = {path: path.read_bytes() for path in source_assets}
+
+            data, _ = import_data(
+                workbook_path,
+                output_path,
+                private_output_path=private_path,
+            )
+
+            self.assertEqual(
+                next(link for link in data["imageCatalog"] if link["cell"] == "BB8")["status"],
+                "present",
+            )
+            for path in stale_images:
+                self.assertFalse(path.exists(), path)
+            for path in unrelated_images:
+                self.assertEqual(path.read_bytes(), b"unrelated")
+            for path, content in source_before.items():
+                self.assertEqual(path.read_bytes(), content)
+            for link in data["imageCatalog"]:
+                if link["status"] in {"copied", "present"}:
+                    folder = {
+                        "elephant-and-castle": "ELEPHANT_AND_CASTLE",
+                        "garnizon": "GARNIZON",
+                        "kronsberg": "KRONSBERG",
+                        "aspern-seestadt": "SEESTADT",
+                        "orestad-syd": "ORESTAD",
+                    }[link["cityId"]]
+                    self.assertTrue(
+                        (public_dir / folder / f"{link['resolvedName']}.PNG").is_file()
+                    )
+
+            public_before_repeat = {
+                path.relative_to(public_dir): path.read_bytes()
+                for path in public_dir.rglob("*")
+                if path.is_file()
+            }
+            repeated_data, _ = import_data(
+                workbook_path,
+                output_path,
+                private_output_path=private_path,
+            )
+            public_after_repeat = {
+                path.relative_to(public_dir): path.read_bytes()
+                for path in public_dir.rglob("*")
+                if path.is_file()
+            }
+            self.assertNotEqual(data, repeated_data)
+            stable_data, _ = import_data(
+                workbook_path,
+                output_path,
+                private_output_path=private_path,
+            )
+            stable_public = {
+                path.relative_to(public_dir): path.read_bytes()
+                for path in public_dir.rglob("*")
+                if path.is_file()
+            }
+            self.assertEqual(repeated_data, stable_data)
+            self.assertEqual(public_after_repeat, stable_public)
+            for path, content in source_before.items():
+                self.assertEqual(path.read_bytes(), content)
+
+    def test_incomplete_import_does_not_prune_or_overwrite_published_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            public_dir = root / "public"
+            output_path = public_dir / "data" / "atlas.json"
+            private_path = root / "private" / "content.json"
+            published = {
+                output_path: b"existing atlas",
+                private_path: b"existing private data",
+                public_dir / "ELEPHANT_AND_CASTLE" / "stale.PNG": b"stale image",
+                public_dir / "unrelated" / "image.PNG": b"unrelated image",
+            }
+            for path, content in published.items():
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(content)
+
+            invalid_workbook = load_workbook(fixture_workbook())
+            invalid_workbook.remove(invalid_workbook["Garnizon -Key Characteristics"])
+            invalid_stream = BytesIO()
+            invalid_workbook.save(invalid_stream)
+            invalid_workbook.close()
+            invalid_stream.seek(0)
+
+            with self.assertRaisesRegex(ValueError, "missing required sheets"):
+                import_data(
+                    invalid_stream,
+                    output_path,
+                    private_output_path=private_path,
+                )
+
+            for path, content in published.items():
+                self.assertEqual(path.read_bytes(), content)
 
 
 if __name__ == "__main__":

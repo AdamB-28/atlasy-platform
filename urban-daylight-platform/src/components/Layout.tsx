@@ -175,8 +175,7 @@ export default function Layout({ children }: LayoutProps) {
             <div className="sm:col-span-2 lg:col-span-1">
               <h3 className="font-semibold mb-3 text-sm sm:text-base">Learn More</h3>
               <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                This platform demonstrates daylight factor (DF), spatial daylight autonomy (sDA), 
-                and useful daylight illuminance (UDI) metrics across diverse urban contexts.
+                Explore source-reported sun hours, daylight-potential distributions, urban-block indicators, and solar-energy data. Missing values are not estimated.
               </p>
             </div>
           </div>

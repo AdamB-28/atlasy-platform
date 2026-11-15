@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict'
-import { access, readFile } from 'node:fs/promises'
+import { access, readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import test from 'node:test'
 
-const atlas = JSON.parse(await readFile(new URL('../public/data/atlas.json', import.meta.url), 'utf8'))
+const atlasText = await readFile(new URL('../public/data/atlas.json', import.meta.url), 'utf8')
+const atlas = JSON.parse(atlasText)
 const sourceFile = 'ATLASY_DANE_261107.xlsx'
 
 test('atlas is generated from the website workbook and all five source locations', () => {
@@ -23,6 +24,27 @@ test('atlas is generated from the website workbook and all five source locations
   assert.deepEqual(atlas.benchmarks, [])
   assert.ok(!JSON.stringify(atlas).includes('hudson-yards'))
   assert.ok(!JSON.stringify(atlas).includes('.venv/TEMP'))
+})
+
+test('published data contains no retired locations, room scenarios, or legacy shading content', () => {
+  assert.deepEqual(atlas.cities.map((city) => city.id), [
+    'elephant-and-castle',
+    'garnizon',
+    'kronsberg',
+    'aspern-seestadt',
+    'orestad-syd',
+  ])
+  assert.deepEqual(atlas.benchmarks, [])
+  assert.deepEqual(atlas.unassignedProfiles, [])
+  assert.ok(atlas.cities.every((city) => !('shadingAnalysis' in city)))
+  assert.ok(atlas.cities.every((city) => city.analysisUnits.every((unit) => (
+    unit.analysisLevel === 'urban-block'
+    && !('daylightFactor' in unit)
+    && !('spatialDaylightAutonomy' in unit)
+    && !('usefulDaylightIlluminance' in unit)
+    && !('shadingAnalysis' in unit)
+  ))))
+  assert.doesNotMatch(atlasText, /hudson|selected.room|room.scale.simulation|shadingAnalysis/i)
 })
 
 test('workbook provenance is public without exposing unapproved narrative text', () => {
@@ -118,12 +140,27 @@ test('exact approved image references resolve to public assets', async () => {
   }
   const resolved = atlas.imageCatalog.filter((link) => ['copied', 'present'].includes(link.status))
   assert.ok(resolved.length > 0)
+  const expectedAssets = Object.fromEntries(
+    Object.values(folders).map((folder) => [folder, []]),
+  )
   for (const link of resolved) {
     assert.equal(link.referencedName, link.resolvedName)
     assert.equal(link.sheet, 'DANE')
     assert.ok(link.cell)
     const assetPath = path.resolve('public', folders[link.cityId], `${link.resolvedName}.PNG`)
     await access(assetPath)
+    expectedAssets[folders[link.cityId]].push(`${link.resolvedName}.PNG`)
+  }
+  const publishedDirectories = (await readdir(path.resolve('public'), { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name)
+    .sort()
+  assert.deepEqual(publishedDirectories, ['data', ...Object.values(folders)].sort())
+  for (const [folder, expected] of Object.entries(expectedAssets)) {
+    const published = (await readdir(path.resolve('public', folder)))
+      .filter((name) => name.toLowerCase().endsWith('.png'))
+      .sort()
+    assert.deepEqual(published, expected.sort(), `${folder} contains only source-backed images`)
   }
   const elephant = atlas.cities[0]
   assert.ok(elephant.location.imageUrl)

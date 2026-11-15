@@ -32,7 +32,7 @@ export default function QuarterDetail({ quarter, cityName, sourcePath }: Quarter
       <div>
         <h3 className="text-xl md:text-2xl font-bold text-neutral-900 dark:text-white mb-2 transition-colors duration-500">{quarter.name}</h3>
         <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
-          {quarter.analysisLevel === 'selected-room' ? 'Room-scale simulation' : 'Urban-block analysis'}
+          Urban-block analysis
         </p>
         {hasData(quarter.function) && (
           <p className="text-sm md:text-base text-neutral-600 dark:text-neutral-400 transition-colors duration-500">{quarter.function}</p>

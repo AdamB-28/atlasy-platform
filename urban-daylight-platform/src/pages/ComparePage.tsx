@@ -383,14 +383,6 @@ export default function ComparePage() {
           <InsightsSection insights={urbanFormInsights} isOpen={showUrbanFormInsights} onToggle={() => setShowUrbanFormInsights(!showUrbanFormInsights)} />
         </div>
 
-        <div className="mb-14 border-b border-neutral-200 pb-8 dark:border-neutral-700">
-          <h3 className="mb-5 text-xl font-semibold text-neutral-900 dark:text-white">Seasonal Shading</h3>
-          <p className="mb-4 max-w-4xl text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">The image pairs show source-provided shading for the equinoxes, summer solstice, and winter solstice. Color scales remain as supplied in each study.</p>
-          <ComparisonImage imageA={quarterA?.shadingAnalysis?.marchSeptember ?? cityA.shadingAnalysis.marchSeptember} imageB={quarterB?.shadingAnalysis?.marchSeptember ?? cityB.shadingAnalysis.marchSeptember} title="March/September (Equinox)" leftTitle={panelNameA} rightTitle={panelNameB} field="shadingAnalysis.marchSeptember" linksA={cityA.imageLinks} linksB={cityB.imageLinks} />
-          <ComparisonImage imageA={quarterA?.shadingAnalysis?.june ?? cityA.shadingAnalysis.june} imageB={quarterB?.shadingAnalysis?.june ?? cityB.shadingAnalysis.june} title="June (Summer Solstice)" leftTitle={panelNameA} rightTitle={panelNameB} field="shadingAnalysis.june" linksA={cityA.imageLinks} linksB={cityB.imageLinks} />
-          <ComparisonImage imageA={quarterA?.shadingAnalysis?.december ?? cityA.shadingAnalysis.december} imageB={quarterB?.shadingAnalysis?.december ?? cityB.shadingAnalysis.december} title="December (Winter Solstice)" leftTitle={panelNameA} rightTitle={panelNameB} field="shadingAnalysis.december" linksA={cityA.imageLinks} linksB={cityB.imageLinks} />
-        </div>
-
         <ComparisonStreetSection />
 
         {hasComparableSunHours && (
